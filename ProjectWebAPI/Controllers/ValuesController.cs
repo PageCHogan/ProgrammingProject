@@ -20,7 +20,7 @@ namespace ProjectWebAPI.Controllers
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value";
+            return "value selected: " + id;
         }
 
         // POST api/values

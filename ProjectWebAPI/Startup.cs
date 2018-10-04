@@ -33,8 +33,8 @@ namespace ProjectWebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseMvc();
+			app.UseStaticFiles();
+			app.UseMvc();
         }
     }
 }

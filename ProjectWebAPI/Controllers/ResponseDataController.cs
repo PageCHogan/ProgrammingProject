@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ProjectWebAPI.Models;
+using ProjectWebAPI.Models.ViewModels;
 using ProjectWebAPI.Services;
 
 namespace ProjectWebAPI.Controllers
@@ -13,10 +13,15 @@ namespace ProjectWebAPI.Controllers
         [Route("api/[controller]")]
 		[HttpGet]
 		public ActionResult Index()
-		{
+
+        {
 			DatabaseService databaseService = new DatabaseService();
 
-			return View(databaseService.GetResponseData());
+            ResponseDataViewModel model = new ResponseDataViewModel();
+
+            model.Responses = databaseService.GetResponseData();
+
+			return View(model);
 		}
 	}
 }

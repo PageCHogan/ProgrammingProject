@@ -17,13 +17,13 @@ namespace ProjectWebAPI.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            List<StaffTestDataModel> test = new List<StaffTestDataModel>();
+            List<StaffDataModel> test = new List<StaffDataModel>();
             string result = "";
             bool init = false;
 
-            test = databaseService.GetTestData();
+            test = databaseService.GetStaffData();
             
-            foreach (StaffTestDataModel staff in test)
+            foreach (StaffDataModel staff in test)
             {
                 if(!init)
                 {
@@ -37,11 +37,29 @@ namespace ProjectWebAPI.Controllers
             yield return result.ToString();
         }
 
+        //Retrieves staff details when passed a staff ID - Convert to action result and redirect to the view.
         // GET api/values/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            return "value selected: " + id;
+            List<StaffDataModel> test = new List<StaffDataModel>();
+            //string result = "";
+            //bool init = false;
+
+            test = databaseService.GetStaffData(id);
+
+            //foreach (StaffDataModel staff in test)
+            //{
+            //    if (!init)
+            //    {
+            //        result += " ";
+            //        init = true;
+            //    }
+
+            //    result += staff.Name + " / ";
+            //}
+
+            return test.ToString();
         }
 
         // POST api/values

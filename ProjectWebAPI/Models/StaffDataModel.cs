@@ -5,26 +5,21 @@ using System.Threading.Tasks;
 
 namespace ProjectWebAPI.Models
 {
-    public class StaffTestDataModel
+    public class StaffDataModel
     {
         public string StaffID { get; set; }
         public string Name { get; set; }
-        public string Password { get; set; }
+        //public string Password { get; set; }
         public string Type { get; set; }    
         public string Groups { get; set; }
         
-        public StaffTestDataModel()
+        public StaffDataModel()
         {
             StaffID = "";
             Name = "";
-            Password = "";
+            //Password = "";
             Type = "";
             Groups = "";
-        }
-
-        public override string ToString()
-        {
-            return Name;
         }
     }
 }

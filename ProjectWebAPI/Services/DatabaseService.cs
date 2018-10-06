@@ -16,10 +16,10 @@ namespace ProjectWebAPI.Services
 			//Empty Constructor...for now
 		}
 
-		public List<StaffTestDataModel> GetTestData(int? userID = null)
+		public List<StaffDataModel> GetStaffData(int? staffID = null)
 		{
-			List<StaffTestDataModel> testData = new List<StaffTestDataModel>();
-			string SqlQuery = "SELECT * FROM Staff";
+			List<StaffDataModel> staffData = new List<StaffDataModel>();
+			string SqlQuery = "SELECT StaffID, Name, Type, Groups FROM Staff";
 
 			using (SqlConnection conn = new SqlConnection())
 			{
@@ -28,12 +28,16 @@ namespace ProjectWebAPI.Services
 
 				SqlCommand command;
 
-				if (userID.HasValue)
+                //TODO: Remove, only testing as an ID while they are strings.
+                string testID = "m5";
+
+                //If a parameter (staffID) is passed, return data for that record else return ALL data.
+                if (staffID.HasValue)
 				{
-					//SqlQuery += " Where ID = @0";
+					SqlQuery += " Where StaffID = @0";
 					command = new SqlCommand(SqlQuery, conn);
-					//command.Parameters.Add(new SqlParameter("0", userID));
-				}
+                    command.Parameters.Add(new SqlParameter("0", testID)); //staffID));
+                }
 				else
 				{
 					command = new SqlCommand(SqlQuery, conn);
@@ -41,34 +45,39 @@ namespace ProjectWebAPI.Services
 
 				using (SqlDataReader reader = command.ExecuteReader())
 				{
-					while (reader.Read())
-					{
-						//if (Int32.TryParse(reader[0].ToString(), out int id))
-						//{
-						testData.Add(new StaffTestDataModel()
-						{
-							StaffID = reader[0].ToString(),
-							Name = reader[1].ToString(),
-							Password = reader[2].ToString(),
-							Type = reader[3].ToString(),
-							Groups = reader[4].ToString()
-						});
-						//}
-					}
+                    if(reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            staffData.Add(new StaffDataModel()
+                            {
+                                StaffID = reader[0].ToString(),
+                                Name = reader[1].ToString(),
+                                Type = reader[2].ToString(),
+                                Groups = reader[3].ToString()
+                                //,Password = reader[4].ToString() //not really needed, bad practice to throw passwords around.
+                            });
+                        }
+                    }
 				}
 			}
 
-			return testData;
+			return staffData;
 		}
 
-		public List<ResponseDataModel> GetResponseData()
+		public List<ResponseDataModel> GetResponseData(int? responseID = null)
 		{
-			List<ResponseDataModel> data = new List<ResponseDataModel>();
+			List<ResponseDataModel> responseData = new List<ResponseDataModel>();
 
-			string sqlquery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Survey.date, Staff.name, Response.responseCSV, Response.date\n" +
-                "FROM (	(Response INNER JOIN Survey ON Response.surveyID = Survey.surveyID) INNER JOIN\n" +
-                "Staff ON Survey.staffID = Staff.staffID\n" +
-                ");";
+            //string SqlQuery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Survey.date, Staff.name, Response.responseCSV, Response.date\n" +
+            //             "FROM (	(Response INNER JOIN Survey ON Response.surveyID = Survey.surveyID) INNER JOIN\n" +
+            //             "Staff ON Survey.staffID = Staff.staffID\n" +
+            //             ");";
+
+            string SqlQuery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Survey.date, Staff.name, Response.responseCSV, Response.date " +
+                "FROM Survey " +
+                "INNER JOIN Response on Response.SurveyID = Survey.surveyID " +
+                "INNER JOIN Staff on Staff.staffID = Survey.staffID ";
             
 			using (SqlConnection conn = new SqlConnection())
 			{
@@ -77,28 +86,44 @@ namespace ProjectWebAPI.Services
 
 				SqlCommand command;
 
-				command = new SqlCommand(sqlquery, conn);
+                //TODO: Remove, only testing as an ID while they are strings.
+                string testID = "r1";
+
+                //If a parameter (responseID) is passed, return data for that record else return ALL data.
+                if (responseID.HasValue)
+                {
+                    SqlQuery += " Where ResponseID = @0";
+                    command = new SqlCommand(SqlQuery, conn);
+                    command.Parameters.Add(new SqlParameter("0", testID)); //responseID));
+                }
+                else
+                {
+                    command = new SqlCommand(SqlQuery, conn);
+                }
 
 				using (SqlDataReader reader = command.ExecuteReader())
 				{
-					while (reader.Read())
-					{
-						data.Add(new ResponseDataModel()
-						{
-							ResponseID = reader[0].ToString(),
-							SurveyName = reader[1].ToString(),
-							SurveyType = reader[2].ToString(),
-							SurveyDescription = reader[3].ToString(),
-							SurveyDate = reader[4].ToString(),
-							StaffName = reader[5].ToString(),
-							ResponseCSV = reader[6].ToString(),
-							ResponseDate = reader[7].ToString()
-						});
-					}
+                    if(reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            responseData.Add(new ResponseDataModel()
+                            {
+                                ResponseID = reader[0].ToString(),
+                                SurveyName = reader[1].ToString(),
+                                SurveyType = reader[2].ToString(),
+                                SurveyDescription = reader[3].ToString(),
+                                SurveyDate = Convert.ToDateTime(reader[4]),
+                                StaffName = reader[5].ToString(),
+                                ResponseCSV = reader[6].ToString(),
+                                ResponseDate = Convert.ToDateTime(reader[7])
+                            });
+                        }
+                    }
 				}
 			}
 
-			return data;
+			return responseData;
 		}
 	}
 }

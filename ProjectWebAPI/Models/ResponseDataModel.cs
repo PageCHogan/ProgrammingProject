@@ -11,10 +11,10 @@ namespace ProjectWebAPI.Models
         public string SurveyName { get; set; }
         public string SurveyType { get; set; }
         public string SurveyDescription { get; set; }
-        public string SurveyDate { get; set; }
+        public DateTime SurveyDate { get; set; }
         public string StaffName { get; set; }
         public string ResponseCSV { get; set; }
-        public string ResponseDate { get; set; }
+        public DateTime ResponseDate { get; set; }
 
         public ResponseDataModel()
         {
@@ -22,10 +22,10 @@ namespace ProjectWebAPI.Models
             SurveyName = "";
             SurveyType = "";
             SurveyDescription = "";
-            SurveyDate = "";
+            SurveyDate = DateTime.MinValue;
             StaffName = "";
             ResponseCSV = "";
-            ResponseDate = "";
+            ResponseDate = DateTime.MinValue;
         }
     }
 }

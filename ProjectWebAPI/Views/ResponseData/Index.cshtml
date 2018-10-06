@@ -1,4 +1,5 @@
-﻿@model List<ProjectWebAPI.Models.ResponseDataModel>
+﻿@model ProjectWebAPI.Models.ViewModels.ResponseDataViewModel
+@*@model List<ProjectWebAPI.Models.ResponseDataModel>*@
 
 @{
 	ViewData["Title"] = "View";
@@ -22,7 +23,7 @@
 			<th>ResponseCSV</th>
 			<th>ResponseDate</th>
 		</tr>
-	@foreach ( var row in Model)
+	@foreach ( var row in Model.Responses)
 	{
 		<tr>
 			<td>@row.ResponseID</td>

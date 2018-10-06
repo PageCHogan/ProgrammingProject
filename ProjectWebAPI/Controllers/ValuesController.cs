@@ -11,7 +11,6 @@ namespace ProjectWebAPI.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-
         DatabaseService databaseService = new DatabaseService();
 
         // GET api/values
@@ -36,14 +35,12 @@ namespace ProjectWebAPI.Controllers
             }
 
             yield return result.ToString();
-            //new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
-
             return "value selected: " + id;
         }
 

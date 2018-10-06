@@ -65,11 +65,11 @@ namespace ProjectWebAPI.Services
 		{
 			List<ResponseDataModel> data = new List<ResponseDataModel>();
 
-			string sqlquery =	"SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Survey.date, Staff.name, Response.responseCSV, Response.date\n" +
-						"FROM (	(Response INNER JOIN Survey ON Response.surveyID = Survey.surveyID) INNER JOIN\n" +
-							"Staff ON Survey.staffID = Staff.staffID\n" +
-						");";
-
+			string sqlquery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Survey.date, Staff.name, Response.responseCSV, Response.date\n" +
+                "FROM (	(Response INNER JOIN Survey ON Response.surveyID = Survey.surveyID) INNER JOIN\n" +
+                "Staff ON Survey.staffID = Staff.staffID\n" +
+                ");";
+            
 			using (SqlConnection conn = new SqlConnection())
 			{
 				conn.ConnectionString = CONNECTION_STRING;
@@ -93,15 +93,12 @@ namespace ProjectWebAPI.Services
 							StaffName = reader[5].ToString(),
 							ResponseCSV = reader[6].ToString(),
 							ResponseDate = reader[7].ToString()
-
 						});
 					}
 				}
 			}
 
 			return data;
-
 		}
-
 	}
 }

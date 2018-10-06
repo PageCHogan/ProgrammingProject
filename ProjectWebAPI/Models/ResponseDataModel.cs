@@ -26,9 +26,6 @@ namespace ProjectWebAPI.Models
             StaffName = "";
             ResponseCSV = "";
             ResponseDate = "";
-
         }
     }
-
-
 }

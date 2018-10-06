@@ -10,7 +10,7 @@ namespace ProjectWebAPI.Controllers
 {
 	public class ResponseDataController : Controller
 	{
-		[Route("[controller]")]
+        [Route("api/[controller]")]
 		[HttpGet]
 		public ActionResult Index()
 		{

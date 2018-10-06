@@ -22,7 +22,7 @@ namespace ProjectWebAPI.Models
             Groups = "";
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return Name;
         }

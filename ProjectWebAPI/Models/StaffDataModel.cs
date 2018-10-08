@@ -7,7 +7,7 @@ namespace ProjectWebAPI.Models
 {
     public class StaffDataModel
     {
-        public string StaffID { get; set; }
+        public int StaffID { get; set; }
         public string Name { get; set; }
         //public string Password { get; set; }
         public string Type { get; set; }    
@@ -15,7 +15,7 @@ namespace ProjectWebAPI.Models
         
         public StaffDataModel()
         {
-            StaffID = "";
+            //StaffID = 0;
             Name = "";
             //Password = "";
             Type = "";

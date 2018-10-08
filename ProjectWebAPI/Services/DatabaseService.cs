@@ -28,15 +28,12 @@ namespace ProjectWebAPI.Services
 
 				SqlCommand command;
 
-                //TODO: Remove, only testing as an ID while they are strings.
-                string testID = "m5";
-
                 //If a parameter (staffID) is passed, return data for that record else return ALL data.
                 if (staffID.HasValue)
 				{
 					SqlQuery += " Where StaffID = @0";
 					command = new SqlCommand(SqlQuery, conn);
-                    command.Parameters.Add(new SqlParameter("0", testID)); //staffID));
+                    command.Parameters.Add(new SqlParameter("0", staffID));
                 }
 				else
 				{
@@ -51,11 +48,10 @@ namespace ProjectWebAPI.Services
                         {
                             staffData.Add(new StaffDataModel()
                             {
-                                StaffID = reader[0].ToString(),
+                                StaffID = Convert.ToInt32(reader[0]),
                                 Name = reader[1].ToString(),
                                 Type = reader[2].ToString(),
                                 Groups = reader[3].ToString()
-                                //,Password = reader[4].ToString() //not really needed, bad practice to throw passwords around.
                             });
                         }
                     }
@@ -69,12 +65,7 @@ namespace ProjectWebAPI.Services
 		{
 			List<ResponseDataModel> responseData = new List<ResponseDataModel>();
 
-            //string SqlQuery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Survey.date, Staff.name, Response.responseCSV, Response.date\n" +
-            //             "FROM (	(Response INNER JOIN Survey ON Response.surveyID = Survey.surveyID) INNER JOIN\n" +
-            //             "Staff ON Survey.staffID = Staff.staffID\n" +
-            //             ");";
-
-            string SqlQuery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Survey.date, Staff.name, Response.responseCSV, Response.date " +
+            string SqlQuery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Staff.name, Response.responseCSV, Response.date " +
                 "FROM Survey " +
                 "INNER JOIN Response on Response.SurveyID = Survey.surveyID " +
                 "INNER JOIN Staff on Staff.staffID = Survey.staffID ";
@@ -86,15 +77,12 @@ namespace ProjectWebAPI.Services
 
 				SqlCommand command;
 
-                //TODO: Remove, only testing as an ID while they are strings.
-                string testID = "r1";
-
                 //If a parameter (responseID) is passed, return data for that record else return ALL data.
                 if (responseID.HasValue)
                 {
                     SqlQuery += " Where ResponseID = @0";
                     command = new SqlCommand(SqlQuery, conn);
-                    command.Parameters.Add(new SqlParameter("0", testID)); //responseID));
+                    command.Parameters.Add(new SqlParameter("0", responseID));
                 }
                 else
                 {
@@ -109,14 +97,13 @@ namespace ProjectWebAPI.Services
                         {
                             responseData.Add(new ResponseDataModel()
                             {
-                                ResponseID = reader[0].ToString(),
+                                ResponseID = Convert.ToInt32(reader[0]),
                                 SurveyName = reader[1].ToString(),
                                 SurveyType = reader[2].ToString(),
                                 SurveyDescription = reader[3].ToString(),
-                                SurveyDate = Convert.ToDateTime(reader[4]),
-                                StaffName = reader[5].ToString(),
-                                ResponseCSV = reader[6].ToString(),
-                                ResponseDate = Convert.ToDateTime(reader[7])
+                                StaffName = reader[4].ToString(),
+                                ResponseCSV = reader[5].ToString(),
+                                ResponseDate = Convert.ToDateTime(reader[6])
                             });
                         }
                     }

@@ -7,7 +7,7 @@ namespace ProjectWebAPI.Models
 {
     public class ResponseDataModel
     {
-        public string ResponseID { get; set; }
+        public int ResponseID { get; set; }
         public string SurveyName { get; set; }
         public string SurveyType { get; set; }
         public string SurveyDescription { get; set; }
@@ -18,7 +18,7 @@ namespace ProjectWebAPI.Models
 
         public ResponseDataModel()
         {
-            ResponseID = "";
+            ResponseID = 0;
             SurveyName = "";
             SurveyType = "";
             SurveyDescription = "";

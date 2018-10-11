@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 namespace ProjectWebAPI.Controllers
 {
     [Route("api/[controller]")]
-	public class ResponseDataController : Controller
+	public class ResponseController : Controller
 	{
         DatabaseService databaseService = new DatabaseService();
 
@@ -42,6 +42,24 @@ namespace ProjectWebAPI.Controllers
             result = JsonConvert.SerializeObject(responseData);
 
             return result;
+        }
+
+        // POST api/response
+        [HttpPost]
+        public void Post([FromBody]string value)
+        {
+        }
+
+        // PUT api/response/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE api/response/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
         }
     }
 }

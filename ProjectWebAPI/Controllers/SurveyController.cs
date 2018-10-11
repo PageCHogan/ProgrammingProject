@@ -2,60 +2,59 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ProjectWebAPI.Services;
 using ProjectWebAPI.Models;
+using ProjectWebAPI.Services;
 using Newtonsoft.Json;
 
 namespace ProjectWebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    public class QuestionController : Controller
+    [Produces("application/json")]
+    [Route("api/Survey")]
+    public class SurveyController : Controller
     {
         DatabaseService databaseService = new DatabaseService();
 
-        // GET api/question
-        [HttpGet]
-        //public IEnumerable<string> Get()
+        // GET: api/Survey
         public string Get()
         {
-            List<QuestionDataModel> questionData = new List<QuestionDataModel>();
+            List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
             string result = "";
 
-            questionData = databaseService.GetQuestionData();
+            surveyData = databaseService.GetSurveyData();
 
-            result = JsonConvert.SerializeObject(questionData);
+            result = JsonConvert.SerializeObject(surveyData);
             return result;
         }
 
-        //Retrieves question details when passed a surveyID
-        // GET api/question/5
+        // GET: api/Survey/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            List<QuestionDataModel> questionData = new List<QuestionDataModel>();
+            List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
             string result = "";
 
-            questionData = databaseService.GetQuestionData(id);
+            surveyData = databaseService.GetSurveyData(id);
 
-            result = JsonConvert.SerializeObject(questionData);
+            result = JsonConvert.SerializeObject(surveyData);
 
             return result;
         }
 
-        // POST api/question
+        // POST: api/Survey
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
-
-        // PUT api/question/5
+        
+        // PUT: api/Survey/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
-
-        // DELETE api/question/5
+        
+        // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

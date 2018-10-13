@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using ProjectWebAPI.Models;
+using ProjectWebAPI.Models.StaffModels;
 
 namespace ProjectWebAPI.Services
 {
@@ -61,7 +65,31 @@ namespace ProjectWebAPI.Services
 			return staffData;
 		}
 
-		public List<ResponseDataModel> GetResponseData(int? responseID = null)
+        //WIP
+        public HttpResponseMessage GetStaffDataHTTP()
+        {
+            List<StaffDataModel> testResponseModel = GetStaffData();
+
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(testResponseModel), System.Text.Encoding.UTF8, "application/json") };
+
+            return response;
+        }
+
+        public bool AddNewStaff(object data)
+        {
+            bool result = false;
+
+            //StaffMemberModel staff = JsonConvert.DeserializeObject<StaffDataModel>(data);
+
+            JsonConvert.SerializeObject(data);
+            
+
+
+            return result;
+        }
+
+
+        public List<ResponseDataModel> GetResponseData(int? responseID = null)
 		{
 			List<ResponseDataModel> responseData = new List<ResponseDataModel>();
 
@@ -200,6 +228,53 @@ namespace ProjectWebAPI.Services
                                 StartDate = Convert.ToDateTime(reader[5]),
                                 EndDate = Convert.ToDateTime(reader[6]),
                                 Permission = reader[7].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            return surveyData;
+        }
+
+        public List<ReportDataModel> GetReportData(int? reportID = null)
+        {
+            List<ReportDataModel> surveyData = new List<ReportDataModel>();
+            string SqlQuery = "SELECT reportID, responseID, Name, Report_file, Date FROM Report";
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = CONNECTION_STRING;
+                conn.Open();
+
+                SqlCommand command;
+
+                //If a parameter (Report) is passed, return data for that record else return ALL data.
+                if (reportID.HasValue)
+                {
+                    SqlQuery += " Where ReportID = @0";
+                    command = new SqlCommand(SqlQuery, conn);
+                    command.Parameters.Add(new SqlParameter("0", reportID));
+                }
+                else
+                {
+                    command = new SqlCommand(SqlQuery, conn);
+                }
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            surveyData.Add(new ReportDataModel()
+                            {
+                                ReportID = Convert.ToInt32(reader[0]),
+                                ResponseID = Convert.ToInt32(reader[1]),
+                                Name = reader[2].ToString(),
+                                ReportFile = reader[3].ToString(),
+                                Date = Convert.ToDateTime(reader[4])
+
                             });
                         }
                     }

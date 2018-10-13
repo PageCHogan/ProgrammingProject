@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 
 namespace ProjectWebAPI.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
 	public class ResponseController : Controller
 	{

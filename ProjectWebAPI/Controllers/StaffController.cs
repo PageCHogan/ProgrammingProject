@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net;
 using ProjectWebAPI.Messages;
+using ProjectWebAPI.Models.StaffModels;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -19,7 +20,7 @@ namespace ProjectWebAPI.Controllers
         DatabaseService databaseService = new DatabaseService();
 
         // GET api/staff
-        [HttpGet]
+        [HttpGet("{type}")]
         public string Get()
         {
             List<StaffDataModel> staffData = new List<StaffDataModel>();
@@ -28,7 +29,6 @@ namespace ProjectWebAPI.Controllers
             staffData = databaseService.GetStaffData();
 
             result = JsonConvert.SerializeObject(staffData);
-            
 
             return result;
         }
@@ -36,12 +36,12 @@ namespace ProjectWebAPI.Controllers
         //Retrieves staff details when passed a staff ID - Convert to action result and redirect to the view.
         // GET api/staff/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public string Get(int ID)
         {
             List<StaffDataModel> staffData = new List<StaffDataModel>();
             string result = "";
 
-            staffData = databaseService.GetStaffData(id);
+            staffData = databaseService.GetStaffData(ID);
 
             result = JsonConvert.SerializeObject(staffData);
 
@@ -86,17 +86,16 @@ namespace ProjectWebAPI.Controllers
 
         private HttpResponseMessage AddNewStaff(object data)
         {
+            StaffMemberModel staff = JsonConvert.DeserializeObject<StaffMemberModel>(data.ToString());
             BaseResponse result = new BaseResponse();
 
-            if (databaseService.AddNewStaff(data))
+            if (databaseService.AddNewStaff(staff))
             {
                 result.Status = "Success";
             }
 
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Status, System.Text.Encoding.UTF8, "application/json") };
             
-
-
             return response;
         }
     }

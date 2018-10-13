@@ -9,16 +9,18 @@ namespace ProjectWebAPI.Models
     {
         public int StaffID { get; set; }
         public string Name { get; set; }
-        //public string Password { get; set; }
+        public string Password { get; set; }
         public string Type { get; set; }    
+        public string Permission { get; set; }
         public string Groups { get; set; }
+        
         
         public StaffDataModel()
         {
-            //StaffID = 0;
             Name = "";
-            //Password = "";
+            Password = "";
             Type = "";
+            Permission = "";
             Groups = "";
         }
     }

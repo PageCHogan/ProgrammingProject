@@ -10,12 +10,16 @@ namespace ProjectWebAPI.Models.StaffModels
         public string Name { get; set; }
         public string Type { get; set; }
         public string Groups { get; set; }
+        public string Password { get; set; }
+        public string Permission { get; set; }
 
         public StaffMemberModel()
         {
             Name = "";
             Type = "";
             Groups = "";
+            Password = "password";
+            Permission = "";
         }
     }
 }

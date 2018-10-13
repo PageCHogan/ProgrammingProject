@@ -75,19 +75,42 @@ namespace ProjectWebAPI.Services
             return response;
         }
 
-        public bool AddNewStaff(object data)
+        public bool AddNewStaff(StaffMemberModel staff)
         {
             bool result = false;
 
-            //StaffMemberModel staff = JsonConvert.DeserializeObject<StaffDataModel>(data);
+            if (staff != null)
+            {
+                string SqlQuery = "INSERT INTO Staff (Name,Password,Type,Permission,Groups) VALUES (@Name,@Password,@Type,@Permission,@Groups)";
 
-            JsonConvert.SerializeObject(data);
-            
+                using (SqlConnection conn = new SqlConnection())
+                {
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
 
+                    SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                    if (SqlQuery.Length > 0)
+                    {
+                        //SqlQuery += " Where StaffID = @0";
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.AddWithValue("@Name", staff.Name);
+                        command.Parameters.AddWithValue("@Password", staff.Password);
+                        command.Parameters.AddWithValue("@Type", staff.Type);
+                        command.Parameters.AddWithValue("@Permission", staff.Permission);
+                        command.Parameters.AddWithValue("@Groups", staff.Groups);
+                    }
+                    int sqlResult = command.ExecuteNonQuery();
+
+                    if(sqlResult < 0)
+                    {
+                        Console.WriteLine("Error - No Bueno");
+                    }
+                }
+            }
 
             return result;
         }
-
 
         public List<ResponseDataModel> GetResponseData(int? responseID = null)
 		{

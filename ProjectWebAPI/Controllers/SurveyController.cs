@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ProjectWebAPI.Models;
+using ProjectWebAPI.Models.SurveyModels;
 using ProjectWebAPI.Services;
 using Newtonsoft.Json;
 
@@ -14,7 +14,7 @@ namespace ProjectWebAPI.Controllers
     [Route("api/Survey")]
     public class SurveyController : Controller
     {
-        DatabaseService databaseService = new DatabaseService();
+        SurveyServices surveyService = new SurveyServices();
 
         // GET: api/Survey
         public string Get()
@@ -22,7 +22,7 @@ namespace ProjectWebAPI.Controllers
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
             string result = "";
 
-            surveyData = databaseService.GetSurveyData();
+            surveyData = surveyService.GetSurveyData();
 
             result = JsonConvert.SerializeObject(surveyData);
             return result;
@@ -35,7 +35,7 @@ namespace ProjectWebAPI.Controllers
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
             string result = "";
 
-            surveyData = databaseService.GetSurveyData(id);
+            surveyData = surveyService.GetSurveyData(id);
 
             result = JsonConvert.SerializeObject(surveyData);
 

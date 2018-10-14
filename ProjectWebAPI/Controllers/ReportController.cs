@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProjectWebAPI.Services;
-using ProjectWebAPI.Models;
+using ProjectWebAPI.Models.ReportModels;
 using Newtonsoft.Json;
 
 namespace ProjectWebAPI.Controllers
@@ -14,7 +14,7 @@ namespace ProjectWebAPI.Controllers
     [Route("api/Report")]
     public class ReportController : Controller
     {
-        DatabaseService databaseService = new DatabaseService();
+        ReportService reportService = new ReportService();
 
         // GET api/report
         [HttpGet]
@@ -23,7 +23,7 @@ namespace ProjectWebAPI.Controllers
             List<ReportDataModel> reportData = new List<ReportDataModel>();
             string result = "";
 
-            reportData = databaseService.GetReportData();
+            reportData = reportService.GetReportData();
 
             result = JsonConvert.SerializeObject(reportData);
             return result;
@@ -37,7 +37,7 @@ namespace ProjectWebAPI.Controllers
             List<ReportDataModel> reportData = new List<ReportDataModel>();
             string result = "";
 
-            reportData = databaseService.GetReportData(id);
+            reportData = reportService.GetReportData(id);
 
             result = JsonConvert.SerializeObject(reportData);
 

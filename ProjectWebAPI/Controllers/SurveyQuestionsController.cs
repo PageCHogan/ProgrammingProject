@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProjectWebAPI.Services;
-using ProjectWebAPI.Models;
+using ProjectWebAPI.Models.QuestionModels;
 using Newtonsoft.Json;
 
 namespace ProjectWebAPI.Controllers
@@ -13,7 +13,8 @@ namespace ProjectWebAPI.Controllers
     [Route("api/[controller]")]
     public class SurveyQuestionsController : Controller
     {
-        DatabaseService databaseService = new DatabaseService();
+        //DatabaseService databaseService = new DatabaseService();
+        SurveyQuestionsService surveyQuestionService = new SurveyQuestionsService();
 
         // GET api/surveyQuestions
         [HttpGet]
@@ -22,7 +23,7 @@ namespace ProjectWebAPI.Controllers
             List<QuestionDataModel> questionData = new List<QuestionDataModel>();
             string result = "";
 
-            questionData = databaseService.GetQuestionData();
+            questionData = surveyQuestionService.GetQuestionData();
 
             result = JsonConvert.SerializeObject(questionData);
             return result;
@@ -36,7 +37,7 @@ namespace ProjectWebAPI.Controllers
             List<QuestionDataModel> questionData = new List<QuestionDataModel>();
             string result = "";
 
-            questionData = databaseService.GetQuestionData(id);
+            questionData = surveyQuestionService.GetQuestionData(id);
 
             result = JsonConvert.SerializeObject(questionData);
 

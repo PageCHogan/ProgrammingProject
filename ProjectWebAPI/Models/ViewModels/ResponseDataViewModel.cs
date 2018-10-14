@@ -6,13 +6,14 @@ using ProjectWebAPI.Models;
 
 namespace ProjectWebAPI.Models.ViewModels
 {
+    [Obsolete("View Model not required in backend")]
     public class ResponseDataViewModel
     {
-        public List<ResponseDataModel> Responses { get; set; }
+        //public List<ResponseDataModel> Responses { get; set; }
 
-        public ResponseDataViewModel()
-        {
-            Responses = new List<ResponseDataModel>();
-        }
+        //public ResponseDataViewModel()
+        //{
+        //    Responses = new List<ResponseDataModel>();
+        //}
     }
 }

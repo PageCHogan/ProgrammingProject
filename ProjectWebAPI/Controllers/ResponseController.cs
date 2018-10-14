@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ProjectWebAPI.Models;
+using ProjectWebAPI.Models.ResponseModels;
 using ProjectWebAPI.Models.ViewModels;
 using ProjectWebAPI.Services;
 using Newtonsoft.Json;
@@ -14,21 +14,20 @@ namespace ProjectWebAPI.Controllers
     [Route("api/[controller]")]
 	public class ResponseController : Controller
 	{
-        DatabaseService databaseService = new DatabaseService();
+        ResponseService responseService = new ResponseService();
 
 		[HttpGet]
         public string Get()
         {
-			DatabaseService databaseService = new DatabaseService();
+            List<ResponseDataModel> responseData = new List<ResponseDataModel>();
+            string result = "";
 
-            ResponseDataViewModel model = new ResponseDataViewModel();
+            responseData = responseService.GetResponseData();
 
-            model.Responses = databaseService.GetResponseData();
-
-            string result = JsonConvert.SerializeObject(model.Responses);
+            result = JsonConvert.SerializeObject(responseData);
 
             return result;
-		}
+        }
 
         //Retrieves response details when passed a responseID
         // GET api/responsedata/5
@@ -38,7 +37,7 @@ namespace ProjectWebAPI.Controllers
             List<ResponseDataModel> responseData = new List<ResponseDataModel>();
             string result = "";
 
-            responseData = databaseService.GetResponseData(id);
+            responseData = responseService.GetResponseData(id);
 
             result = JsonConvert.SerializeObject(responseData);
 

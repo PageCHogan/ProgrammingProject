@@ -29,7 +29,6 @@ namespace ProjectWebAPI.Controllers
             return result;
         }
 
-        //Retrieves report details when passed a reportID - Convert to action result and redirect to the view.
         // GET api/report/5
         [HttpGet("{id}")]
         public string Get(int id)

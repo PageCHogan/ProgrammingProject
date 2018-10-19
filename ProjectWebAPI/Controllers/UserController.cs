@@ -9,47 +9,47 @@ using Newtonsoft.Json;
 using System.Net.Http;
 using System.Net;
 using ProjectWebAPI.Messages;
-using ProjectWebAPI.Models.StaffModels;
+using ProjectWebAPI.Models.UserModels;
 
 namespace ProjectWebAPI.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
-    public class StaffController : Controller
+    public class UserController : Controller
     {
         //DatabaseService databaseService = new DatabaseService(); //TODO: Remove as obsolete
-        StaffService staffService = new StaffService();
+        UserService userService = new UserService();
 
-        // GET api/staff
+        // GET api/user
         [HttpGet]
         public string Get()
         {
-            List<StaffDataModel> staffData = new List<StaffDataModel>();
+            List<UserDataModel> userData = new List<UserDataModel>();
             string result = "";
 
-            staffData = staffService.GetStaffData();
+            userData = userService.GetUserData();
 
-            result = JsonConvert.SerializeObject(staffData);
+            result = JsonConvert.SerializeObject(userData);
 
             return result;
         }
 
-        // Retrieves staff details when passed a staff ID - Convert to action result and redirect to the view.
-        // GET api/staff/5
+        // Retrieves user details when passed a user ID - Convert to action result and redirect to the view.
+        // GET api/user/5
         [HttpGet("{id}")]
         public string Get(int ID)
         {
-            List<StaffDataModel> staffData = new List<StaffDataModel>();
+            List<UserDataModel> userData = new List<UserDataModel>();
             string result = "";
 
-            staffData = staffService.GetStaffData(ID);
+            userData = userService.GetUserData(ID);
 
-            result = JsonConvert.SerializeObject(staffData);
+            result = JsonConvert.SerializeObject(userData);
 
             return result;
         }
 
-        // POST api/staff
+        // POST api/user
         [HttpPost("{option}")]
         public HttpResponseMessage Post([FromBody] object data, string option)
         {
@@ -60,9 +60,9 @@ namespace ProjectWebAPI.Controllers
                 switch(option.ToLower())
                 {
                     case "save":
-                        responseMessage = AddNewStaff(data);
+                        responseMessage = AddNewUser(data);
                         break;
-                    case "????": //TODO: Any other options required for interacting with staff?
+                    case "????": //TODO: Any other options required for interacting with user?
                         break;
                     default:
                         break;
@@ -72,34 +72,38 @@ namespace ProjectWebAPI.Controllers
             return responseMessage;
         }
 
-        // PUT api/staff/5
+        // PUT api/user/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/staff/5
+        // DELETE api/user/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
         }
 
-        private HttpResponseMessage AddNewStaff(object data)
+        private HttpResponseMessage AddNewUser(object data)
         {
-            StaffMemberModel staff = JsonConvert.DeserializeObject<StaffMemberModel>(data.ToString());
+            UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
             BaseResponse result = new BaseResponse();
 
-            List<StaffDataModel> existingStaff = staffService.GetStaffData();
+            List<UserDataModel> existingUsers = userService.GetUserData();
 
-            if(existingStaff != null)
+            if(existingUsers != null)
             {
-                if(!existingStaff.Exists(o => o.Name == staff.Name))
+                if(!existingUsers.Exists(o => o.Username == user.Username))
                 {
-                    if (staffService.AddNewStaff(staff))
+                    if (userService.AddNewUser(user))
                     {
                         result.Status = "Success";
                     }
                 }
+            }
+            else
+            {
+                //Error - User already exists
             }
 
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Status, System.Text.Encoding.UTF8, "application/json") };

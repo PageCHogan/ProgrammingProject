@@ -13,7 +13,7 @@ namespace ProjectWebAPI.Services
         public List<SurveyDataModel> GetSurveyData(int? surveyID = null)
         {
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
-            string SqlQuery = "SELECT surveyID, survey_name, staffID, type, description, start_date, end_date, permission FROM Survey";
+            string SqlQuery = "SELECT surveyID, survey_name, userID, type, description, start_date, end_date, permission FROM Survey";
 
             using (SqlConnection conn = new SqlConnection())
             {
@@ -44,7 +44,7 @@ namespace ProjectWebAPI.Services
                             {
                                 SurveyID = Convert.ToInt32(reader[0]),
                                 SurveyName = reader[1].ToString(),
-                                StaffID = Convert.ToInt32(reader[2]),
+                                UserID = Convert.ToInt32(reader[2]),
                                 Type = reader[3].ToString(),
                                 Description = reader[4].ToString(),
                                 StartDate = Convert.ToDateTime(reader[5]),

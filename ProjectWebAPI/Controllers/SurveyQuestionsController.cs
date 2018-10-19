@@ -13,7 +13,6 @@ namespace ProjectWebAPI.Controllers
     [Route("api/[controller]")]
     public class SurveyQuestionsController : Controller
     {
-        //DatabaseService databaseService = new DatabaseService();
         SurveyQuestionsService surveyQuestionService = new SurveyQuestionsService();
 
         // GET api/surveyQuestions

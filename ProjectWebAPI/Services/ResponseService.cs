@@ -14,10 +14,10 @@ namespace ProjectWebAPI.Services
         {
             List<ResponseDataModel> responseData = new List<ResponseDataModel>();
 
-            string SqlQuery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, Staff.name, Response.responseCSV, Response.date " +
+            string SqlQuery = "SELECT Response.ResponseID, Survey.survey_name, Survey.type, Survey.description, User.user_name, Response.responseCSV, Response.date " +
                 "FROM Survey " +
                 "INNER JOIN Response on Response.SurveyID = Survey.surveyID " +
-                "INNER JOIN Staff on Staff.staffID = Survey.staffID ";
+                "INNER JOIN User on User.userID = Survey.userID ";
 
             using (SqlConnection conn = new SqlConnection())
             {

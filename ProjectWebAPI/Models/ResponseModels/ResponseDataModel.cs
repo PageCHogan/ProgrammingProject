@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectWebAPI.Models
+namespace ProjectWebAPI.Models.ResponseModels
 {
     public class ResponseDataModel
     {

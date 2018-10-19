@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ProjectWebAPI.Models
+namespace ProjectWebAPI.Models.SurveyModels
 {
     public class SurveyDataModel
     {
         public int SurveyID { get; set; }
         public string SurveyName { get; set; }
-        public int StaffID { get; set; }
+        public int UserID { get; set; }
         public string Type { get; set; }
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
@@ -20,7 +20,7 @@ namespace ProjectWebAPI.Models
         {
             //SurveyID = 0;
             SurveyName = "";
-            //StaffID = 0;
+            //UserID = 0;
             Type = "";
             Description = "";
             StartDate = DateTime.MinValue;

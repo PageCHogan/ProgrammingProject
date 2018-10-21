@@ -78,19 +78,32 @@ namespace ProjectWebAPI.Controllers
         {
         }
 
+        //I think delete should return a success/fail message like add, will add tonight/tomorrow
         // DELETE api/user/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        /*[HttpDelete("{id}")]
+        public HttpResponseMessage Delete(int id)
         {
-        }
+            HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            BaseResponse result = new BaseResponse();
+            List<UserDataModel> existingUsers = userService.GetUserData();
+            if(existingUsers != null)
+            {
+                if (existingUsers.Exists(o => o.UserID == id))
+                {
+                   //call delete service
+                   //update response if delete service successful
+                }
+            }
+            return response
+        }*/
 
         private HttpResponseMessage AddNewUser(object data)
         {
             UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
             BaseResponse result = new BaseResponse();
-
+            HttpResponseMessage response;
             List<UserDataModel> existingUsers = userService.GetUserData();
-
+            //should I add more indepth response messages as result.Status?
             if(existingUsers != null)
             {
                 if(!existingUsers.Exists(o => o.Username == user.Username))
@@ -101,13 +114,15 @@ namespace ProjectWebAPI.Controllers
                     }
                 }
             }
+            if (result.Status != "Success")
+            {
+                response = new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent(result.Status, System.Text.Encoding.UTF8, "application/json") };
+            }
             else
             {
-                //Error - User already exists
+                response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Status, System.Text.Encoding.UTF8, "application/json") };
             }
-
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Status, System.Text.Encoding.UTF8, "application/json") };
-            
+                       
             return response;
         }
     }

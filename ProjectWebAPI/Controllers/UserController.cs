@@ -130,7 +130,7 @@ namespace ProjectWebAPI.Controllers
         private string UpdateUser(object data, int ID)
         {
             UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
-            string result = "";
+            string result = "Error - No changes made";
 
             List<UserDataModel> existingUsers = userService.GetUserData(); //Create list of existing users
             UserDataModel userMatch = new UserDataModel();
@@ -147,19 +147,7 @@ namespace ProjectWebAPI.Controllers
                     {
                         result = "Successfully updated user";
                     }
-                    else
-                    {
-                        result = "Error - No changes made";
-                    }
                 }
-                else
-                {
-                    result = "Error - No changes made";
-                }
-            }
-            else
-            {
-                result = "Error - No changes made";
             }
 
             return result;

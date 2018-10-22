@@ -110,15 +110,13 @@ namespace ProjectWebAPI.Controllers
                 result = "Error - Report not added";
             }
 
-            //            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Success.ToString(), System.Text.Encoding.UTF8, "application/json") };
-
             return result;
         }
 
         private string UpdateReport(object data, int ID)
         {
             ReportDataModel report = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
-            string result = "";
+            string result = "Error - No changes made";
 
             List<ReportDataModel> existingReports = reportService.GetReportData(); //Create list of existing users
             ReportDataModel reportMatch = new ReportDataModel();
@@ -135,19 +133,7 @@ namespace ProjectWebAPI.Controllers
                     {
                         result = "Successfully updated report";
                     }
-                    else
-                    {
-                        result = "Error - No changes made";
-                    }
                 }
-                else
-                {
-                    result = "Error - No changes made";
-                }
-            }
-            else
-            {
-                result = "Error - No changes made";
             }
 
             return result;

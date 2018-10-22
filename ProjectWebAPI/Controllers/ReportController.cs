@@ -44,21 +44,125 @@ namespace ProjectWebAPI.Controllers
         }
 
         // POST: api/Report
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost("{option}")]
+        public string Post([FromBody]object data, string option)
         {
+            //HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            string response = "";
+
+            if (option != null && data != null)
+            {
+                switch (option.ToLower())
+                {
+                    case "save":
+                        response = AddNewReport(data);
+                        break;
+                    case "????": //TODO: Any other options required for interacting with user?
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return response;
         }
-        
+
         // PUT: api/Report/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public string Put(int ID, [FromBody]object data)
         {
+            string response = "";
+
+            if (ID > 0 && data != null)
+            {
+                response = UpdateReport(data, ID);
+            }
+
+            return response;
         }
-        
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public string Delete(int ID)
         {
+            string response = "";
+
+            if (ID > 0)
+            {
+                response = DeleteReport(ID);
+            }
+
+            return response;
+        }
+
+
+        private string AddNewReport(object data)
+        {
+            ReportDataModel newReport = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
+            string result = "";
+
+            if (reportService.AddNewReport(newReport))
+            {
+                result = "Successfully added new report";
+            }
+            else
+            {
+                result = "Error - Report not added";
+            }
+
+            //            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Success.ToString(), System.Text.Encoding.UTF8, "application/json") };
+
+            return result;
+        }
+
+        private string UpdateReport(object data, int ID)
+        {
+            ReportDataModel report = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
+            string result = "";
+
+            List<ReportDataModel> existingReports = reportService.GetReportData(); //Create list of existing users
+            ReportDataModel reportMatch = new ReportDataModel();
+
+            if (existingReports != null)
+            {
+                reportMatch = existingReports.Find(o => o.ReportID.Equals(ID));
+
+                if (reportMatch != null) //If user is found
+                {
+                    report.ReportID = reportMatch.ReportID;
+
+                    if (reportService.UpdateReport(report))
+                    {
+                        result = "Successfully updated report";
+                    }
+                    else
+                    {
+                        result = "Error - No changes made";
+                    }
+                }
+                else
+                {
+                    result = "Error - No changes made";
+                }
+            }
+            else
+            {
+                result = "Error - No changes made";
+            }
+
+            return result;
+        }
+
+        private string DeleteReport(int ID)
+        {
+            string result = "";
+
+            if (reportService.DeleteReport(ID))
+                result = "Successfully deleted report";
+            else
+                result = "Error - No changes made";
+
+            return result;
         }
     }
 }

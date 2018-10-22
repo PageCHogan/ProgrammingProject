@@ -44,21 +44,103 @@ namespace ProjectWebAPI.Controllers
         }
 
         // POST api/surveyQuestions
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost("{option}")]
+        public string Post([FromBody]object data, string option)
         {
+            //HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            string response = "";
+
+            if (option != null && data != null)
+            {
+                switch (option.ToLower())
+                {
+                    case "save":
+                        response = AddNewQuestion(data);
+                        break;
+                    case "????": //TODO: Any other options required for interacting with questions?
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return response;
         }
 
         // PUT api/surveyQuestions/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public string Put(int ID, [FromBody]object data)
         {
+            string response = "";
+
+            if (ID > 0 && data != null)
+            {
+                response = UpdateQuestion(data, ID);
+            }
+
+            return response;
         }
 
         // DELETE api/surveyQuestions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{questionID}/{surveyID}")]
+        public string Delete(int questionID, int surveyID)
         {
+            string response = "";
+
+            if (questionID > 0 && surveyID > 0)
+            {
+                response = DeleteQuestion(questionID, surveyID);
+            }
+
+            return response;
+        }
+
+        private string AddNewQuestion(object data)
+        {
+            QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
+            string result = "";
+
+            List<QuestionDataModel> existingUsers = surveyQuestionService.GetQuestionData();
+
+            if (surveyQuestionService.AddNewQuestion(question))
+            {
+                result = "Successfully added new question";
+            }
+            else
+            {
+                result = "Error - Failed to add new question";
+            }
+
+            return result;
+        }
+
+        private string UpdateQuestion(object data, int ID)
+        {
+            QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
+            string result = "";
+
+            if (surveyQuestionService.UpdateQuestion(question))
+            {
+                result = "Successfully updated question";
+            }
+            else
+            {
+                result = "Error - No changes made";
+            }
+
+            return result;
+        }
+
+        private string DeleteQuestion(int questionID, int surveyID)
+        {
+            string result = "";
+
+            if (surveyQuestionService.DeleteQuestion(questionID, surveyID))
+                result = "Successfully deleted question";
+            else
+                result = "Error - No changes made";
+
+            return result;
         }
     }
 }

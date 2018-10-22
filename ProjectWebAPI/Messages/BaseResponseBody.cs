@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ProjectWebAPI.Messages
 {
-    public class BaseResponse
+    public class BaseResponseBody
     {
-        public string Status { get; set; }
+        public string Result { get; set; }
 
-        public BaseResponse()
+        public BaseResponseBody()
         {
-            Status = "Failed";
+            Result = "";
         }
     }
 }

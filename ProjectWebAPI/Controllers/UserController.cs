@@ -17,18 +17,17 @@ namespace ProjectWebAPI.Controllers
     [Route("api/[controller]")]
     public class UserController : Controller
     {
-        //DatabaseService databaseService = new DatabaseService(); //TODO: Remove as obsolete
         UserService userService = new UserService();
 
         // GET api/user
         [HttpGet]
         public string Get()
         {
+            string result;
+
             List<UserDataModel> userData = new List<UserDataModel>();
-            string result = "";
-
             userData = userService.GetUserData();
-
+            
             result = JsonConvert.SerializeObject(userData);
 
             return result;
@@ -51,16 +50,17 @@ namespace ProjectWebAPI.Controllers
 
         // POST api/user
         [HttpPost("{option}")]
-        public HttpResponseMessage Post([FromBody] object data, string option)
+        public string Post([FromBody]object data, string option)
         {
-            HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            //HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            string response = "";
 
             if (option != null && data != null)
             {
                 switch(option.ToLower())
                 {
                     case "save":
-                        responseMessage = AddNewUser(data);
+                        response = AddNewUser(data);
                         break;
                     case "????": //TODO: Any other options required for interacting with user?
                         break;
@@ -69,17 +69,26 @@ namespace ProjectWebAPI.Controllers
                 }
             }
 
-            return responseMessage;
+            return response;
         }
 
         // PUT api/user/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public string Put(int ID, [FromBody]object data)
         {
+            string response = "";
+
+            if (ID > 0 && data != null)
+            {
+                response = UpdateUser(data, ID);
+            }
+
+            return response;
         }
 
         //I think delete should return a success/fail message like add, will add tonight/tomorrow
         // DELETE api/user/5
+<<<<<<< HEAD
         /*[HttpDelete("{id}")]
         public HttpResponseMessage Delete(int id)
         {
@@ -96,12 +105,31 @@ namespace ProjectWebAPI.Controllers
             }
             return response
         }*/
+=======
+        [HttpDelete("{id}")]
+        public string Delete(int ID)
+        {
+            string response = "";
 
-        private HttpResponseMessage AddNewUser(object data)
+            if (ID > 0)
+            {
+                response = DeleteUser(ID);
+            }
+
+            return response;
+        }
+>>>>>>> Page_BackendBase
+
+        private string AddNewUser(object data)
         {
             UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
+<<<<<<< HEAD
             BaseResponse result = new BaseResponse();
             HttpResponseMessage response;
+=======
+            string result = "";
+
+>>>>>>> Page_BackendBase
             List<UserDataModel> existingUsers = userService.GetUserData();
             //should I add more indepth response messages as result.Status?
             if(existingUsers != null)
@@ -110,7 +138,7 @@ namespace ProjectWebAPI.Controllers
                 {
                     if (userService.AddNewUser(user))
                     {
-                        result.Status = "Success";
+                        result = "Successfully added new user";
                     }
                 }
             }
@@ -120,10 +148,57 @@ namespace ProjectWebAPI.Controllers
             }
             else
             {
+<<<<<<< HEAD
                 response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Status, System.Text.Encoding.UTF8, "application/json") };
             }
                        
             return response;
+=======
+                result = "Error - User already exists";
+            }
+
+//            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Success.ToString(), System.Text.Encoding.UTF8, "application/json") };
+            
+            return result;
+        }
+
+        private string UpdateUser(object data, int ID)
+        {
+            UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
+            string result = "Error - No changes made";
+
+            List<UserDataModel> existingUsers = userService.GetUserData(); //Create list of existing users
+            UserDataModel userMatch = new UserDataModel();
+
+            if (existingUsers != null)
+            {
+                userMatch = existingUsers.Find(o => o.UserID.Equals(ID));
+
+                if (userMatch != null) //If user is found
+                {
+                    user.UserID = userMatch.UserID;
+
+                    if (userService.UpdateUser(user))
+                    {
+                        result = "Successfully updated user";
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private string DeleteUser(int ID)
+        {
+            string result = "";
+
+            if (userService.DeleteUser(ID))
+                result = "Successfully deleted user";
+            else
+                result = "Error - No changes made";
+
+            return result;
+>>>>>>> Page_BackendBase
         }
     }
 }

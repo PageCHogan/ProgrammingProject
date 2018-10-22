@@ -13,7 +13,7 @@ namespace ProjectWebAPI.Services
         public List<QuestionDataModel> GetQuestionData(int? surveyID = null)
         {
             List<QuestionDataModel> questionData = new List<QuestionDataModel>();
-            string SqlQuery = "SELECT questionNumber, surveyID, question, type, options FROM Questions";
+            string SqlQuery = "SELECT QuestionNumber, surveyID, question, type, options FROM Questions";
 
             using (SqlConnection conn = new SqlConnection())
             {
@@ -54,6 +54,110 @@ namespace ProjectWebAPI.Services
             }
 
             return questionData;
+        }
+
+        //Not Currently Working
+        public bool AddNewQuestion(QuestionDataModel question)
+        {
+            bool result = false;
+
+            if (question != null)
+            {
+                string SqlQuery = "INSERT INTO Questions (SurveyID, QuestionNumber, Question, Type, Options) VALUES (@SurveyID, @QuestionNumber, @Question, @Type, @Options)";
+
+                using (SqlConnection conn = new SqlConnection())
+                {
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
+
+                    SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                    if (SqlQuery.Length > 0)
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.AddWithValue("@SurveyID", question.SurveyID);
+                        command.Parameters.AddWithValue("@QuestionNumber", question.QuestionNumber);
+                        command.Parameters.AddWithValue("@Question", question.Question);
+                        command.Parameters.AddWithValue("@Type", question.Type);
+                        command.Parameters.AddWithValue("@Options", question.Options);
+                    }
+                    int sqlResult = command.ExecuteNonQuery();
+
+                    result = sqlResult < 0 ? false : true;
+
+                    if (!result)
+                        Console.WriteLine("Error - record not saved to database");
+                }
+            }
+
+            return result;
+        }
+
+        public bool UpdateQuestion(QuestionDataModel question)
+        {
+            bool result = false;
+
+            if (question != null)
+            {
+                string SqlQuery = "UPDATE Questions SET SurveyID = @SurveyID, QuestionNumber = @QuestionNumber, Question = @Question, Type = @Type, Options = @Options  WHERE SurveyID = " + question.QuestionNumber;
+
+                using (SqlConnection conn = new SqlConnection())
+                {
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
+
+                    SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                    if (SqlQuery.Length > 0)
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.AddWithValue("@SurveyID", question.SurveyID);
+                        command.Parameters.AddWithValue("@QuestionNumber", question.QuestionNumber);
+                        command.Parameters.AddWithValue("@Question", question.Question);
+                        command.Parameters.AddWithValue("@Type", question.Type);
+                        command.Parameters.AddWithValue("@Options", question.Options);
+                    }
+                    int sqlResult = command.ExecuteNonQuery();
+
+                    result = sqlResult < 0 ? false : true;
+
+                    if (!result)
+                        Console.WriteLine("Error - record not updated in database");
+                }
+            }
+
+            return result;
+        }
+
+        public bool DeleteQuestion(int questionID, int surveyID)
+        {
+            bool result = false;
+
+            string SqlQuery = "DELETE FROM Questions WHERE QuestionNumber = @QuestionNumber AND SurveyID = @SurveyID";
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = CONNECTION_STRING;
+                conn.Open();
+
+                SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                if (SqlQuery.Length > 0)
+                {
+                    command = new SqlCommand(SqlQuery, conn);
+                    command.Parameters.AddWithValue("@SurveyID", surveyID);
+                    command.Parameters.AddWithValue("@QuestionNumber", questionID);
+                }
+
+                int sqlResult = command.ExecuteNonQuery();
+
+                result = sqlResult < 0 ? false : true;
+
+                if (!result)
+                    Console.WriteLine("Error - record not deleted");
+            }
+
+            return result;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace ProjectWebAPI.Controllers
 
             List<UserDataModel> userData = new List<UserDataModel>();
             userData = userService.GetUserData();
-            
+
             result = JsonConvert.SerializeObject(userData);
 
             return result;
@@ -57,7 +57,7 @@ namespace ProjectWebAPI.Controllers
 
             if (option != null && data != null)
             {
-                switch(option.ToLower())
+                switch (option.ToLower())
                 {
                     case "save":
                         response = AddNewUser(data);
@@ -86,26 +86,7 @@ namespace ProjectWebAPI.Controllers
             return response;
         }
 
-        //I think delete should return a success/fail message like add, will add tonight/tomorrow
         // DELETE api/user/5
-<<<<<<< HEAD
-        /*[HttpDelete("{id}")]
-        public HttpResponseMessage Delete(int id)
-        {
-            HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
-            BaseResponse result = new BaseResponse();
-            List<UserDataModel> existingUsers = userService.GetUserData();
-            if(existingUsers != null)
-            {
-                if (existingUsers.Exists(o => o.UserID == id))
-                {
-                   //call delete service
-                   //update response if delete service successful
-                }
-            }
-            return response
-        }*/
-=======
         [HttpDelete("{id}")]
         public string Delete(int ID)
         {
@@ -118,23 +99,17 @@ namespace ProjectWebAPI.Controllers
 
             return response;
         }
->>>>>>> Page_BackendBase
 
         private string AddNewUser(object data)
         {
             UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
-<<<<<<< HEAD
-            BaseResponse result = new BaseResponse();
-            HttpResponseMessage response;
-=======
-            string result = "";
+            string result = "Error - User already exists";
 
->>>>>>> Page_BackendBase
             List<UserDataModel> existingUsers = userService.GetUserData();
-            //should I add more indepth response messages as result.Status?
-            if(existingUsers != null)
+
+            if (existingUsers != null)
             {
-                if(!existingUsers.Exists(o => o.Username == user.Username))
+                if (!existingUsers.Exists(o => o.Username == user.Username))
                 {
                     if (userService.AddNewUser(user))
                     {
@@ -142,23 +117,7 @@ namespace ProjectWebAPI.Controllers
                     }
                 }
             }
-            if (result.Status != "Success")
-            {
-                response = new HttpResponseMessage(HttpStatusCode.BadRequest) { Content = new StringContent(result.Status, System.Text.Encoding.UTF8, "application/json") };
-            }
-            else
-            {
-<<<<<<< HEAD
-                response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Status, System.Text.Encoding.UTF8, "application/json") };
-            }
-                       
-            return response;
-=======
-                result = "Error - User already exists";
-            }
 
-//            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(result.Success.ToString(), System.Text.Encoding.UTF8, "application/json") };
-            
             return result;
         }
 
@@ -198,7 +157,6 @@ namespace ProjectWebAPI.Controllers
                 result = "Error - No changes made";
 
             return result;
->>>>>>> Page_BackendBase
         }
     }
 }

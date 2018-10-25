@@ -19,44 +19,52 @@ namespace ProjectWebAPI.Services
                 "INNER JOIN Response on Response.SurveyID = Survey.surveyID " +
                 "INNER JOIN User on User.userID = Survey.userID ";
 
-            using (SqlConnection conn = new SqlConnection())
+            try
             {
-                conn.ConnectionString = CONNECTION_STRING;
-                conn.Open();
-
-                SqlCommand command;
-
-                //If a parameter (responseID) is passed, return data for that record else return ALL data.
-                if (responseID.HasValue)
+                using (SqlConnection conn = new SqlConnection())
                 {
-                    SqlQuery += " Where ResponseID = @0";
-                    command = new SqlCommand(SqlQuery, conn);
-                    command.Parameters.Add(new SqlParameter("0", responseID));
-                }
-                else
-                {
-                    command = new SqlCommand(SqlQuery, conn);
-                }
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
 
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
+                    SqlCommand command;
+
+                    //If a parameter (responseID) is passed, return data for that record else return ALL data.
+                    if (responseID.HasValue)
                     {
-                        while (reader.Read())
+                        SqlQuery += " Where ResponseID = @0";
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.Add(new SqlParameter("0", responseID));
+                    }
+                    else
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                    }
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
                         {
-                            responseData.Add(new ResponseDataModel()
+                            while (reader.Read())
                             {
-                                ResponseID = Convert.ToInt32(reader[0]),
-                                SurveyName = reader[1].ToString(),
-                                SurveyType = reader[2].ToString(),
-                                SurveyDescription = reader[3].ToString(),
-                                StaffName = reader[4].ToString(),
-                                ResponseCSV = reader[5].ToString(),
-                                ResponseDate = Convert.ToDateTime(reader[6])
-                            });
+                                responseData.Add(new ResponseDataModel()
+                                {
+                                    ResponseID = Convert.ToInt32(reader[0]),
+                                    SurveyName = reader[1].ToString(),
+                                    SurveyType = reader[2].ToString(),
+                                    SurveyDescription = reader[3].ToString(),
+                                    StaffName = reader[4].ToString(),
+                                    ResponseCSV = reader[5].ToString(),
+                                    ResponseDate = Convert.ToDateTime(reader[6])
+                                });
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception Caught - " + ex.Message);
+                throw;
             }
 
             return responseData;

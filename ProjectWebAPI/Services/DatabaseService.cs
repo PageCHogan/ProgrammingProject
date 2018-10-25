@@ -19,9 +19,3 @@ namespace ProjectWebAPI.Services
 		}
     }
 }
-
-
-////WIP - Backbench
-////public HttpResponseMessage GetStaffDataHTTP()////{////    List<StaffDataModel> testResponseModel = GetStaffData();
-////    HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(testResponseModel), System.Text.Encoding.UTF8, "application/json") };
-////    return response;////}

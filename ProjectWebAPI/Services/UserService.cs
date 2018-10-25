@@ -12,49 +12,57 @@ namespace ProjectWebAPI.Services
         public List<UserDataModel> GetUserData(int? userID = null)
         {
             List<UserDataModel> userData = new List<UserDataModel>();
-            //Query must match Database Field names...
+            
             string SqlQuery = "SELECT UserID, user_name, title, first_name, last_name, email, type, permission, groups FROM Users";
 
-            using (SqlConnection conn = new SqlConnection())
+            try
             {
-                conn.ConnectionString = CONNECTION_STRING;
-                conn.Open();
-
-                SqlCommand command;
-
-                //If a parameter (staffID) is passed, return data for that record else return ALL data.
-                if (userID.HasValue)
+                using (SqlConnection conn = new SqlConnection())
                 {
-                    SqlQuery += " Where UserID = @0";
-                    command = new SqlCommand(SqlQuery, conn);
-                    command.Parameters.Add(new SqlParameter("0", userID));
-                }
-                else
-                {
-                    command = new SqlCommand(SqlQuery, conn);
-                }
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
 
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
+                    SqlCommand command;
+
+                    //If a parameter (staffID) is passed, return data for that record else return ALL data.
+                    if (userID.HasValue)
                     {
-                        while (reader.Read())
+                        SqlQuery += " Where UserID = @0";
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.Add(new SqlParameter("0", userID));
+                    }
+                    else
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                    }
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
                         {
-                            userData.Add(new UserDataModel()
+                            while (reader.Read())
                             {
-                                UserID = Convert.ToInt32(reader[0]),
-                                Username = reader[1].ToString(),
-                                Title = reader[2].ToString(),
-                                Firstname = reader[3].ToString(),
-                                Lastname = reader[4].ToString(),
-                                Email = reader[5].ToString(),
-                                Type = reader[6].ToString(),
-                                Permission = reader[7].ToString(),
-                                Groups = reader[8].ToString()
-                            });
+                                userData.Add(new UserDataModel()
+                                {
+                                    UserID = Convert.ToInt32(reader[0]),
+                                    Username = reader[1].ToString(),
+                                    Title = reader[2].ToString(),
+                                    Firstname = reader[3].ToString(),
+                                    Lastname = reader[4].ToString(),
+                                    Email = reader[5].ToString(),
+                                    Type = reader[6].ToString(),
+                                    Permission = reader[7].ToString(),
+                                    Groups = reader[8].ToString()
+                                });
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception Caught - " + ex.Message);
+                throw;
             }
 
             return userData;
@@ -68,35 +76,43 @@ namespace ProjectWebAPI.Services
             {
                 string SqlQuery = "INSERT INTO Users (user_name, title, first_name, last_name, email, type, permission, groups, password) VALUES (@user_name, @title, @first_name, @last_name, @email, @type, @permission, @groups, @password)";
 
-                using (SqlConnection conn = new SqlConnection())
+                try
                 {
-                    conn.ConnectionString = CONNECTION_STRING;
-                    conn.Open();
-
-                    SqlCommand command = new SqlCommand(SqlQuery, conn);
-
-                    if (SqlQuery.Length > 0)
+                    using (SqlConnection conn = new SqlConnection())
                     {
-                        command = new SqlCommand(SqlQuery, conn);
-                        command.Parameters.AddWithValue("@user_name", user.Username);
-                        command.Parameters.AddWithValue("@title", user.Title);
-                        command.Parameters.AddWithValue("@first_name", user.Firstname);
-                        command.Parameters.AddWithValue("@last_name", user.Lastname);
-                        command.Parameters.AddWithValue("@email", user.Email);
-                        command.Parameters.AddWithValue("@type", user.Type);
-                        command.Parameters.AddWithValue("@permission", user.Permission);
-                        command.Parameters.AddWithValue("@groups", user.Groups);
-                        command.Parameters.AddWithValue("@password", user.Password);
+                        conn.ConnectionString = CONNECTION_STRING;
+                        conn.Open();
 
+                        SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                        if (SqlQuery.Length > 0)
+                        {
+                            command = new SqlCommand(SqlQuery, conn);
+                            command.Parameters.AddWithValue("@user_name", user.Username);
+                            command.Parameters.AddWithValue("@title", user.Title);
+                            command.Parameters.AddWithValue("@first_name", user.Firstname);
+                            command.Parameters.AddWithValue("@last_name", user.Lastname);
+                            command.Parameters.AddWithValue("@email", user.Email);
+                            command.Parameters.AddWithValue("@type", user.Type);
+                            command.Parameters.AddWithValue("@permission", user.Permission);
+                            command.Parameters.AddWithValue("@groups", user.Groups);
+                            command.Parameters.AddWithValue("@password", user.Password);
+
+                        }
+                        int sqlResult = command.ExecuteNonQuery();
+
+                        result = sqlResult < 0 ? false : true;
                     }
-                    int sqlResult = command.ExecuteNonQuery();
-
-                    result = sqlResult < 0 ? false : true;
-
-                    if(!result)
-                        Console.WriteLine("Error - record not saved to database");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception Caught - " + ex.Message);
+                    throw;
                 }
             }
+
+            if (!result)
+                Console.WriteLine("Error - record not saved to database");
 
             return result;
         }
@@ -109,33 +125,41 @@ namespace ProjectWebAPI.Services
             {
                 string SqlQuery = "UPDATE Users SET title = @title, first_name = @first_name, last_name = @last_name, email = @email, type = @type, permission = @permission, groups = @groups, password = @password WHERE UserID = " + user.UserID;
 
-                using (SqlConnection conn = new SqlConnection())
+                try
                 {
-                    conn.ConnectionString = CONNECTION_STRING;
-                    conn.Open();
-
-                    SqlCommand command = new SqlCommand(SqlQuery, conn);
-
-                    if (SqlQuery.Length > 0)
+                    using (SqlConnection conn = new SqlConnection())
                     {
-                        command = new SqlCommand(SqlQuery, conn);
-                        command.Parameters.AddWithValue("@title", user.Title);
-                        command.Parameters.AddWithValue("@first_name", user.Firstname);
-                        command.Parameters.AddWithValue("@last_name", user.Lastname);
-                        command.Parameters.AddWithValue("@email", user.Email);
-                        command.Parameters.AddWithValue("@type", user.Type);
-                        command.Parameters.AddWithValue("@permission", user.Permission);
-                        command.Parameters.AddWithValue("@groups", user.Groups);
-                        command.Parameters.AddWithValue("@password", user.Password);
+                        conn.ConnectionString = CONNECTION_STRING;
+                        conn.Open();
+
+                        SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                        if (SqlQuery.Length > 0)
+                        {
+                            command = new SqlCommand(SqlQuery, conn);
+                            command.Parameters.AddWithValue("@title", user.Title);
+                            command.Parameters.AddWithValue("@first_name", user.Firstname);
+                            command.Parameters.AddWithValue("@last_name", user.Lastname);
+                            command.Parameters.AddWithValue("@email", user.Email);
+                            command.Parameters.AddWithValue("@type", user.Type);
+                            command.Parameters.AddWithValue("@permission", user.Permission);
+                            command.Parameters.AddWithValue("@groups", user.Groups);
+                            command.Parameters.AddWithValue("@password", user.Password);
+                        }
+                        int sqlResult = command.ExecuteNonQuery();
+
+                        result = sqlResult < 0 ? false : true;
                     }
-                    int sqlResult = command.ExecuteNonQuery();
-
-                    result = sqlResult < 0 ? false : true;
-
-                    if (!result)
-                        Console.WriteLine("Error - record not updated in database");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception Caught - " + ex.Message);
+                    throw;
                 }
             }
+
+            if (!result)
+                Console.WriteLine("Error - record not updated in database");
 
             return result;
         }
@@ -146,26 +170,34 @@ namespace ProjectWebAPI.Services
 
             string SqlQuery = "DELETE FROM Users WHERE UserID = @userID";
 
-            using (SqlConnection conn = new SqlConnection())
+            try
             {
-                conn.ConnectionString = CONNECTION_STRING;
-                conn.Open();
-
-                SqlCommand command = new SqlCommand(SqlQuery, conn);
-
-                if (SqlQuery.Length > 0)
+                using (SqlConnection conn = new SqlConnection())
                 {
-                    command = new SqlCommand(SqlQuery, conn);
-                    command.Parameters.AddWithValue("@userID", ID);
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
+
+                    SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                    if (SqlQuery.Length > 0)
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.AddWithValue("@userID", ID);
+                    }
+
+                    int sqlResult = command.ExecuteNonQuery();
+
+                    result = sqlResult < 0 ? false : true;
                 }
-
-                int sqlResult = command.ExecuteNonQuery();
-
-                result = sqlResult < 0 ? false : true;
-
-                if (!result)
-                    Console.WriteLine("Error - record not deleted");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception Caught - " + ex.Message);
+                throw;
+            }
+
+            if (!result)
+                Console.WriteLine("Error - record not deleted");
 
             return result;
         }

@@ -118,14 +118,14 @@ namespace ProjectWebAPI.Controllers
             ReportDataModel report = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
             string result = "Error - No changes made";
 
-            List<ReportDataModel> existingReports = reportService.GetReportData(); //Create list of existing users
+            List<ReportDataModel> existingReports = reportService.GetReportData(); //Create list of existing reports
             ReportDataModel reportMatch = new ReportDataModel();
 
             if (existingReports != null)
             {
                 reportMatch = existingReports.Find(o => o.ReportID.Equals(ID));
 
-                if (reportMatch != null) //If user is found
+                if (reportMatch != null) //If report is found
                 {
                     report.ReportID = reportMatch.ReportID;
 

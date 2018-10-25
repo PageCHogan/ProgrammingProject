@@ -43,21 +43,105 @@ namespace ProjectWebAPI.Controllers
         }
 
         // POST: api/Survey
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost("{option}")]
+        public string Post([FromBody]object data, string option)
         {
+            string response = "";
+
+            if (option != null && data != null)
+            {
+                switch (option.ToLower())
+                {
+                    case "save":
+                        response = AddNewSurvey(data);
+                        break;
+                    case "????": //TODO: Any other options required for interacting with survey?
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return response;
         }
-        
+
         // PUT: api/Survey/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public string Put(int ID, [FromBody]object data)
         {
+            string response = "";
+
+            if (ID > 0 && data != null)
+            {
+                response = UpdateSurvey(data, ID);
+            }
+
+            return response;
         }
-        
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public string Delete(int ID)
         {
+            string response = "";
+
+            if (ID > 0)
+            {
+                response = DeleteSurvey(ID);
+            }
+
+            return response;
+        }
+
+        private string AddNewSurvey(object data)
+        {
+            SurveyDataModel survey = JsonConvert.DeserializeObject<SurveyDataModel>(data.ToString());
+            string result = "";
+
+            if (surveyService.AddNewSurvey(survey))
+            {
+                result = "Successfully added new survey";
+            }
+
+            return result;
+        }
+
+        private string UpdateSurvey(object data, int ID)
+        {
+            SurveyDataModel survey = JsonConvert.DeserializeObject<SurveyDataModel>(data.ToString());
+            string result = "Error - No changes made";
+
+            List<SurveyDataModel> existingSurveys = surveyService.GetSurveyData(); //Create list of existing surveys
+            SurveyDataModel surveyMatch = new SurveyDataModel();
+
+            if (existingSurveys != null)
+            {
+                surveyMatch = existingSurveys.Find(o => o.SurveyID.Equals(ID));
+
+                if (surveyMatch != null) //If survey is found
+                {
+                    survey.SurveyID = surveyMatch.SurveyID;
+
+                    if (surveyService.UpdateSurvey(survey))
+                    {
+                        result = "Successfully updated survey";
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private string DeleteSurvey(int ID)
+        {
+            string result = "";
+
+            if (surveyService.DeleteSurvey(ID))
+                result = "Successfully deleted survey";
+            else
+                result = "Error - No changes made";
+
+            return result;
         }
     }
 }

@@ -15,48 +15,187 @@ namespace ProjectWebAPI.Services
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
             string SqlQuery = "SELECT surveyID, survey_name, userID, type, description, start_date, end_date, permission FROM Survey";
 
-            using (SqlConnection conn = new SqlConnection())
+            try
             {
-                conn.ConnectionString = CONNECTION_STRING;
-                conn.Open();
-
-                SqlCommand command;
-
-                //If a parameter (survey) is passed, return data for that record else return ALL data.
-                if (surveyID.HasValue)
+                using (SqlConnection conn = new SqlConnection())
                 {
-                    SqlQuery += " Where SurveyID = @0";
-                    command = new SqlCommand(SqlQuery, conn);
-                    command.Parameters.Add(new SqlParameter("0", surveyID));
-                }
-                else
-                {
-                    command = new SqlCommand(SqlQuery, conn);
-                }
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
 
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
+                    SqlCommand command;
+
+                    //If a parameter (survey) is passed, return data for that record else return ALL data.
+                    if (surveyID.HasValue)
                     {
-                        while (reader.Read())
+                        SqlQuery += " Where SurveyID = @0";
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.Add(new SqlParameter("0", surveyID));
+                    }
+                    else
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                    }
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
                         {
-                            surveyData.Add(new SurveyDataModel()
+                            while (reader.Read())
                             {
-                                SurveyID = Convert.ToInt32(reader[0]),
-                                SurveyName = reader[1].ToString(),
-                                UserID = Convert.ToInt32(reader[2]),
-                                Type = reader[3].ToString(),
-                                Description = reader[4].ToString(),
-                                StartDate = Convert.ToDateTime(reader[5]),
-                                EndDate = Convert.ToDateTime(reader[6]),
-                                Permission = reader[7].ToString()
-                            });
+                                surveyData.Add(new SurveyDataModel()
+                                {
+                                    SurveyID = Convert.ToInt32(reader[0]),
+                                    SurveyName = reader[1].ToString(),
+                                    UserID = Convert.ToInt32(reader[2]),
+                                    Type = reader[3].ToString(),
+                                    Description = reader[4].ToString(),
+                                    StartDate = Convert.ToDateTime(reader[5]),
+                                    EndDate = Convert.ToDateTime(reader[6]),
+                                    Permission = reader[7].ToString()
+                                });
+                            }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception Caught - " + ex.Message);
+                throw;
+            }
 
             return surveyData;
         }
+
+        public bool AddNewSurvey(SurveyDataModel survey)
+        {
+            bool result = false;
+
+            if (survey != null)
+            {
+                string SqlQuery = "INSERT INTO Survey (survey_name, userID, type, description, start_date, end_date, permission) VALUES (@survey_name, @userID, @type, @description, @start_date, @end_date, @permission)";
+
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection())
+                    {
+                        conn.ConnectionString = CONNECTION_STRING;
+                        conn.Open();
+
+                        SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                        if (SqlQuery.Length > 0)
+                        {
+                            command = new SqlCommand(SqlQuery, conn);
+                            command.Parameters.AddWithValue("@survey_name", survey.SurveyName);
+                            command.Parameters.AddWithValue("@userID", survey.UserID);
+                            command.Parameters.AddWithValue("@type", survey.Type);
+                            command.Parameters.AddWithValue("@description", survey.Description);
+                            command.Parameters.AddWithValue("@start_date", survey.StartDate);
+                            command.Parameters.AddWithValue("@end_date", survey.EndDate);
+                            command.Parameters.AddWithValue("@permission", survey.Permission);
+                        }
+                        int sqlResult = command.ExecuteNonQuery();
+
+                        result = sqlResult < 0 ? false : true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception Caught - " + ex.Message);
+                    throw;
+                }
+            }
+
+            if (!result)
+                Console.WriteLine("Error - record not saved to database");
+
+            return result;
+        }
+
+        public bool UpdateSurvey(SurveyDataModel survey)
+        {
+            bool result = false;
+
+            if (survey != null)
+            {
+                string SqlQuery = "UPDATE Survey SET survey_name = @survey_name, userID = @userID, type = @type, description = @description, start_date = @start_date, end_date = @end_date, permission = @permission WHERE SurveyID = " + survey.SurveyID;
+
+                try
+                {
+                    using (SqlConnection conn = new SqlConnection())
+                    {
+                        conn.ConnectionString = CONNECTION_STRING;
+                        conn.Open();
+
+                        SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                        if (SqlQuery.Length > 0)
+                        {
+                            command = new SqlCommand(SqlQuery, conn);
+                            command.Parameters.AddWithValue("@survey_name", survey.SurveyName);
+                            command.Parameters.AddWithValue("@userID", survey.UserID);
+                            command.Parameters.AddWithValue("@type", survey.Type);
+                            command.Parameters.AddWithValue("@description", survey.Description);
+                            command.Parameters.AddWithValue("@start_date", survey.StartDate);
+                            command.Parameters.AddWithValue("@end_date", survey.EndDate);
+                            command.Parameters.AddWithValue("@permission", survey.Permission);
+                        }
+                        int sqlResult = command.ExecuteNonQuery();
+
+                        result = sqlResult < 0 ? false : true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception Caught - " + ex.Message);
+                    throw;
+                }
+            }
+
+            if (!result)
+                Console.WriteLine("Error - record not updated in database");
+
+            return result;
+        }
+
+        public bool DeleteSurvey(int ID)
+        {
+            bool result = false;
+
+            string SqlQuery = "DELETE FROM Survey WHERE SurveyID = @surveyID";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection())
+                {
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
+
+                    SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                    if (SqlQuery.Length > 0)
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.AddWithValue("@surveyID", ID);
+                    }
+
+                    int sqlResult = command.ExecuteNonQuery();
+
+                    result = sqlResult < 0 ? false : true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception Caught - " + ex.Message);
+                throw;
+            }
+
+            if (!result)
+                Console.WriteLine("Error - record not deleted");
+
+            return result;
+        }
+
     }
 }

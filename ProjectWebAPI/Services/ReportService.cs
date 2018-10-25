@@ -14,43 +14,51 @@ namespace ProjectWebAPI.Services
             List<ReportDataModel> surveyData = new List<ReportDataModel>();
             string SqlQuery = "SELECT reportID, responseID, Name, Report_file, Date FROM Report";
 
-            using (SqlConnection conn = new SqlConnection())
+            try
             {
-                conn.ConnectionString = CONNECTION_STRING;
-                conn.Open();
-
-                SqlCommand command;
-
-                //If a parameter (Report) is passed, return data for that record else return ALL data.
-                if (reportID.HasValue)
+                using (SqlConnection conn = new SqlConnection())
                 {
-                    SqlQuery += " Where ReportID = @0";
-                    command = new SqlCommand(SqlQuery, conn);
-                    command.Parameters.Add(new SqlParameter("0", reportID));
-                }
-                else
-                {
-                    command = new SqlCommand(SqlQuery, conn);
-                }
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
 
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
+                    SqlCommand command;
+
+                    //If a parameter (Report) is passed, return data for that record else return ALL data.
+                    if (reportID.HasValue)
                     {
-                        while (reader.Read())
-                        {
-                            surveyData.Add(new ReportDataModel()
-                            {
-                                ReportID = Convert.ToInt32(reader[0]),
-                                ResponseID = Convert.ToInt32(reader[1]),
-                                Name = reader[2].ToString(),
-                                ReportFile = reader[3].ToString(),
-                                Date = Convert.ToDateTime(reader[4])
+                        SqlQuery += " Where ReportID = @0";
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.Add(new SqlParameter("0", reportID));
+                    }
+                    else
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                    }
 
-                            });
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                surveyData.Add(new ReportDataModel()
+                                {
+                                    ReportID = Convert.ToInt32(reader[0]),
+                                    ResponseID = Convert.ToInt32(reader[1]),
+                                    Name = reader[2].ToString(),
+                                    ReportFile = reader[3].ToString(),
+                                    Date = Convert.ToDateTime(reader[4])
+
+                                });
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception ex )
+            {
+                Console.WriteLine("Exception Caught - " + ex.Message);
+                throw;
             }
 
             return surveyData;
@@ -67,30 +75,38 @@ namespace ProjectWebAPI.Services
 
                 string SqlQuery = "INSERT INTO Report (responseID, Name, Report_file, Date) VALUES (@responseID, @Name, @Report_file, @Date)";
 
-                using (SqlConnection conn = new SqlConnection())
+                try
                 {
-                    conn.ConnectionString = CONNECTION_STRING;
-                    conn.Open();
-
-                    SqlCommand command = new SqlCommand(SqlQuery, conn);
-
-                    if (SqlQuery.Length > 0)
+                    using (SqlConnection conn = new SqlConnection())
                     {
-                        command = new SqlCommand(SqlQuery, conn);
-                        command.Parameters.AddWithValue("@responseID", report.ResponseID);
-                        command.Parameters.AddWithValue("@Name", report.Name);
-                        command.Parameters.AddWithValue("@Report_file", report.ReportFile);
-                        command.Parameters.AddWithValue("@Date", report.Date);
+                        conn.ConnectionString = CONNECTION_STRING;
+                        conn.Open();
 
+                        SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                        if (SqlQuery.Length > 0)
+                        {
+                            command = new SqlCommand(SqlQuery, conn);
+                            command.Parameters.AddWithValue("@responseID", report.ResponseID);
+                            command.Parameters.AddWithValue("@Name", report.Name);
+                            command.Parameters.AddWithValue("@Report_file", report.ReportFile);
+                            command.Parameters.AddWithValue("@Date", report.Date);
+
+                        }
+                        int sqlResult = command.ExecuteNonQuery();
+
+                        result = sqlResult < 0 ? false : true;
                     }
-                    int sqlResult = command.ExecuteNonQuery();
-
-                    result = sqlResult < 0 ? false : true;
-
-                    if (!result)
-                        Console.WriteLine("Error - record not saved to database");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception Caught - " + ex.Message);
+                    throw;
                 }
             }
+
+            if (!result)
+                Console.WriteLine("Error - record not saved to database");
 
             return result;
         }
@@ -106,28 +122,36 @@ namespace ProjectWebAPI.Services
 
                 string SqlQuery = "UPDATE Report SET name = @name, report_file = @report_file, Date = @Date WHERE ReportID = " + report.ReportID;
 
-                using (SqlConnection conn = new SqlConnection())
+                try
                 {
-                    conn.ConnectionString = CONNECTION_STRING;
-                    conn.Open();
-
-                    SqlCommand command = new SqlCommand(SqlQuery, conn);
-
-                    if (SqlQuery.Length > 0)
+                    using (SqlConnection conn = new SqlConnection())
                     {
-                        command = new SqlCommand(SqlQuery, conn);
-                        command.Parameters.AddWithValue("@name", report.Name);
-                        command.Parameters.AddWithValue("@report_file", report.ReportFile);
-                        command.Parameters.AddWithValue("@Date", report.Date);
+                        conn.ConnectionString = CONNECTION_STRING;
+                        conn.Open();
+
+                        SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                        if (SqlQuery.Length > 0)
+                        {
+                            command = new SqlCommand(SqlQuery, conn);
+                            command.Parameters.AddWithValue("@name", report.Name);
+                            command.Parameters.AddWithValue("@report_file", report.ReportFile);
+                            command.Parameters.AddWithValue("@Date", report.Date);
+                        }
+                        int sqlResult = command.ExecuteNonQuery();
+
+                        result = sqlResult < 0 ? false : true;                      
                     }
-                    int sqlResult = command.ExecuteNonQuery();
-
-                    result = sqlResult < 0 ? false : true;
-
-                    if (!result)
-                        Console.WriteLine("Error - record not updated in database");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Exception Caught - " + ex.Message);
+                    throw;
                 }
             }
+
+            if (!result)
+                Console.WriteLine("Error - record not updated in database");
 
             return result;
         }
@@ -138,26 +162,34 @@ namespace ProjectWebAPI.Services
 
             string SqlQuery = "DELETE FROM Report WHERE ReportID = @reportID";
 
-            using (SqlConnection conn = new SqlConnection())
+            try
             {
-                conn.ConnectionString = CONNECTION_STRING;
-                conn.Open();
-
-                SqlCommand command = new SqlCommand(SqlQuery, conn);
-
-                if (SqlQuery.Length > 0)
+                using (SqlConnection conn = new SqlConnection())
                 {
-                    command = new SqlCommand(SqlQuery, conn);
-                    command.Parameters.AddWithValue("@reportID", ID);
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
+
+                    SqlCommand command = new SqlCommand(SqlQuery, conn);
+
+                    if (SqlQuery.Length > 0)
+                    {
+                        command = new SqlCommand(SqlQuery, conn);
+                        command.Parameters.AddWithValue("@reportID", ID);
+                    }
+
+                    int sqlResult = command.ExecuteNonQuery();
+
+                    result = sqlResult < 0 ? false : true;
                 }
-
-                int sqlResult = command.ExecuteNonQuery();
-
-                result = sqlResult < 0 ? false : true;
-
-                if (!result)
-                    Console.WriteLine("Error - record not deleted");
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception Caught - " + ex.Message);
+                throw;
+            }
+
+            if (!result)
+                Console.WriteLine("Error - record not deleted");
 
             return result;
         }

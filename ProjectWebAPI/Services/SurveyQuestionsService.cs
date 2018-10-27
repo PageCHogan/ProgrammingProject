@@ -115,7 +115,7 @@ namespace ProjectWebAPI.Services
 
             if (question != null)
             {
-                string SqlQuery = "UPDATE Questions SET SurveyID = @SurveyID, QuestionNumber = @QuestionNumber, Question = @Question, Type = @Type, Options = @Options  WHERE SurveyID = " + question.QuestionNumber;
+                string SqlQuery = "UPDATE Questions SET Question = @Question, Type = @Type, Options = @Options  WHERE SurveyID = @SurveyID AND QuestionNumber = @QuestionNumber";
 
                 try
                 {

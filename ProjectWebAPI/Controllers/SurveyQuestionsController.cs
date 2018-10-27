@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProjectWebAPI.Services;
 using ProjectWebAPI.Models.QuestionModels;
+using ProjectWebAPI.Models.SurveyModels;
 using Newtonsoft.Json;
 
 namespace ProjectWebAPI.Controllers
@@ -14,6 +15,7 @@ namespace ProjectWebAPI.Controllers
     public class SurveyQuestionsController : Controller
     {
         SurveyQuestionsService surveyQuestionService = new SurveyQuestionsService();
+        SurveyServices surveyService = new SurveyServices();
 
         // GET api/surveyQuestions
         [HttpGet]
@@ -68,14 +70,14 @@ namespace ProjectWebAPI.Controllers
         }
 
         // PUT api/surveyQuestions/5
-        [HttpPut("{id}")]
-        public string Put(int ID, [FromBody]object data)
+        [HttpPut("{questionID}/{surveyID}")]
+        public string Put(int questionID, int surveyID, [FromBody]object data)
         {
             string response = "";
 
-            if (ID > 0 && data != null)
+            if ((questionID > 0 && surveyID > 0) && data != null)
             {
-                response = UpdateQuestion(data, ID);
+                response = UpdateQuestion(data, questionID, surveyID);
             }
 
             return response;
@@ -98,34 +100,48 @@ namespace ProjectWebAPI.Controllers
         private string AddNewQuestion(object data)
         {
             QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
-            string result = "";
+            string result = "Entered survey not found, failed to add question";
 
-            List<QuestionDataModel> existingUsers = surveyQuestionService.GetQuestionData();
+            List<SurveyDataModel> existingSurveys = surveyService.GetSurveyData();
 
-            if (surveyQuestionService.AddNewQuestion(question))
+            if(existingSurveys != null)
             {
-                result = "Successfully added new question";
-            }
-            else
-            {
-                result = "Error - Failed to add new question";
+                if(existingSurveys.Exists(o => o.SurveyID == question.SurveyID))
+                {
+                    if (surveyQuestionService.AddNewQuestion(question))
+                    {
+                        result = "Successfully added new question";
+                    }
+                    else
+                    {
+                        result = "Error - Failed to add new question";
+                    }
+                }
             }
 
             return result;
         }
 
-        private string UpdateQuestion(object data, int ID)
+        private string UpdateQuestion(object data, int questionID, int surveyID)
         {
             QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
-            string result = "";
+            string result = "Entered survey not found, failed to update question";
 
-            if (surveyQuestionService.UpdateQuestion(question))
+            List<SurveyDataModel> existingSurveys = surveyService.GetSurveyData();
+
+            if (existingSurveys != null)
             {
-                result = "Successfully updated question";
-            }
-            else
-            {
-                result = "Error - No changes made";
+                if (existingSurveys.Exists(o => o.SurveyID == question.SurveyID))
+                {
+                    if (surveyQuestionService.UpdateQuestion(question))
+                    {
+                        result = "Successfully updated question";
+                    }
+                    else
+                    {
+                        result = "Error - No changes made";
+                    }
+                }
             }
 
             return result;

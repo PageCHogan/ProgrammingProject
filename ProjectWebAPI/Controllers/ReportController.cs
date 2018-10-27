@@ -95,7 +95,6 @@ namespace ProjectWebAPI.Controllers
             return response;
         }
 
-
         private string AddNewReport(object data)
         {
             ReportDataModel newReport = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());

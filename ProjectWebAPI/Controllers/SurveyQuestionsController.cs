@@ -24,7 +24,7 @@ namespace ProjectWebAPI.Controllers
             List<QuestionDataModel> questionData = new List<QuestionDataModel>();
             string result = "";
 
-            questionData = surveyQuestionService.GetQuestionData();
+            questionData = surveyQuestionService.GetSurveyQuestions();
 
             result = JsonConvert.SerializeObject(questionData);
             return result;
@@ -38,7 +38,7 @@ namespace ProjectWebAPI.Controllers
             List<QuestionDataModel> questionData = new List<QuestionDataModel>();
             string result = "";
 
-            questionData = surveyQuestionService.GetQuestionData(id);
+            questionData = surveyQuestionService.GetSurveyQuestions(id);
 
             result = JsonConvert.SerializeObject(questionData);
 
@@ -102,7 +102,7 @@ namespace ProjectWebAPI.Controllers
             QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
             string result = "Entered survey not found, failed to add question";
 
-            List<SurveyDataModel> existingSurveys = surveyService.GetSurveyData();
+            List<SurveyDataModel> existingSurveys = surveyService.GetSurveys();
 
             if(existingSurveys != null)
             {
@@ -127,7 +127,7 @@ namespace ProjectWebAPI.Controllers
             QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
             string result = "Entered survey not found, failed to update question";
 
-            List<SurveyDataModel> existingSurveys = surveyService.GetSurveyData();
+            List<SurveyDataModel> existingSurveys = surveyService.GetSurveys();
 
             if (existingSurveys != null)
             {

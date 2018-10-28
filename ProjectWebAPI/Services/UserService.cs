@@ -9,7 +9,7 @@ namespace ProjectWebAPI.Services
 {
     public class UserService : DatabaseService
     {
-        public List<UserDataModel> GetUserData(int? userID = null)
+        public List<UserDataModel> GetUsers(int? userID = null)
         {
             List<UserDataModel> userData = new List<UserDataModel>();
             

@@ -22,7 +22,7 @@ namespace ProjectWebAPI.Controllers
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
             string result = "";
 
-            surveyData = surveyService.GetSurveyData();
+            surveyData = surveyService.GetSurveys();
 
             result = JsonConvert.SerializeObject(surveyData);
             return result;
@@ -35,7 +35,7 @@ namespace ProjectWebAPI.Controllers
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
             string result = "";
 
-            surveyData = surveyService.GetSurveyData(id);
+            surveyData = surveyService.GetSurveys(id);
 
             result = JsonConvert.SerializeObject(surveyData);
 
@@ -111,7 +111,7 @@ namespace ProjectWebAPI.Controllers
             SurveyDataModel survey = JsonConvert.DeserializeObject<SurveyDataModel>(data.ToString());
             string result = "Error - No changes made";
 
-            List<SurveyDataModel> existingSurveys = surveyService.GetSurveyData(); //Create list of existing surveys
+            List<SurveyDataModel> existingSurveys = surveyService.GetSurveys(); //Create list of existing surveys
             SurveyDataModel surveyMatch = new SurveyDataModel();
 
             if (existingSurveys != null)

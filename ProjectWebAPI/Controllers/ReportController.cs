@@ -23,7 +23,7 @@ namespace ProjectWebAPI.Controllers
             List<ReportDataModel> reportData = new List<ReportDataModel>();
             string result = "";
 
-            reportData = reportService.GetReportData();
+            reportData = reportService.GetReports();
 
             result = JsonConvert.SerializeObject(reportData);
             return result;
@@ -36,7 +36,7 @@ namespace ProjectWebAPI.Controllers
             List<ReportDataModel> reportData = new List<ReportDataModel>();
             string result = "";
 
-            reportData = reportService.GetReportData(id);
+            reportData = reportService.GetReports(id);
 
             result = JsonConvert.SerializeObject(reportData);
 
@@ -117,7 +117,7 @@ namespace ProjectWebAPI.Controllers
             ReportDataModel report = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
             string result = "Error - No changes made";
 
-            List<ReportDataModel> existingReports = reportService.GetReportData(); //Create list of existing reports
+            List<ReportDataModel> existingReports = reportService.GetReports(); //Create list of existing reports
             ReportDataModel reportMatch = new ReportDataModel();
 
             if (existingReports != null)

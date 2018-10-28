@@ -10,7 +10,7 @@ namespace ProjectWebAPI.Services
     public class SurveyServices : DatabaseService
     {
         //Survey Database Actions
-        public List<SurveyDataModel> GetSurveyData(int? surveyID = null)
+        public List<SurveyDataModel> GetSurveys(int? surveyID = null)
         {
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
             string SqlQuery = "SELECT surveyID, survey_name, userID, type, description, start_date, end_date, permission FROM Survey";

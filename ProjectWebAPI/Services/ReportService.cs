@@ -9,7 +9,7 @@ namespace ProjectWebAPI.Services
 {
     public class ReportService : DatabaseService
     {
-        public List<ReportDataModel> GetReportData(int? reportID = null)
+        public List<ReportDataModel> GetReports(int? reportID = null)
         {
             List<ReportDataModel> surveyData = new List<ReportDataModel>();
             string SqlQuery = "SELECT reportID, responseID, Name, Report_file, Date FROM Report";

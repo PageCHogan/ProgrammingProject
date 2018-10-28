@@ -10,7 +10,7 @@ namespace ProjectWebAPI.Services
     public class SurveyQuestionsService : DatabaseService
     {
         //Returns all questions in database OR if surveyID provided, will return all questions belonging to that survey.
-        public List<QuestionDataModel> GetQuestionData(int? surveyID = null)
+        public List<QuestionDataModel> GetSurveyQuestions(int? surveyID = null)
         {
             List<QuestionDataModel> questionData = new List<QuestionDataModel>();
             string SqlQuery = "SELECT QuestionNumber, surveyID, question, type, options FROM Questions";

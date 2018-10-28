@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net;
 using ProjectWebAPI.Messages;
 using ProjectWebAPI.Models.UserModels;
+using System.Text;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -26,7 +27,7 @@ namespace ProjectWebAPI.Controllers
             string result;
 
             List<UserDataModel> userData = new List<UserDataModel>();
-            userData = userService.GetUserData();
+            userData = userService.GetUsers();
 
             result = JsonConvert.SerializeObject(userData);
 
@@ -37,13 +38,19 @@ namespace ProjectWebAPI.Controllers
         // GET api/user/5
         [HttpGet("{id}")]
         public string Get(int ID)
+        //public HttpResponseMessage Get(int ID)
         {
+            //https://stackoverflow.com/questions/17097841/return-a-json-string-explicitly-from-asp-net-webapi
             List<UserDataModel> userData = new List<UserDataModel>();
             string result = "";
 
-            userData = userService.GetUserData(ID);
+            userData = userService.GetUsers(ID);
 
             result = JsonConvert.SerializeObject(userData);
+
+            //HttpResponseMessage response = new HttpResponseMessage();
+            //response.Content = new StringContent(result, Encoding.UTF8, "application/json");
+            //return response;
 
             return result;
         }
@@ -105,7 +112,7 @@ namespace ProjectWebAPI.Controllers
             UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
             string result = "Error - User already exists";
 
-            List<UserDataModel> existingUsers = userService.GetUserData();
+            List<UserDataModel> existingUsers = userService.GetUsers();
 
             if (existingUsers != null)
             {
@@ -126,7 +133,7 @@ namespace ProjectWebAPI.Controllers
             UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
             string result = "Error - No changes made";
 
-            List<UserDataModel> existingUsers = userService.GetUserData(); //Create list of existing users
+            List<UserDataModel> existingUsers = userService.GetUsers(); //Create list of existing users
             UserDataModel userMatch = new UserDataModel();
 
             if (existingUsers != null)

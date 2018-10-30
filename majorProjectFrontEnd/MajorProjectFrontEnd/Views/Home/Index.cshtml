@@ -1,0 +1,105 @@
+﻿@model List<QuestionDataModel>
+
+<form id="target" asp-action="SurveyResponse" method="post">
+	<input name="numberOfQuestions" type="hidden" value="@Model.Count">
+	<input name="surveyID" type="hidden" value="@Model[0].SurveyID">
+@foreach (var question in Model)
+{
+	<div class="question">
+		<div class="survey-question">Question @(Model.IndexOf(question) + 1): @question.Question</div>
+		@{
+			<p class="errorMessage @question.QuestionNumber"></p>
+
+			var options = question.Options.Split(",");
+
+			<input name="question_options_@question.QuestionNumber" type="hidden" value="@question.Options">
+			<input name="question_title_@question.QuestionNumber" type="hidden" value="@question.Question">
+
+			if (question.Type == "MQ")
+			{
+				<input name="question_type_@question.QuestionNumber" type="hidden" value="MQ">
+
+				for (var i = 0; i < options.Length; ++i)
+				{
+					/*
+						if (i == 0)
+						{
+							<label class="radio">@options[i]<input type="radio" name="@question.QuestionNumber" value="@options[i]" checked required></label>
+						}
+						else
+						{
+					*/
+
+					<label class="radio">@options[i]<input type="radio" name="@question.QuestionNumber" value="@options[i]" required></label>
+
+				}
+			}
+			else if (question.Type == "RANGE")
+			{
+				<input name="question_type_@question.QuestionNumber" type="hidden" value="RANGE">
+				<p>1 = @options[0]</p>
+				<p>@options[2] = @options[1]</p>
+				<select name="@question.QuestionNumber">
+					@for (var i = 1; i <= Int32.Parse(options[2]); ++i)
+					{
+						<option value="@i">@i</option>
+					}
+				</select>
+
+			}
+			else if (question.Type == "NI")
+			{
+				<input name="question_type_@question.QuestionNumber" type="hidden" value="NI">
+				<input class="text" type="number" min="0" name="@question.QuestionNumber">
+			}
+			else if (question.Type == "COMMENT")
+			{
+				<input name="question_type_@question.QuestionNumber" type="hidden" value="COMMENT">
+				<textarea name="@question.QuestionNumber"></textarea>
+
+
+			}
+			else if (question.Type == "TEXT")
+			{
+
+				<input name="question_type_@question.QuestionNumber" type="hidden" value="TEXT">
+				<input class="text" name="@question.QuestionNumber">
+			}
+			else if (question.Type == "RANK")
+			{
+
+				<input name="question_type_@question.QuestionNumber" type="hidden" value="RANK">
+
+				var numberOfRanks = options.Count();
+
+				foreach (var option in options)
+				{
+					<span>Rank @(options.ToList().IndexOf(option) + 1):</span>
+					<select class="rank" name="@question.QuestionNumber">
+						@for (var i = 0; i < options.Count(); ++i)
+						{
+							if (i == options.ToList().IndexOf(option))
+							{
+								<option value="@options[i]" class="@question.QuestionNumber" selected>@options[i]</option>
+							}
+							else
+							{
+								<option value="@options[i]" class="@question.QuestionNumber">@options[i]</option>
+							}
+
+
+						}
+					</select>
+					<br>
+
+				}
+
+			}
+		}
+	</div>
+}
+	<p id="mainErrorMessage"></p>
+	<input type="submit">
+</form>
+
+

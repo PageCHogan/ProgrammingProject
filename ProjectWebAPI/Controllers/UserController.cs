@@ -46,7 +46,7 @@ namespace ProjectWebAPI.Controllers
 
             userData = userService.GetUsers(ID);
 
-            result = JsonConvert.SerializeObject(userData);
+            result = JsonConvert.SerializeObject(userData, Formatting.Indented);
 
             //HttpResponseMessage response = new HttpResponseMessage();
             //response.Content = new StringContent(result, Encoding.UTF8, "application/json");

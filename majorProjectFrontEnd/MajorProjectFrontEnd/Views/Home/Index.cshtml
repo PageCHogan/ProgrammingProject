@@ -1,6 +1,6 @@
 ﻿@model List<QuestionDataModel>
-
-<form id="target" asp-action="SurveyResponse" method="post">
+<article>
+<form id="target" asp-action="SurveyResponseAsync" method="post">
 	<input name="numberOfQuestions" type="hidden" value="@Model.Count">
 	<input name="surveyID" type="hidden" value="@Model[0].SurveyID">
 @foreach (var question in Model)
@@ -101,5 +101,6 @@
 	<p id="mainErrorMessage"></p>
 	<input type="submit">
 </form>
+</article>
 
 

@@ -89,3 +89,9 @@ C:\Users\New\Downloads\MajorProjectWebAPI-front-end\MajorProjectWebAPI-front-end
 C:\Users\New\Downloads\MajorProjectWebAPI-front-end\MajorProjectWebAPI-front-end\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.pdb
 C:\Users\New\Downloads\MajorProjectWebAPI-front-end\MajorProjectWebAPI-front-end\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.csproj.CopyComplete
 C:\Users\New\Downloads\MajorProjectWebAPI-front-end\MajorProjectWebAPI-front-end\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Home\SurveyResponse.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Index.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Create.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Details.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Edit.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Home\SurveyResponseAsync.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Delete.g.cshtml.cs

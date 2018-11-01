@@ -1,0 +1,53 @@
+﻿@model MajorProjectFrontEnd.Models.QuestionDataModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+<input type="hidden" name="questionNumber" value="@Model.QuestionNumber">
+<input type="hidden" name="surveyID" value="@Model.QuestionNumber">
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>QuestionDataModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuestionNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SurveyID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SurveyID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Question)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Question)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Options)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Options)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

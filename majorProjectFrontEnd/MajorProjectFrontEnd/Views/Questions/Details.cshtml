@@ -1,0 +1,49 @@
+﻿@model MajorProjectFrontEnd.Models.QuestionDataModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+<p>@ViewData["QuestionDetails"]</p>
+<div>
+    <h4>QuestionDataModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.QuestionNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SurveyID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SurveyID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Question)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Question)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Type)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Options)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Options)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { surveyID = Model.SurveyID, questionNumber = Model.QuestionNumber }) |
+    <a asp-action="Index">Back to List</a>
+</div>

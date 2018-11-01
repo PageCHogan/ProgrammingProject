@@ -82,9 +82,19 @@ namespace MajorProjectFrontEnd.Controllers
 		}
 
 
-		public ViewResult SurveyResponse()
+		public async Task<ViewResult> SurveyResponseAsync()
 		{
-			return View("SurveyResponse", GetResponseModelList(Request.Form));
+			client.BaseAddress = new Uri("http://localhost:61081/");
+
+			client.DefaultRequestHeaders.Accept.Clear();
+			client.DefaultRequestHeaders.Accept.Add(
+			    new MediaTypeWithQualityHeaderValue("application/json"));
+
+			HttpResponseMessage response = await client.PostAsJsonAsync("api/response/save", GetResponseModelList(Request.Form));
+			response.EnsureSuccessStatusCode();
+
+
+			return View("SurveyResponseAsync", GetResponseModelList(Request.Form));
 		}
 
 
@@ -109,6 +119,14 @@ namespace MajorProjectFrontEnd.Controllers
 			}
 
 			return list;
+		}
+		[Route("ListQuestions")]
+		public IActionResult ListQuestions()
+		{
+			var questionData = databaseService.GetQuestionData();
+
+			return View(questionData);
+
 		}
 	}
 }

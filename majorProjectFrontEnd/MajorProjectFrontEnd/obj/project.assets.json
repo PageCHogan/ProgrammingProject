@@ -12261,11 +12261,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\New\\Desktop\\majorProjectFrontEnd\\MajorProjectFrontEnd\\MajorProjectFrontEnd.csproj",
+      "projectUniqueName": "C:\\Users\\New\\gges-main\\programming-project\\GitHub\\majorProjectFrontEnd\\MajorProjectFrontEnd\\MajorProjectFrontEnd.csproj",
       "projectName": "MajorProjectFrontEnd",
-      "projectPath": "C:\\Users\\New\\Desktop\\majorProjectFrontEnd\\MajorProjectFrontEnd\\MajorProjectFrontEnd.csproj",
+      "projectPath": "C:\\Users\\New\\gges-main\\programming-project\\GitHub\\majorProjectFrontEnd\\MajorProjectFrontEnd\\MajorProjectFrontEnd.csproj",
       "packagesPath": "C:\\Users\\New\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\New\\Desktop\\majorProjectFrontEnd\\MajorProjectFrontEnd\\obj\\",
+      "outputPath": "C:\\Users\\New\\gges-main\\programming-project\\GitHub\\majorProjectFrontEnd\\MajorProjectFrontEnd\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

@@ -31,10 +31,10 @@ namespace MajorProjectFrontEnd.Controllers
 
 			questionData = databaseService.GetQuestionData(id);
 			*/
-			return View(getQuestionDataAsync().Result);
+			return View(getQuestionDataAsync(id).Result);
 		}
 
-		public async Task<List<QuestionDataModel>> getQuestionDataAsync()
+		public async Task<List<QuestionDataModel>> getQuestionDataAsync(int id)
 		{
 			// https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
 
@@ -48,7 +48,7 @@ namespace MajorProjectFrontEnd.Controllers
 			List<QuestionDataModel> list = null;
 
 
-			HttpResponseMessage response = await client.GetAsync("api/surveyQuestions");
+			HttpResponseMessage response = await client.GetAsync("api/SurveyQuestions/" + id.ToString());
 			if (response.IsSuccessStatusCode)
 			{
 				list = await response.Content.ReadAsAsync<List<QuestionDataModel>>();

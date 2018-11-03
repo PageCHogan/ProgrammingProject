@@ -26,10 +26,11 @@ namespace MajorProjectFrontEnd.Controllers
 		[HttpGet("{id}")]
 		public IActionResult Index(int id)
 		{
+			/*
 			List<QuestionDataModel> questionData = null;
 
 			questionData = databaseService.GetQuestionData(id);
-
+			*/
 			return View(getQuestionDataAsync().Result);
 		}
 

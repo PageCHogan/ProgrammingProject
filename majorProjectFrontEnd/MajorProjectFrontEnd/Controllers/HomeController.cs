@@ -26,11 +26,11 @@ namespace MajorProjectFrontEnd.Controllers
 		[HttpGet("{id}")]
 		public IActionResult Index(int id)
 		{
-			List<QuestionDataModel> questionData = new List<QuestionDataModel>();
+			List<QuestionDataModel> questionData = null;
 
 			questionData = databaseService.GetQuestionData(id);
 
-			return View(questionData);
+			return View(getQuestionDataAsync().Result);
 		}
 
 		public async Task<List<QuestionDataModel>> getQuestionDataAsync()
@@ -38,7 +38,7 @@ namespace MajorProjectFrontEnd.Controllers
 			// https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
 
 			// What string do I put here?
-			client.BaseAddress = new Uri("http://localhost:64195/");
+			client.BaseAddress = new Uri("http://localhost:61081");
 
 			client.DefaultRequestHeaders.Accept.Clear();
 			client.DefaultRequestHeaders.Accept.Add(

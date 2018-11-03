@@ -58,7 +58,7 @@ using MajorProjectFrontEnd.Models;
             WriteLiteral("<article>\r\n");
             EndContext();
             BeginContext(43, 3047, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "5972c00dde4742a4893ec37775fd7ffd", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "685d830aa2a9494f8d8ef899beef6c8b", async() => {
                 BeginContext(108, 48, true);
                 WriteLiteral("\r\n\t<input name=\"numberOfQuestions\" type=\"hidden\"");
                 EndContext();
@@ -317,7 +317,7 @@ WriteAttributeValue("", 1476, question.QuestionNumber, 1476, 24, false);
                 WriteLiteral("\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(1576, 30, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7d651afde58b42ca94b87cbdb739ebc3", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7f29d515972b4403a886358fcce9d710", async() => {
                     BeginContext(1596, 1, false);
 #line 45 "C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\Views\Home\Index.cshtml"
                                       Write(i);
@@ -520,7 +520,7 @@ WriteAttributeValue("", 2571, question.QuestionNumber, 2571, 24, false);
                 WriteLiteral("\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(2727, 90, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a2ffd2afc8c0472c8b50ed178fec26da", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4426df796cfb46c89e277bf933037ffe", async() => {
                     BeginContext(2798, 10, false);
 #line 83 "C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\Views\Home\Index.cshtml"
                                                                                                  Write(options[i]);
@@ -573,7 +573,7 @@ AddHtmlAttributeValue("", 2762, question.QuestionNumber, 2762, 24, false);
                 WriteLiteral("\t\t\t\t\t\t\t\t");
                 EndContext();
                 BeginContext(2860, 81, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "901daef7671943c590df475bf0e40dd0", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "cba3aa0dc95d4a129106408ad895380e", async() => {
                     BeginContext(2922, 10, false);
 #line 87 "C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\Views\Home\Index.cshtml"
                                                                                         Write(options[i]);

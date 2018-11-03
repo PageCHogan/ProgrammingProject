@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+	text-align: center;
+	margin-bottom: 50px;
+	font-size: 40px;
+}
+
+nav {
+	text-align: center;
+	background-color: rgb(0, 122, 204);
+	transition: height 0.5s;
+	padding: 0;
+	margin-left: auto;
+	margin-right: auto;
+	box-shadow: 3px 3px 3px black;
+	border-radius: 5px;
+	margin-bottom: 50px;
+}
+
+footer {
+	background-color: rgb(0, 122, 204);
+	width: 350px;
+	box-shadow: 3px 3px 3px black;
+	margin-left: auto;
+	margin-right: auto;
+	color: white;
+	text-shadow: 2px 2px 8px black;
+	border-radius: 5px;
+	padding: 10px;
+	font-size: 12px;
+	margin-top: 30px;
+}
+
+.nav-item {
+	margin-right: 40px;
+	margin-left: 40px;
+	text-decoration: none;
+	font-size: 20px;
+	color: white;
+	text-shadow: 2px 2px 8px black;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	font-weight: bold;
+	display: inline-block;
+}
+
+.nav-item:hover {
+	text-decoration: underline;
+}
+
+.nav-item:active {
+	background: black;
+}
+
+#menu-bar div {
+	width: 30px;
+	height: 7px;
+	background-color: blue;
+	margin-bottom: 6px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#menu-bar {
+	cursor: pointer;
+	width: 35px;
+	margin-left: auto;
+	margin-right: auto;
+	display: none;
+	margin-bottom: 30px;
+
+}
+
+#menu-bar:active {
+	background-color: aqua;
+}
+
+article {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+    width: 600px;
+	
+}
+
+/* Browser's width is 400px or less */
+@media screen and (max-width: 400px) {
+
+	.nav-hide {
+		height: 0;
+		
+		overflow: hidden;
+		
+	}
+	
+	.nav-item {
+		display: block;
+		margin-bottom: 40px;
+		margin-top: 40px;
+	}
+
+	#menu-bar {
+		display: block;
+	}
+	
+	.nav-show {
+		height: 230px;
+		overflow: hidden;
+		
+	}
+
+	nav {
+		width: auto;
+	}
+	
+	article {
+		width: 100%;
+	}
+	
+	footer {
+		width: 100%;
+	}
+	input {
+		width: 100%;
+	}
+}
+
+.survey-question {
+	font-weight: bold;
+	margin-bottom: 20px;
+	font-size: 20px;
+}
+
+.radio {
+	margin-bottom: 20px;
+	display: block;
+	border-style: solid;
+	padding: 10px;
+	width: 100%;
+	font-size: 20px;
+	font-family: 'Roboto', sans-serif;
+    border-width: 0.5px;
+}
+
+
+article h2 {
+	margin-bottom: 50px;
+	font-size: 30px;
+}
+
+select {
+	
+	height: 30px;
+	font-size: 20px;
+	font-family: 'Roboto', sans-serif;
+}
+
+.question {
+	margin-bottom: 70px;
+}
+
+.current-page {
+	text-decoration: underline;
+}
+
+textarea {
+	width: 100%;
+	height: 200px;
+	font-size: 20px;
+	font-family: 'Roboto', sans-serif;
+}
+
+.text {
+	font-size: 20px;
+	font-family: 'Roboto', sans-serif;	
+}
+
+#submit {
+	font-size: 20px;
+	font-family: 'Roboto', sans-serif;	
+}
+
+.rankOption {
+    width: 300px;
+    display: inline-block;
+    margin-bottom: 50px;
+
+}
+
+.radio-rank {
+    border-style: solid;
+    border-width: 0.5px;
+    padding: 10px;
+}
+
+.errorMessage {
+    color: red;
+    font-size: 30px;
+}
+
+#mainErrorMessage {
+    color: red;
+    font-size: 30px;
+}
+
+
+/* Table styles from https://www.w3schools.com/css/tryit.asp?filename=trycss_table_striped*/
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+    border-style: solid;
+    border-width: 0.5px
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}

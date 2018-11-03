@@ -1,0 +1,36 @@
+﻿<!doctype html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<script src="~/js/jquery-3.3.1.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="~/css/styles.css">
+	<!-- https://developers.google.com/web/fundamentals/design-and-ux/responsive/ -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Project Sebens Survey</title>
+
+</head>
+
+<body>
+	<h1>Project Sebens Survey</h1>
+	<div id="menu-bar">
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+	<nav id="nav" class="nav-hide">
+		<a href="index.html" class="nav-item current-page">Survey</a>
+		<a href="index.html" class="nav-item">About</a>
+		<a href="index.html" class="nav-item">Log in</a>
+	</nav>
+
+	@RenderBody()
+
+	<script src="~/js/site.js"></script> 
+
+	<footer>
+		Created by Samuel Miller, Page Hogan, Noah Park, Julie Bracken, Dylan Godwin, and Gerrit Sebens.
+	</footer>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<MajorProjectFrontEnd.Models.QuestionDataModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.QuestionNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SurveyID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Question)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Options)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.QuestionNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SurveyID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Question)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Options)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { surveyID = item.SurveyID, questionNumber = item.QuestionNumber }) |
+                @Html.ActionLink("Details", "Details", new { surveyID = item.SurveyID, questionNumber = item.QuestionNumber }) |
+                @Html.ActionLink("Delete", "Delete", new { surveyID = item.SurveyID, questionNumber = item.QuestionNumber })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

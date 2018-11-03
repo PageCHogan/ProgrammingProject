@@ -1,0 +1,21 @@
+﻿@model List<ResponseModel>
+@{
+	ViewData["Title"] = "SurveyResponse";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SurveyResponse</h2>
+<p>Number of questions: @Model.Count</p>
+@foreach (var response in Model)
+{
+	<p>survey id: @response.surveyID</p>
+	<p>question number: @response.questionNumber</p>
+	<p>question title: @response.question</p>
+	<p>question type: @response.questionType</p>
+	<p>question options: @response.options</p>
+	<p>response: @response.response</p>
+	<br>
+	<br>
+	<br>
+}
+

@@ -21,5 +21,14 @@ namespace MajorProjectFrontEnd.Models
 			Type = "";
 			Options = "";
 		}
+		
+		public QuestionDataModel(int questionNumber, int surveyID, string question, string type, string options)
+		{
+			QuestionNumber = questionNumber;
+			SurveyID = surveyID;
+			Question = question;
+			Type = type;
+			Options = options;
+		}
 	}
 }

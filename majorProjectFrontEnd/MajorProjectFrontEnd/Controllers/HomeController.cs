@@ -56,15 +56,11 @@ namespace MajorProjectFrontEnd.Controllers
 			if (response.IsSuccessStatusCode)
 			{
 				stringlist = response.Content.ReadAsAsync<string>().Result;
-				//stringlist = "[{\"QuestionNumber\":1,\"SurveyID\":1,\"Question\":\"Have you visited a GP in Australia?\",\"Type\":\"MQ\",\"Options\":\"Yes,No\"},{\"QuestionNumber\":2,\"SurveyID\":1,\"Question\":\"What is your age?\",\"Type\":\"MQ\",\"Options\":\"Under 12 years old,12-17 years old,18-24 years old,25-34 years old,35-44 years old,45-54 years old,55-64 years old,65-74 years old,75 years or older\"},{\"QuestionNumber\":3,\"SurveyID\":1,\"Question\":\"What is your gender?\",\"Type\":\"MQ\",\"Options\":\"Male,Female\"},{\"QuestionNumber\":4,\"SurveyID\":1,\"Question\":\"Do you have children?\",\"Type\":\"MQ\",\"Options\":\"Yes,No\"},{\"QuestionNumber\":5,\"SurveyID\":1,\"Question\":\"Do you smoke?\",\"Type\":\"MQ\",\"Options\":\"Yes,No\"},{\"QuestionNumber\":6,\"SurveyID\":1,\"Question\":\"What is your Australian visa status?\",\"Type\":\"MQ\",\"Options\":\"Citizen,Permanent resident,Student visa,Working visa,Temporary visa,Humanitarian visa,Travel visa\"},{\"QuestionNumber\":7,\"SurveyID\":1,\"Question\":\"Which state do you live in?\",\"Type\":\"MQ\",\"Options\":\"Victoria,Queensland,South Australia,Western Australia,Tasmania,ACT,Northern Territory\"},{\"QuestionNumber\":8,\"SurveyID\":1,\"Question\":\"What is your level of health cover?\",\"Type\":\"MQ\",\"Options\":\"Medicare only,Medicare + health care card,Medicare + private health insurance,Do not have any\"},{\"QuestionNumber\":9,\"SurveyID\":1,\"Question\":\"How often do you visit a GP per year?\",\"Type\":\"NI\",\"Options\":\"\"},{\"QuestionNumber\":10,\"SurveyID\":1,\"Question\":\"What was the reason for your last visit to the GP?\",\"Type\":\"MQ\",\"Options\":\"Physical injury,Pain,Viral infection(flu),Mental illness,Skin problem,Disease ,Chronic illness,Other\"},{\"QuestionNumber\":11,\"SurveyID\":1,\"Question\":\"How do you make an appointment to see a doctor?\",\"Type\":\"MQ\",\"Options\":\"Phone,Internet,Visit\"},{\"QuestionNumber\":12,\"SurveyID\":1,\"Question\":\"How long does it take to get an appointment to see a doctor?\",\"Type\":\"MQ\",\"Options\":\"Within 6 hours,Within a day,Within 2 days,Within a few days,Within a week,A few weeks,Other\"},{\"QuestionNumber\":13,\"SurveyID\":1,\"Question\":\"How easy is it to make an appointment to see your preferred doctor?\",\"Type\":\"RANGE\",\"Options\":\"Easy,Hard,5\"},{\"QuestionNumber\":14,\"SurveyID\":1,\"Question\":\"Do you have enough quality time with your GP?\",\"Type\":\"RANGE\",\"Options\":\"Not enough,Enough,5\"},{\"QuestionNumber\":15,\"SurveyID\":1,\"Question\":\"How involved are you with the decision making in your health care?\",\"Type\":\"RANGE\",\"Options\":\"Not involved,Very involved,5\"},{\"QuestionNumber\":16,\"SurveyID\":1,\"Question\":\"How much do you trust your doctors advice?\",\"Type\":\"RANGE\",\"Options\":\"Not at all,Completely,5\"},{\"QuestionNumber\":17,\"SurveyID\":1,\"Question\":\"Did you get referred to a specialist?\",\"Type\":\"MQ\",\"Options\":\"Yes,No\"}]";
-				//stringlist = await response.Content.ToString();
+				
 			}
-			
-			
 			
 			var list = JsonConvert.DeserializeObject<List<QuestionDataModel>>(stringlist);
 
-			string a = null;
 			return list;
 
 		}

@@ -89,7 +89,7 @@ namespace MajorProjectFrontEnd.Controllers
 		public ActionResult Edit(int surveyID, int questionNumber)
 		{
 
-			requestUri = "api/SurveyQuestions";
+			requestUri = "api/SurveyQuestions/" + surveyID.ToString();
 			var response = api.GetResponseAsync(baseAddress, requestUri);
 			var list = JsonConvert.DeserializeObject<List<QuestionDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
 
@@ -121,7 +121,7 @@ namespace MajorProjectFrontEnd.Controllers
 		public ActionResult Delete(int surveyID, int questionNumber)
 		{
 
-			requestUri = "api/SurveyQuestions";
+			requestUri = "api/SurveyQuestions/" + surveyID.ToString();
 			var response = api.GetResponseAsync(baseAddress, requestUri);
 			var list = JsonConvert.DeserializeObject<List<QuestionDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
 
@@ -131,11 +131,16 @@ namespace MajorProjectFrontEnd.Controllers
 		// POST: Questions/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> DeleteAsync(int id, IFormCollection collection)
+		public async Task<ActionResult> Delete(int id, IFormCollection collection)
 		{
+			api.Client().BaseAddress = new Uri(baseAddress);
+
+			HttpResponseMessage response = await api.Client().DeleteAsync("api/surveyQuestions/" + int.Parse(collection["questionNumber"]) + "/"
+												+ collection["surveyID"]);
+			response.EnsureSuccessStatusCode();
 
 
-			return View();
+			return RedirectToAction("Index", "Questions");
 		}
 	}
 }

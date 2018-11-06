@@ -50,12 +50,12 @@
 			else if (question.Type == "NI")
 			{
 				<input name="question_type_@question.QuestionNumber" type="hidden" value="NI">
-				<input class="text" type="number" min="0" name="@question.QuestionNumber">
+				<input class="text" type="number" min="0" name="@question.QuestionNumber" required>
 			}
 			else if (question.Type == "COMMENT")
 			{
 				<input name="question_type_@question.QuestionNumber" type="hidden" value="COMMENT">
-				<textarea name="@question.QuestionNumber"></textarea>
+				<textarea name="@question.QuestionNumber" required></textarea>
 
 
 			}
@@ -63,7 +63,7 @@
 			{
 
 				<input name="question_type_@question.QuestionNumber" type="hidden" value="TEXT">
-				<input class="text" name="@question.QuestionNumber">
+				<input class="text" name="@question.QuestionNumber" required>
 			}
 			else if (question.Type == "RANK")
 			{

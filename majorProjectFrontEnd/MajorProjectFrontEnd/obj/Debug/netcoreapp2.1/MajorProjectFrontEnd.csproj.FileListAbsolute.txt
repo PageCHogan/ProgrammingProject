@@ -93,5 +93,6 @@ C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProj
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Create.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Details.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Edit.g.cshtml.cs
-C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Home\SurveyResponseAsync.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Questions\Delete.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\DoSurvey\Index.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\DoSurvey\SurveyResponseAsync.g.cshtml.cs

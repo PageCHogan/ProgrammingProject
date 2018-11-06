@@ -19,50 +19,12 @@ namespace MajorProjectFrontEnd.Controllers
 {
 	public class HomeController : Controller
 	{
-		DatabaseService databaseService = new DatabaseService();
 
-		HttpClient client = new HttpClient();
-
-		[HttpGet("{id}")]
-		public IActionResult Index(int id)
+		public IActionResult Index()
 		{
-			/*
-			List<QuestionDataModel> questionData = null;
 
-			questionData = databaseService.GetQuestionData(id);
-			*/
-
+			return View();
 			
-			return View(getQuestionDataAsync(id).Result);
-			
-		}
-
-		public async Task<List<QuestionDataModel>> getQuestionDataAsync(int id)
-		{
-			// https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
-
-			// What string do I put here?
-			client.BaseAddress = new Uri("http://localhost:61081");
-
-			client.DefaultRequestHeaders.Accept.Clear();
-			client.DefaultRequestHeaders.Accept.Add(
-			    new MediaTypeWithQualityHeaderValue("application/json"));
-
-
-			HttpResponseMessage response = await client.GetAsync("api/SurveyQuestions/" + id.ToString());
-
-			String stringlist = null;
-			
-			if (response.IsSuccessStatusCode)
-			{
-				stringlist = response.Content.ReadAsAsync<string>().Result;
-				
-			}
-			
-			var list = JsonConvert.DeserializeObject<List<QuestionDataModel>>(stringlist);
-
-			return list;
-
 		}
 
 		public IActionResult About()
@@ -90,52 +52,5 @@ namespace MajorProjectFrontEnd.Controllers
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
-
-		public async Task<ViewResult> SurveyResponseAsync()
-		{
-			client.BaseAddress = new Uri("http://localhost:61081/");
-
-			client.DefaultRequestHeaders.Accept.Clear();
-			client.DefaultRequestHeaders.Accept.Add(
-			    new MediaTypeWithQualityHeaderValue("application/json"));
-
-			HttpResponseMessage response = await client.PostAsJsonAsync("api/response/save", GetResponseModelList(Request.Form));
-			response.EnsureSuccessStatusCode();
-
-
-			return View("SurveyResponseAsync", GetResponseModelList(Request.Form));
-		}
-
-
-
-		private List<ResponseModel> GetResponseModelList(IFormCollection col)
-		{
-			int numberOfQuestions = Int32.Parse(col["numberOfQuestions"]);
-			int surveyID = Int32.Parse(col["surveyID"]);
-			List<ResponseModel> list = new List<ResponseModel>();
-
-			for (int i = 1; i <= numberOfQuestions; ++i)
-			{
-				string questionOptions = col["question_options_" + i.ToString()];
-				string questionTitle = col["question_title_" + i.ToString()];
-				string questionType = col["question_type_" + i.ToString()];
-				string response = col[i.ToString()];
-
-				var responseModel = new ResponseModel { surveyID = surveyID, options = questionOptions, questionType = questionType, 
-									question = questionTitle, questionNumber = i, response = response };
-
-				list.Add(responseModel);
-			}
-
-			return list;
-		}
-		[Route("ListQuestions")]
-		public IActionResult ListQuestions()
-		{
-			var questionData = databaseService.GetQuestionData();
-
-			return View(questionData);
-
-		}
 	}
 }

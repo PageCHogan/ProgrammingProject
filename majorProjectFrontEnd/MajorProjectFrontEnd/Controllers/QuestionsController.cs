@@ -103,18 +103,18 @@ namespace MajorProjectFrontEnd.Controllers
 		// POST: Questions/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, IFormCollection collection)
+		public async Task<ActionResult> Edit(int id, IFormCollection collection)
 		{
-			try
-			{
-				// TODO: Add update logic here
 
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
+			var question = new QuestionDataModel(int.Parse(collection["QuestionNumber"]), int.Parse(collection["surveyID"]), collection["Question"],
+								collection["Type"], collection["Options"]);
+			api.Client().BaseAddress = new Uri("http://localhost:61081/");
+			HttpResponseMessage response = await api.Client().PutAsJsonAsync("api/surveyQuestions/" + int.Parse(collection["QuestionNumber"]) + "/"
+												+ collection["surveyID"], question);
+			response.EnsureSuccessStatusCode();
+
+			return View();
+
 		}
 
 		// GET: Questions/Delete/5
@@ -133,26 +133,7 @@ namespace MajorProjectFrontEnd.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> DeleteAsync(int id, IFormCollection collection)
 		{
-			/*
-		    try
-		    {
-			// TODO: Add delete logic here
 
-			return RedirectToAction(nameof(Index));
-		    }
-		    catch
-		    {
-			return View();
-		    }
-			*/
-
-			client.BaseAddress = new Uri("http://localhost:61081");
-
-			client.DefaultRequestHeaders.Accept.Clear();
-			client.DefaultRequestHeaders.Accept.Add(
-				new MediaTypeWithQualityHeaderValue("application/json"));
-
-			HttpResponseMessage response = await client.GetAsync("api/surveyQuestions/" + collection["questionNumber"] + "/" + collection["surveyID"]);
 
 			return View();
 		}

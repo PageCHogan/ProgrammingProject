@@ -20,7 +20,7 @@ namespace MajorProjectFrontEnd.Controllers
 
 		APIService api = new APIService();
 		
-		HttpClient client = new HttpClient();
+		
 
 		// GET: Questions
 		[Route("[controller]")]

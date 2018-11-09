@@ -94,10 +94,10 @@ namespace MajorProjectFrontEnd.Controllers
 			var list = JsonConvert.DeserializeObject<List<QuestionDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
 
 			var question = list.Where(o => o.QuestionNumber == questionNumber).ElementAt(0);
-			ViewData["Question"] = "Current question: question number: " + question.QuestionNumber + ", surveyID: " + question.SurveyID + ", question type: "
-				+ question.Type + ", question options: " + question.Options + ", question title: " + question.Question;
+			ViewData["Question"] = "Question type: " + question.Type;
+				
 
-			return View();
+			return View(question);
 		}
 
 		// POST: Questions/Edit/5

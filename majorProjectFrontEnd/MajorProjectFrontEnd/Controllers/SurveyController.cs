@@ -46,41 +46,80 @@ namespace MajorProjectFrontEnd.Controllers
 		// POST: Survey/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create(IFormCollection collection)
+		public async Task<ActionResult> Create(IFormCollection collection)
 		{
-			try
-			{
-				// TODO: Add insert logic here
+			int SurveyID = int.Parse(collection["SurveyID"]);
+			string SurveyName = collection["SurveyName"];
+			int UserID = int.Parse(collection["UserID"]);
+			string Type = collection["Type"];
+			string Description = collection["Description"];
+			DateTime StartDate = Convert.ToDateTime(collection["StartDate"]);
+			DateTime EndDate = Convert.ToDateTime(collection["EndDate"]);
+			string Permission = collection["Permission"];
 
-				return RedirectToAction(nameof(Index));
-			}
-			catch
+			var survey = new SurveyDataModel
 			{
-				return View();
-			}
+				SurveyID = SurveyID,
+				SurveyName = SurveyName,
+				UserID = UserID,
+				Type = Type,
+				Description = Description,
+				StartDate = StartDate,
+				EndDate = EndDate,
+				Permission = Permission
+			};
+
+			api.Client().BaseAddress = new Uri("http://localhost:61081/");
+			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/save", survey);
+			response.EnsureSuccessStatusCode();
+
+			return View();
 		}
 
 		// GET: Survey/Edit/5
-		public ActionResult Edit(int id)
+		public ActionResult Edit(int SurveyID)
 		{
+			requestUri = "api/survey/" + SurveyID.ToString();
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+			var list = JsonConvert.DeserializeObject<List<SurveyDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
+
+			var survey = list.Where(o => o.SurveyID == SurveyID).ElementAt(0);
+
+			ViewData["Survey"] = survey.ToString();
+
 			return View();
 		}
 
 		// POST: Survey/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, IFormCollection collection)
+		public async Task<ActionResult> Edit(int SurveyID, IFormCollection collection)
 		{
-			try
-			{
-				// TODO: Add update logic here
+			string SurveyName = collection["SurveyName"];
+			int UserID = int.Parse(collection["UserID"]);
+			string Type = collection["Type"];
+			string Description = collection["Description"];
+			DateTime StartDate = Convert.ToDateTime(collection["StartDate"]);
+			DateTime EndDate = Convert.ToDateTime(collection["EndDate"]);
+			string Permission = collection["Permission"];
 
-				return RedirectToAction(nameof(Index));
-			}
-			catch
+			var survey = new SurveyDataModel
 			{
-				return View();
-			}
+				SurveyID = SurveyID,
+				SurveyName = SurveyName,
+				UserID = UserID,
+				Type = Type,
+				Description = Description,
+				StartDate = StartDate,
+				EndDate = EndDate,
+				Permission = Permission
+			};
+
+			api.Client().BaseAddress = new Uri("http://localhost:61081/");
+			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/" + SurveyID.ToString(), survey);
+			response.EnsureSuccessStatusCode();
+
+			return View();
 		}
 
 		// GET: Survey/Delete/5

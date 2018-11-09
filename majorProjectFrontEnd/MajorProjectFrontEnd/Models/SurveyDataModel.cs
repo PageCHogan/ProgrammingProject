@@ -27,5 +27,13 @@ namespace MajorProjectFrontEnd.Models
 			EndDate = DateTime.MinValue;
 			Permission = "";
 		}
+
+		override
+		public string ToString()
+		{
+			return "SurveyID: " + SurveyID.ToString() + ", " + "SurveyName: " + SurveyName + ", " + "UserID: " + UserID.ToString() + ", "
+			+ "Type: " + Type + ", " + "Description: " + Description + ", " + "StartDate: " + StartDate.ToString() + ", " +
+			"EndDate: " + EndDate.ToString() + ", " + "Permission: " + Permission;
+		}
 	}
 }

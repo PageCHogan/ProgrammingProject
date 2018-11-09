@@ -77,7 +77,7 @@ namespace MajorProjectFrontEnd.Controllers
 
 			string date = year + month + day;
 
-			string time = currentTime.ToString("HH:mm:ss");
+			string time = currentTime.ToString("H:mm:ss");
 
 			for (int i = 1; i <= numberOfQuestions; ++i)
 			{

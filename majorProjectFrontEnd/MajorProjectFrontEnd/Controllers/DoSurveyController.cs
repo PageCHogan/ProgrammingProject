@@ -47,12 +47,15 @@ namespace MajorProjectFrontEnd.Controllers
 			return list;
 
 		}
-
+		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public async Task<ViewResult> SurveyResponseAsync()
 		{
+			api.Client().BaseAddress = new Uri(baseAddress);
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/response/save", GetResponseModelList(Request.Form));
 			response.EnsureSuccessStatusCode();
-
+			
+			
 
 			return View("SurveyResponseAsync", GetResponseModelList(Request.Form));
 		}
@@ -64,6 +67,17 @@ namespace MajorProjectFrontEnd.Controllers
 			int numberOfQuestions = Int32.Parse(col["numberOfQuestions"]);
 			int surveyID = Int32.Parse(col["surveyID"]);
 			List<ResponseModel> list = new List<ResponseModel>();
+
+			var currentTime = DateTime.Now;
+			string year = currentTime.Year.ToString();
+
+			// https://stackoverflow.com/questions/1152583/cdatetime-now-month-output-format
+			string month = currentTime.Month.ToString("d2");
+			string day = currentTime.Day.ToString("d2");
+
+			string date = year + month + day;
+
+			string time = currentTime.ToString("HH:mm:ss");
 
 			for (int i = 1; i <= numberOfQuestions; ++i)
 			{
@@ -79,7 +93,9 @@ namespace MajorProjectFrontEnd.Controllers
 					questionType = questionType,
 					question = questionTitle,
 					questionNumber = i,
-					response = response
+					response = response,
+					date = date,
+					time = time
 				};
 
 				list.Add(responseModel);

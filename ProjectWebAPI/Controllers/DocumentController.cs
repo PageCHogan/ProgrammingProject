@@ -9,6 +9,9 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System.IO;
 using ProjectWebAPI.Models.DocumentModels;
 using Newtonsoft.Json;
+using System.Net;
+using ProjectWebAPI.Models.ResponseModels;
+using ProjectWebAPI.Models.QuestionModels;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -17,7 +20,7 @@ namespace ProjectWebAPI.Controllers
     {
         private static string ACCOUNT_NAME = "sebenv2";
         private static string KEY = "+hK/4kPTevqxL+OqG60wEIaNjquLfxIXOBkyNkwXJ4g5CIEFUDNnD+2V6PW63omw5EZom6jhBLOTpwwESDd2sQ==";
-        private static string DOWNLOAD_DIRECTORY = "C:\\Downloads\\Temp";
+        private static string DOWNLOAD_DIRECTORY = @"C:\Downloads\Temp\";
 
         //accessing with the name and key
         private static CloudStorageAccount storage = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(ACCOUNT_NAME, KEY), true);
@@ -63,9 +66,10 @@ namespace ProjectWebAPI.Controllers
                 {
                     case "download":
                         //Still looking at returning an error message if an exception is thrown...
-                        result = DownloadDocument(data).GetAwaiter().GetResult() ? "Successfully downloaded file to " + DOWNLOAD_DIRECTORY : "File not downloaded please try again";
+                        result = DownloadDocument(data).GetAwaiter().GetResult() ? "Successfully downloaded file to " + DOWNLOAD_DIRECTORY : "Error - File not downloaded please try again";
                         break;
-                    case "????": 
+                    case "downloaddata":
+                        GetSurveyResponses(data).GetAwaiter().GetResult();
                         break;
                     default:
                         break;
@@ -103,31 +107,92 @@ namespace ProjectWebAPI.Controllers
             return blobDocuments;
         }
 
-        private async Task<bool> DownloadDocument(object data)
+        private static async Task<bool> DownloadDocument(object data)
         {
             bool result = false;
             AzureBlobDocuments document = JsonConvert.DeserializeObject<AzureBlobDocuments>(data.ToString());
 
             CloudAppendBlob appendBlob = CONTAINER.GetAppendBlobReference(document.Filename); // Get a reference to a blob named.
 
-            try
-            {
-                new FileInfo(DOWNLOAD_DIRECTORY).Directory.Create(); //Create directory if not found
+            List<AzureBlobDocuments> azureCollection = ListDocuments().GetAwaiter().GetResult();
 
-                using (var fileStream = System.IO.File.OpenWrite(DOWNLOAD_DIRECTORY + document.Filename))
-                {
-                    await appendBlob.DownloadToStreamAsync(fileStream);
-                    result = true;
-                }
-            }
-            catch (Exception ex)
+            if (azureCollection != null)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                if (azureCollection.Exists(o => o.Filename == document.Filename))
+                {
+                    try
+                    {
+                        new FileInfo(DOWNLOAD_DIRECTORY).Directory.Create(); //Create directory if not found
+
+                        using (var fileStream = System.IO.File.OpenWrite(DOWNLOAD_DIRECTORY + document.Filename))
+                        {
+                            await appendBlob.DownloadToStreamAsync(fileStream);
+                            result = true;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                        //throw;
+                    }
+                }
             }
 
             return result;
         }
 
+        private static async Task<List<CSVResponse>> GetSurveyResponses(object data)
+        {
+            AzureBlobDocuments document = JsonConvert.DeserializeObject<AzureBlobDocuments>(data.ToString());
+            CSVResponse question = new CSVResponse();
+            List<CSVResponse> csvResponse = new List<CSVResponse>();
+            bool headerIgnore = true;
+            string csvData = null;
+
+            CloudAppendBlob appendBlob = CONTAINER.GetAppendBlobReference(document.Filename);
+
+            try
+            {
+                csvData = await appendBlob.DownloadTextAsync();
+                if(csvData != null)
+                {
+                    csvData = csvData.Replace("\r\n", ",-,"); //replace "\r\n" with end line character
+                    csvData = csvData.Remove(csvData.Length - 1); //remove trailing "," before splitting to stop erronous final record.
+                    string[] values = csvData.Split(',');
+
+                    for (int i = 0; i < values.Count(); i++) 
+                    {
+                        Int32.TryParse(values[i++], out int surveyID);
+                        question.SurveyID = surveyID;
+                        question.Date = values[i++];
+                        question.Time = values[i++];
+
+                        int j = 1;
+                        do
+                        {
+                            if(values[i].Equals("-"))
+                            {
+                                break;
+                            }
+                            question.Responses.Add(new QuestionResponse() { QuestionNumber = j++, Answer = values[i++] });
+
+                        } while (i <= values.Count());
+
+                        if(!headerIgnore)
+                            csvResponse.Add(question);
+
+                        question = new CSVResponse();
+                        headerIgnore = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
+            }
+
+            return csvResponse;
+        }
     }
 }

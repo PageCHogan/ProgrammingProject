@@ -61,8 +61,8 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             return userData;
@@ -88,15 +88,15 @@ namespace ProjectWebAPI.Services
                         if (SqlQuery.Length > 0)
                         {
                             command = new SqlCommand(SqlQuery, conn);
-                            command.Parameters.AddWithValue("@user_name", user.Username);
-                            command.Parameters.AddWithValue("@title", user.Title);
-                            command.Parameters.AddWithValue("@first_name", user.Firstname);
-                            command.Parameters.AddWithValue("@last_name", user.Lastname);
-                            command.Parameters.AddWithValue("@email", user.Email);
-                            command.Parameters.AddWithValue("@type", user.Type);
-                            command.Parameters.AddWithValue("@permission", user.Permission);
-                            command.Parameters.AddWithValue("@groups", user.Groups);
-                            command.Parameters.AddWithValue("@password", user.Password);
+                            command.Parameters.AddWithValue("@user_name", user.Username = user.Username ?? "");
+                            command.Parameters.AddWithValue("@title", user.Title = user.Title ?? "");
+                            command.Parameters.AddWithValue("@first_name", user.Firstname = user.Firstname ?? "");
+                            command.Parameters.AddWithValue("@last_name", user.Lastname = user.Lastname ?? "");
+                            command.Parameters.AddWithValue("@email", user.Email = user.Email ?? "");
+                            command.Parameters.AddWithValue("@type", user.Type = user.Type ?? "");
+                            command.Parameters.AddWithValue("@permission", user.Permission = user.Permission ?? "");
+                            command.Parameters.AddWithValue("@groups", user.Groups = user.Groups ?? "");
+                            command.Parameters.AddWithValue("@password", user.Password = user.Password ?? "");
 
                         }
                         int sqlResult = command.ExecuteNonQuery();
@@ -106,13 +106,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not saved to database");
+                System.Diagnostics.Debug.WriteLine("Error - record not saved to database");
 
             return result;
         }
@@ -137,14 +137,14 @@ namespace ProjectWebAPI.Services
                         if (SqlQuery.Length > 0)
                         {
                             command = new SqlCommand(SqlQuery, conn);
-                            command.Parameters.AddWithValue("@title", user.Title);
-                            command.Parameters.AddWithValue("@first_name", user.Firstname);
-                            command.Parameters.AddWithValue("@last_name", user.Lastname);
-                            command.Parameters.AddWithValue("@email", user.Email);
-                            command.Parameters.AddWithValue("@type", user.Type);
-                            command.Parameters.AddWithValue("@permission", user.Permission);
-                            command.Parameters.AddWithValue("@groups", user.Groups);
-                            command.Parameters.AddWithValue("@password", user.Password);
+                            command.Parameters.AddWithValue("@title", user.Title = user.Title ?? "");
+                            command.Parameters.AddWithValue("@first_name", user.Firstname = user.Firstname ?? "");
+                            command.Parameters.AddWithValue("@last_name", user.Lastname = user.Lastname ?? "");
+                            command.Parameters.AddWithValue("@email", user.Email = user.Email ?? "");
+                            command.Parameters.AddWithValue("@type", user.Type = user.Type ?? "");
+                            command.Parameters.AddWithValue("@permission", user.Permission = user.Permission ?? "");
+                            command.Parameters.AddWithValue("@groups", user.Groups = user.Groups ?? "");
+                            command.Parameters.AddWithValue("@password", user.Password = user.Password ?? "");
                         }
                         int sqlResult = command.ExecuteNonQuery();
 
@@ -153,13 +153,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not updated in database");
+                System.Diagnostics.Debug.WriteLine("Error - record not updated in database");
 
             return result;
         }
@@ -192,12 +192,12 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             if (!result)
-                Console.WriteLine("Error - record not deleted");
+                System.Diagnostics.Debug.WriteLine("Error - record not deleted");
 
             return result;
         }

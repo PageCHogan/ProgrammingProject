@@ -60,8 +60,8 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             return surveyData;
@@ -87,13 +87,13 @@ namespace ProjectWebAPI.Services
                         if (SqlQuery.Length > 0)
                         {
                             command = new SqlCommand(SqlQuery, conn);
-                            command.Parameters.AddWithValue("@survey_name", survey.SurveyName);
+                            command.Parameters.AddWithValue("@survey_name", survey.SurveyName = survey.SurveyName ?? "");
                             command.Parameters.AddWithValue("@userID", survey.UserID);
-                            command.Parameters.AddWithValue("@type", survey.Type);
-                            command.Parameters.AddWithValue("@description", survey.Description);
+                            command.Parameters.AddWithValue("@type", survey.Type = survey.Type ?? "");
+                            command.Parameters.AddWithValue("@description", survey.Description = survey.Description ?? "");
                             command.Parameters.AddWithValue("@start_date", survey.StartDate);
                             command.Parameters.AddWithValue("@end_date", survey.EndDate);
-                            command.Parameters.AddWithValue("@permission", survey.Permission);
+                            command.Parameters.AddWithValue("@permission", survey.Permission = survey.Permission ?? "");
                         }
                         int sqlResult = command.ExecuteNonQuery();
 
@@ -102,13 +102,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not saved to database");
+                System.Diagnostics.Debug.WriteLine("Error - record not saved to database");
 
             return result;
         }
@@ -133,13 +133,13 @@ namespace ProjectWebAPI.Services
                         if (SqlQuery.Length > 0)
                         {
                             command = new SqlCommand(SqlQuery, conn);
-                            command.Parameters.AddWithValue("@survey_name", survey.SurveyName);
+                            command.Parameters.AddWithValue("@survey_name", survey.SurveyName = survey.SurveyName ?? "");
                             command.Parameters.AddWithValue("@userID", survey.UserID);
-                            command.Parameters.AddWithValue("@type", survey.Type);
-                            command.Parameters.AddWithValue("@description", survey.Description);
+                            command.Parameters.AddWithValue("@type", survey.Type = survey.Type ?? "");
+                            command.Parameters.AddWithValue("@description", survey.Description = survey.Description ?? "");
                             command.Parameters.AddWithValue("@start_date", survey.StartDate);
                             command.Parameters.AddWithValue("@end_date", survey.EndDate);
-                            command.Parameters.AddWithValue("@permission", survey.Permission);
+                            command.Parameters.AddWithValue("@permission", survey.Permission = survey.Permission ?? "");
                         }
                         int sqlResult = command.ExecuteNonQuery();
 
@@ -148,13 +148,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not updated in database");
+                System.Diagnostics.Debug.WriteLine("Error - record not updated in database");
 
             return result;
         }
@@ -187,12 +187,12 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             if (!result)
-                Console.WriteLine("Error - record not deleted");
+                System.Diagnostics.Debug.WriteLine("Error - record not deleted");
 
             return result;
         }

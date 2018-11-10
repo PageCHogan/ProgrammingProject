@@ -57,14 +57,13 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             return questionData;
         }
 
-        //Not Currently Working
         public bool AddNewQuestion(QuestionDataModel question)
         {
             bool result = false;
@@ -87,9 +86,9 @@ namespace ProjectWebAPI.Services
                             command = new SqlCommand(SqlQuery, conn);
                             command.Parameters.AddWithValue("@SurveyID", question.SurveyID);
                             command.Parameters.AddWithValue("@QuestionNumber", question.QuestionNumber);
-                            command.Parameters.AddWithValue("@Question", question.Question);
-                            command.Parameters.AddWithValue("@Type", question.Type);
-                            command.Parameters.AddWithValue("@Options", question.Options);
+                            command.Parameters.AddWithValue("@Question", question.Question = question.Question ?? "");
+                            command.Parameters.AddWithValue("@Type", question.Type = question.Type ?? "");
+                            command.Parameters.AddWithValue("@Options", question.Options = question.Options ?? "");
                         }
                         int sqlResult = command.ExecuteNonQuery();
 
@@ -98,13 +97,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not saved to database");
+                System.Diagnostics.Debug.WriteLine("Error - record not saved to database");
 
             return result;
         }
@@ -131,9 +130,9 @@ namespace ProjectWebAPI.Services
                             command = new SqlCommand(SqlQuery, conn);
                             command.Parameters.AddWithValue("@SurveyID", question.SurveyID);
                             command.Parameters.AddWithValue("@QuestionNumber", question.QuestionNumber);
-                            command.Parameters.AddWithValue("@Question", question.Question);
-                            command.Parameters.AddWithValue("@Type", question.Type);
-                            command.Parameters.AddWithValue("@Options", question.Options);
+                            command.Parameters.AddWithValue("@Question", question.Question = question.Question ?? "");
+                            command.Parameters.AddWithValue("@Type", question.Type = question.Type ?? "");
+                            command.Parameters.AddWithValue("@Options", question.Options = question.Options ?? "");
                         }
                         int sqlResult = command.ExecuteNonQuery();
 
@@ -142,13 +141,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not updated in database");
+                System.Diagnostics.Debug.WriteLine("Error - record not updated in database");
 
             return result;
         }
@@ -180,14 +179,14 @@ namespace ProjectWebAPI.Services
                     result = sqlResult < 0 ? false : true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             if (!result)
-                Console.WriteLine("Error - record not deleted");
+                System.Diagnostics.Debug.WriteLine("Error - record not deleted");
 
             return result;
         }

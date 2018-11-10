@@ -13,7 +13,12 @@ namespace MajorProjectFrontEnd.Models
 		public string options { get; set; }
 		public string response { get; set; }
 		public string questionType { get; set; }
+		
+		// E.g. 20180901
+		public string date { get; set; }
+		
 
-
+		//E.g. 19:04:41 
+		public string time { get; set; }
 	}
 }

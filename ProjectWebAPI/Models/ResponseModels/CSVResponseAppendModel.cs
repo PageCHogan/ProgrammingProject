@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MajorProjectFrontEnd.Models
+namespace ProjectWebAPI.Models.ResponseModels
 {
-	public class CSVModel
-	{
-		public string ResponseCSV { get; set; }
+    public class CSVResponseAppendModel
+    {
         public int SurveyID { get; set; }
-	}
+        public string Response { get; set; }
+    }
 }

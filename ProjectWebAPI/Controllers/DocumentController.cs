@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using System.Net;
 using ProjectWebAPI.Models.ResponseModels;
 using ProjectWebAPI.Models.QuestionModels;
+using ProjectWebAPI.Services;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -27,6 +28,8 @@ namespace ProjectWebAPI.Controllers
 
         private static CloudBlobClient client = storage.CreateCloudBlobClient();
         private static readonly CloudBlobContainer CONTAINER = client.GetContainerReference("response-csv");
+
+        ResponseService responseService = new ResponseService();
 
         //returns a full list of the csv's that are stored in the blob.
         // GET: api/Document
@@ -65,14 +68,13 @@ namespace ProjectWebAPI.Controllers
                 switch (option.ToLower())
                 {
                     case "download":
-                        //Still looking at returning an error message if an exception is thrown...
                         result = DownloadDocument(data).GetAwaiter().GetResult() ? "Successfully downloaded file to " + DOWNLOAD_DIRECTORY : "Error - File not downloaded please try again";
                         break;
-                    case "downloaddata":
+                    case "downloaddata": //For data manipulation
                         GetSurveyResponses(data).GetAwaiter().GetResult();
                         break;
-                    case "saveresponse":
-                        GetSurveyResponses(data).GetAwaiter().GetResult();
+                    case "saveresponse": //To append a response to csv in azure.
+                        result = AppendResponse(data).GetAwaiter().GetResult() ? "Successfully added response to CSV" : "Error adding response to CSV";
                         break;
                     default:
                         break;
@@ -144,6 +146,37 @@ namespace ProjectWebAPI.Controllers
             return result;
         }
 
+        private async Task<bool> AppendResponse(object data)
+        {
+            CSVResponseAppendModel responseToAppend = JsonConvert.DeserializeObject<CSVResponseAppendModel>(data.ToString());
+            bool result = false;
+            string fileName = null;
+
+            BaseResponseModel CSVResponse = responseService.GetSurveyFilename(responseToAppend.SurveyID);
+
+            if(CSVResponse != null)
+                fileName = CSVResponse.ResponseCSV.Split("/").Last();
+
+            try
+            {
+                CloudAppendBlob blob = CONTAINER.GetAppendBlobReference(fileName);
+
+                if (blob.ExistsAsync().Result == false) //Create new blob file, if it does not exist.
+                    await blob.CreateOrReplaceAsync();
+
+                await blob.AppendTextAsync(responseToAppend.Response + System.Environment.NewLine); //Append responses to the end of data.
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                result = false;
+            }
+
+            return result;
+        }
+
+
         private static async Task<List<CSVResponse>> GetSurveyResponses(object data)
         {
             AzureBlobDocuments document = JsonConvert.DeserializeObject<AzureBlobDocuments>(data.ToString());
@@ -197,5 +230,7 @@ namespace ProjectWebAPI.Controllers
 
             return csvResponse;
         }
+
+
     }
 }

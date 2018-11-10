@@ -249,5 +249,53 @@ namespace ProjectWebAPI.Services
 
             return result;
         }
+
+        public BaseResponseModel GetSurveyFilename(int surveyID)
+        {
+            BaseResponseModel responseData = new BaseResponseModel();
+
+            string SqlQuery = "SELECT ResponseID, UserID, SurveyID, ResponseCSV, Date FROM Response";
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection())
+                {
+                    conn.ConnectionString = CONNECTION_STRING;
+                    conn.Open();
+
+                    SqlCommand command;
+
+
+                    SqlQuery += " Where SurveyID = @0";
+                    command = new SqlCommand(SqlQuery, conn);
+                    command.Parameters.Add(new SqlParameter("0", surveyID));
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                responseData = new BaseResponseModel()
+                                {
+                                    ResponseID = Convert.ToInt32(reader[0]),
+                                    UserID = Convert.ToInt32(reader[1]),
+                                    SurveyID = Convert.ToInt32(reader[2]),
+                                    ResponseCSV = reader[3].ToString(),
+                                    Date = Convert.ToDateTime(reader[4])
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
+            }
+
+            return responseData;
+        }
     }
 }

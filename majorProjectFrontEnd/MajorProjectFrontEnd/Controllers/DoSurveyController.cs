@@ -52,7 +52,7 @@ namespace MajorProjectFrontEnd.Controllers
 		public async Task<ViewResult> SurveyResponseAsync()
 		{
 			api.Client().BaseAddress = new Uri(baseAddress);
-			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/response/save", GetCSVModel(Request.Form));
+			HttpResponseMessage response = await api.Client().PostAsJsonAsync("...api/document/saveresponse", GetCSVModel(Request.Form));
 			response.EnsureSuccessStatusCode();
 			
 			

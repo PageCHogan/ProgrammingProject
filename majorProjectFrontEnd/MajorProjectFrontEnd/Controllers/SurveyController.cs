@@ -123,26 +123,27 @@ namespace MajorProjectFrontEnd.Controllers
 		}
 
 		// GET: Survey/Delete/5
-		public ActionResult Delete(int id)
+		public ActionResult Delete(int SurveyID)
 		{
-			return View();
+			requestUri = "api/Survey/" + SurveyID.ToString();
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+			var list = JsonConvert.DeserializeObject<List<SurveyDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
+
+			return View(list.Where(o => o.SurveyID == SurveyID).ElementAt(0));
 		}
 
 		// POST: Survey/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Delete(int id, IFormCollection collection)
+		public async Task<ActionResult> Delete(int id, IFormCollection collection)
 		{
-			try
-			{
-				// TODO: Add delete logic here
+			api.Client().BaseAddress = new Uri(baseAddress);
 
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
+			HttpResponseMessage response = await api.Client().DeleteAsync("api/survey/" + collection["surveyID"]);
+			response.EnsureSuccessStatusCode();
+
+
+			return RedirectToAction("Index", "Questions");
 		}
 	}
 }

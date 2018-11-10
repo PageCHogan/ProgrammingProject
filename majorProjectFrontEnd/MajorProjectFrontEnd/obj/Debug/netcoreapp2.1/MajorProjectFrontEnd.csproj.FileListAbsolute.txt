@@ -101,3 +101,4 @@ C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProj
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Survey\Create.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\User\Index.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Survey\Edit.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Survey\Delete.g.cshtml.cs

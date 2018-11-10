@@ -71,6 +71,9 @@ namespace ProjectWebAPI.Controllers
                     case "downloaddata":
                         GetSurveyResponses(data).GetAwaiter().GetResult();
                         break;
+                    case "saveresponse":
+                        GetSurveyResponses(data).GetAwaiter().GetResult();
+                        break;
                     default:
                         break;
                 }

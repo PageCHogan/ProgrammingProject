@@ -57,8 +57,8 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex )
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             return surveyData;
@@ -88,8 +88,8 @@ namespace ProjectWebAPI.Services
                         {
                             command = new SqlCommand(SqlQuery, conn);
                             command.Parameters.AddWithValue("@responseID", report.ResponseID);
-                            command.Parameters.AddWithValue("@Name", report.Name);
-                            command.Parameters.AddWithValue("@Report_file", report.ReportFile);
+                            command.Parameters.AddWithValue("@Name", report.Name = report.Name ?? "");
+                            command.Parameters.AddWithValue("@Report_file", report.ReportFile = report.ReportFile ?? "");
                             command.Parameters.AddWithValue("@Date", report.Date);
 
                         }
@@ -100,13 +100,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not saved to database");
+                System.Diagnostics.Debug.WriteLine("Error - record not saved to database");
 
             return result;
         }
@@ -134,8 +134,8 @@ namespace ProjectWebAPI.Services
                         if (SqlQuery.Length > 0)
                         {
                             command = new SqlCommand(SqlQuery, conn);
-                            command.Parameters.AddWithValue("@name", report.Name);
-                            command.Parameters.AddWithValue("@report_file", report.ReportFile);
+                            command.Parameters.AddWithValue("@name", report.Name = report.Name ?? "");
+                            command.Parameters.AddWithValue("@report_file", report.ReportFile = report.ReportFile ?? "");
                             command.Parameters.AddWithValue("@Date", report.Date);
                         }
                         int sqlResult = command.ExecuteNonQuery();
@@ -145,13 +145,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not updated in database");
+                System.Diagnostics.Debug.WriteLine("Error - record not updated in database");
 
             return result;
         }
@@ -184,12 +184,12 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             if (!result)
-                Console.WriteLine("Error - record not deleted");
+                System.Diagnostics.Debug.WriteLine("Error - record not deleted");
 
             return result;
         }

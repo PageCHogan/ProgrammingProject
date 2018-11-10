@@ -56,8 +56,8 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             return responseData;
@@ -117,8 +117,8 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             return responseData;
@@ -146,7 +146,7 @@ namespace ProjectWebAPI.Services
                             command = new SqlCommand(SqlQuery, conn);
                             command.Parameters.AddWithValue("@userID", response.UserID);
                             command.Parameters.AddWithValue("@surveyID", response.SurveyID);
-                            command.Parameters.AddWithValue("@responseCSV", response.ResponseCSV);
+                            command.Parameters.AddWithValue("@responseCSV", response.ResponseCSV = response.ResponseCSV ?? "");
                             command.Parameters.AddWithValue("@date", response.Date);
 
                         }
@@ -157,13 +157,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not saved to database");
+                System.Diagnostics.Debug.WriteLine("Error - record not saved to database");
 
             return result;
         }
@@ -190,7 +190,7 @@ namespace ProjectWebAPI.Services
                             command = new SqlCommand(SqlQuery, conn);
                             command.Parameters.AddWithValue("@UserID", response.UserID);
                             command.Parameters.AddWithValue("@SurveyID", response.SurveyID);
-                            command.Parameters.AddWithValue("@ResponseCSV", response.ResponseCSV);
+                            command.Parameters.AddWithValue("@ResponseCSV", response.ResponseCSV = response.ResponseCSV ?? "");
                             command.Parameters.AddWithValue("@Date", response.Date);
                             command.Parameters.AddWithValue("@ResponseID", response.ResponseID);
                         }
@@ -201,13 +201,13 @@ namespace ProjectWebAPI.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Exception Caught - " + ex.Message);
-                    throw;
+                    System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                    //throw;
                 }
             }
 
             if (!result)
-                Console.WriteLine("Error - record not updated in database");
+                System.Diagnostics.Debug.WriteLine("Error - record not updated in database");
 
             return result;
         }
@@ -240,12 +240,12 @@ namespace ProjectWebAPI.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                //throw;
             }
 
             if (!result)
-                Console.WriteLine("Error - record not deleted");
+                System.Diagnostics.Debug.WriteLine("Error - record not deleted");
 
             return result;
         }

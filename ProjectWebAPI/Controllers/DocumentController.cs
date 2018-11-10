@@ -84,6 +84,21 @@ namespace ProjectWebAPI.Controllers
             return result;
         }
 
+        // DELETE api/Document/{Option}
+        [HttpDelete("{id}")]
+        public string DeleteAsync(int ID)
+        {
+            string response = "";
+
+            if (ID > 0)
+            {
+                response = DeleteCSV(ID).GetAwaiter().GetResult() ? "Successfully deleted CSV" : "Error deleting CSV";
+            }
+
+            return response;
+        }
+
+
         private static async Task CreateContainer()
         {
             await CONTAINER.CreateIfNotExistsAsync();
@@ -159,12 +174,12 @@ namespace ProjectWebAPI.Controllers
 
             try
             {
-                CloudAppendBlob blob = CONTAINER.GetAppendBlobReference(fileName);
+                CloudAppendBlob CSV = CONTAINER.GetAppendBlobReference(fileName);
 
-                if (blob.ExistsAsync().Result == false) //Create new blob file, if it does not exist.
-                    await blob.CreateOrReplaceAsync();
+                if (CSV.ExistsAsync().Result == false) //Create new blob file, if it does not exist.
+                    await CSV.CreateOrReplaceAsync();
 
-                await blob.AppendTextAsync(responseToAppend.Response + System.Environment.NewLine); //Append responses to the end of data.
+                await CSV.AppendTextAsync(responseToAppend.Response + System.Environment.NewLine); //Append responses to the end of data.
                 result = true;
             }
             catch (Exception ex)
@@ -176,6 +191,36 @@ namespace ProjectWebAPI.Controllers
             return result;
         }
 
+        //TODO: Untested as don't want to delete csv's at this point.
+        private async Task<bool> DeleteCSV(int ID)
+        {
+            bool result = false;
+            string fileName = null;
+
+            BaseResponseModel CSVResponse = responseService.GetSurveyFilename(ID);
+
+            if (CSVResponse != null)
+                fileName = CSVResponse.ResponseCSV.Split("/").Last();
+
+            try
+            {
+                CloudAppendBlob CSV = CONTAINER.GetAppendBlobReference(fileName);
+
+                if(CSV != null)
+                {
+                    await CSV.DeleteAsync();
+                    result = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+                result = false;
+            }
+
+            return result;
+        }
 
         private static async Task<List<CSVResponse>> GetSurveyResponses(object data)
         {

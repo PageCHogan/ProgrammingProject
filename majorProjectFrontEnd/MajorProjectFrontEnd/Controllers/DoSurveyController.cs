@@ -52,7 +52,7 @@ namespace MajorProjectFrontEnd.Controllers
 		public async Task<ViewResult> SurveyResponseAsync()
 		{
 			api.Client().BaseAddress = new Uri(baseAddress);
-			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/response/save", GetResponseModelList(Request.Form));
+			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/response/save", GetCSVModel(Request.Form));
 			response.EnsureSuccessStatusCode();
 			
 			
@@ -60,6 +60,35 @@ namespace MajorProjectFrontEnd.Controllers
 			return View("SurveyResponseAsync", GetResponseModelList(Request.Form));
 		}
 
+		
+		private CSVModel GetCSVModel(IFormCollection col)
+		{
+			int numberOfQuestions = Int32.Parse(col["numberOfQuestions"]);
+			int surveyID = Int32.Parse(col["surveyID"]);
+			var currentTime = DateTime.Now;
+			string year = currentTime.Year.ToString();
+
+			// https://stackoverflow.com/questions/1152583/cdatetime-now-month-output-format
+			string month = currentTime.Month.ToString("d2");
+			string day = currentTime.Day.ToString("d2");
+
+			string date = year + month + day;
+
+			string time = currentTime.ToString("H:mm:ss");
+
+			string ResponseCSV = "";
+
+			ResponseCSV += (surveyID.ToString() + "," + date + "," + time);
+
+			for (int i = 1; i <= numberOfQuestions; ++i)
+			{
+				ResponseCSV += ",";
+				ResponseCSV += col[i.ToString()];
+
+			}
+
+			return new CSVModel { ResponseCSV = ResponseCSV };
+		}
 
 
 		private List<ResponseModel> GetResponseModelList(IFormCollection col)

@@ -29,21 +29,17 @@ edit survey_solutions.bat
 
 A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
 
-_For more examples and usage, please refer to the [Wiki][wiki]._
-
 ## Development setup
 
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
+Windows
+```sh
 Download solution from GitHub.
 Open backend solution "ProjectWebAPI" in Visual Studio, build and run.
 The backend will open up in a browser, ignore this.
 Open frontend solution "MajorProjectFrontEnd" in another Visual Studio, build and run.
 Frontend will open up in a browser, use appropriate links to navigate the website.
-
-```sh
-make install
-npm test
 ```
+
 
 ## Release History
 

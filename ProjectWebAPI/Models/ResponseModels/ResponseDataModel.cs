@@ -11,7 +11,6 @@ namespace ProjectWebAPI.Models.ResponseModels
         public string SurveyName { get; set; }
         public string SurveyType { get; set; }
         public string SurveyDescription { get; set; }
-        //public DateTime SurveyDate { get; set; }
         public string StaffName { get; set; }
         public string ResponseCSV { get; set; }
         public DateTime ResponseDate { get; set; }
@@ -22,7 +21,6 @@ namespace ProjectWebAPI.Models.ResponseModels
             SurveyName = "";
             SurveyType = "";
             SurveyDescription = "";
-            //SurveyDate = DateTime.MinValue;
             StaffName = "";
             ResponseCSV = "";
             ResponseDate = DateTime.MinValue;

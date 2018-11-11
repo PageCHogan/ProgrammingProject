@@ -5,8 +5,6 @@
 Survey Solutions features a full package that's ready to go and includes the front end with surveys, administration login portal where you can add/edit
 surveys and run reports.
 
-![](header.png)
-
 ## Installation
 
 OS X & Linux:

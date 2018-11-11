@@ -1,7 +1,7 @@
 # Survey Solutions
 > Survey Solutions allows you to create/edit surveys to capture participant data about your customers' experiences.It features customisable surveys, full front and backend package using cloud SQL database storage
 
-Create and edit surveys and allow your customer/employee base to provide feedback to grow your marketing strategy.
+>Create and edit surveys and allow your customer/employee base to provide feedback to grow your marketing strategy.
 Survey Solutions features a full package that's ready to go and includes the front end with surveys, administration login portal where you can add/edit
 surveys and run reports.
 

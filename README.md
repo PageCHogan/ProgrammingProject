@@ -1,4 +1,4 @@
-# Product Name
+# Survey Solutions
 > Survey Solutions allows you to create/edit surveys to capture participant data about your customers' experiences.It features customisable surveys, full front and backend package using cloud SQL database storage
 
 [![NPM Version][npm-image]][npm-url]

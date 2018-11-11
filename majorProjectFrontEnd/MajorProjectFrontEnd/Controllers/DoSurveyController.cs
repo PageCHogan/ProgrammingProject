@@ -83,7 +83,7 @@ namespace MajorProjectFrontEnd.Controllers
 			for (int i = 1; i <= numberOfQuestions; ++i)
 			{
 				ResponseCSV += ",";
-				ResponseCSV += col[i.ToString()]; //TODO: would guess this is supposed to be: col[i].ToString(); Testing required. 
+				ResponseCSV += col[i.ToString()];
 
             }
 

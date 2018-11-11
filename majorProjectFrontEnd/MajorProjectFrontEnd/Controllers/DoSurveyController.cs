@@ -83,7 +83,7 @@ namespace MajorProjectFrontEnd.Controllers
 			for (int i = 1; i <= numberOfQuestions; ++i)
 			{
 				ResponseCSV += ",";
-				ResponseCSV += col[i.ToString()];
+				ResponseCSV += col[i.ToString()].ToString().Replace(',', '|');
 
             }
 

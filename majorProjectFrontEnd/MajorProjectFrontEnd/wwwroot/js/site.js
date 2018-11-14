@@ -20,7 +20,7 @@ $(document).ready(function () {
         console.log("\n");
 
 
-        if (selections.length == $.unique(selections).length) {
+        if (selections.length == Array.from(new Set(selections)).length) {
             $("p.errorMessage").filter("." + $(this).attr('name')).html("");
 
         }

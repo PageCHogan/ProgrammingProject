@@ -75,10 +75,25 @@ namespace MajorProjectFrontEnd.Controllers
 			ViewData["Question"] = "question number: " + collection["QuestionNumber"] + ", question: " + collection["Question"]
 			+ ", surveyID: " + collection["surveyID"] + ", type: " + collection["Type"] + ", options: " + collection["Options"];
 
-			var question = new QuestionDataModel(int.Parse(collection["QuestionNumber"]), int.Parse(collection["surveyID"]), collection["Question"],
-								collection["Type"], collection["Options"]);
+			string question = collection["Question"];
+			int questionNumber = int.Parse(collection["QuestionNumber"]);
+			int surveyID = int.Parse(collection["surveyID"]);
+			string type = collection["Type"];
+			string options = collection["Options"];
+
+			if (questionNumber <= 0) {
+				ViewData["Error"] = "Please review form: Question number must be greater than or equal to 1";
+				return View();
+			}
+
+			if (surveyID <= 0) {
+				ViewData["Error"] = "Please review form: Survey ID must be greater than or equal to 1.";
+				return View();
+			}
+			
+			var Question = new QuestionDataModel(questionNumber, surveyID, question, type, options);
 			api.Client().BaseAddress = new Uri("http://localhost:61081/");
-			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/surveyQuestions/save", question);
+			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/surveyQuestions/save", Question);
 			response.EnsureSuccessStatusCode();
 
 			return View();

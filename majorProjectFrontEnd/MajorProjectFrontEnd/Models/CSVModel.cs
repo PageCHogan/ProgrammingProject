@@ -7,7 +7,7 @@ namespace MajorProjectFrontEnd.Models
 {
 	public class CSVModel
 	{
-		public string ResponseCSV { get; set; }
+		public string Response { get; set; }
         public int SurveyID { get; set; }
 	}
 }

@@ -53,7 +53,9 @@ namespace MajorProjectFrontEnd.Controllers
 		{
 			api.Client().BaseAddress = new Uri(baseAddress);
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/document/saveresponse", GetCSVModel(Request.Form));
+			
 			response.EnsureSuccessStatusCode();
+			string responseString = response.Content.ReadAsStringAsync().Result;
 			
 			
 
@@ -87,7 +89,7 @@ namespace MajorProjectFrontEnd.Controllers
 
             }
 
-			return new CSVModel { ResponseCSV = ResponseCSV, SurveyID = surveyID };
+			return new CSVModel { Response = ResponseCSV, SurveyID = surveyID };
 		}
 
 

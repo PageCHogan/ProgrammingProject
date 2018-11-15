@@ -52,8 +52,7 @@ namespace MajorProjectFrontEnd.Controllers
 		public async Task<ViewResult> SurveyResponseAsync()
 		{
 			api.Client().BaseAddress = new Uri(baseAddress);
-			var csvmodel = GetCSVModel(Request.Form);
-			HttpResponseMessage response = await api.Client().PostAsJsonAsync("...api/document/saveresponse", csvmodel);
+			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/document/saveresponse", GetCSVModel(Request.Form));
 			response.EnsureSuccessStatusCode();
 			
 			

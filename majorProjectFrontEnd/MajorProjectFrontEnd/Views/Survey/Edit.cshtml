@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="SurveyName" class="control-label"></label>
-                <input asp-for="SurveyName" class="form-control" required />
+                <input asp-for="SurveyName" class="form-control" required spellcheck="true"/>
                 <span asp-validation-for="SurveyName" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -36,9 +36,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" required />
+                <input asp-for="Description" class="form-control" required spellcheck="true"/>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+	    <p>Start date and end date must be on or after 16 Nov 2018</p>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
                 <input asp-for="StartDate" class="form-control" required min="2018-11-16" />

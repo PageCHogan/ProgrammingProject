@@ -55,7 +55,7 @@
 			else if (question.Type == "COMMENT")
 			{
 				<input name="question_type_@question.QuestionNumber" type="hidden" value="COMMENT">
-				<textarea name="@question.QuestionNumber" required></textarea>
+				<textarea name="@question.QuestionNumber" required spellcheck="true"></textarea>
 
 
 			}
@@ -63,7 +63,7 @@
 			{
 
 				<input name="question_type_@question.QuestionNumber" type="hidden" value="TEXT">
-				<input class="text" name="@question.QuestionNumber" required>
+				<input class="text" name="@question.QuestionNumber" required spellcheck="true">
 			}
 			else if (question.Type == "RANK")
 			{

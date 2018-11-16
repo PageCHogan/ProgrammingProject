@@ -15,42 +15,42 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="SurveyID" class="control-label"></label>
-                <input asp-for="SurveyID" class="form-control" />
+                <input asp-for="SurveyID" class="form-control"  required min="1"/>
                 <span asp-validation-for="SurveyID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SurveyName" class="control-label"></label>
-                <input asp-for="SurveyName" class="form-control" />
+                <input asp-for="SurveyName" class="form-control" required/>
                 <span asp-validation-for="SurveyName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UserID" class="control-label"></label>
-                <input asp-for="UserID" class="form-control" />
+                <input asp-for="UserID" class="form-control" required min="1"/>
                 <span asp-validation-for="UserID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Type" class="control-label"></label>
-                <input asp-for="Type" class="form-control" />
+                <input asp-for="Type" class="form-control" required/>
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <input asp-for="Description" class="form-control" required/>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" />
+                <input asp-for="StartDate" class="form-control" required min="2018-11-16"/>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" />
+                <input asp-for="EndDate" class="form-control" required min="2018-11-16"/>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Permission" class="control-label"></label>
-                <input asp-for="Permission" class="form-control" />
+                <input asp-for="Permission" class="form-control" required/>
                 <span asp-validation-for="Permission" class="text-danger"></span>
             </div>
             <div class="form-group">

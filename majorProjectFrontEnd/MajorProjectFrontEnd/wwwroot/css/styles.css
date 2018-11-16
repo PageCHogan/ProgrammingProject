@@ -230,3 +230,7 @@ tr:nth-child(even) {
 .form-group {
     margin-bottom: 20px;
 }
+
+.bold {
+    font-weight: bold;
+}

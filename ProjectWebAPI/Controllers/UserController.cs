@@ -108,7 +108,8 @@ namespace ProjectWebAPI.Controllers
         private string AddNewUser(object data)
         {
             UserDataModel user = jsonHelper.FromJson<UserDataModel>(data.ToString());
-            //UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             string result = "Error - User already exists";
 
@@ -131,7 +132,8 @@ namespace ProjectWebAPI.Controllers
         private string UpdateUser(object data, int ID)
         {
             UserDataModel user = jsonHelper.FromJson<UserDataModel>(data.ToString());
-            //UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             string result = "Error - No changes made";
 

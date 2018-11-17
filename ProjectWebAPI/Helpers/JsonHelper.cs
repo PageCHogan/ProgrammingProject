@@ -8,6 +8,7 @@ namespace ProjectWebAPI.Helpers
 {
     public class JsonHelper
     {
+        public string ErrorMessage = null;
 
         public List<T> FromJsonList<T>(object data)
         {
@@ -28,7 +29,9 @@ namespace ProjectWebAPI.Helpers
 
         public T FromJson<T>(object data)
         {
-            T response;
+            ErrorMessage = null;
+
+            T response = Activator.CreateInstance<T>();
 
             try
             {
@@ -37,7 +40,8 @@ namespace ProjectWebAPI.Helpers
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
-                throw;
+                ErrorMessage = ex.Message;
+                //throw;
             }
 
             return response;

@@ -104,7 +104,8 @@ namespace ProjectWebAPI.Controllers
             string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             ReportDataModel newReport = jsonHelper.FromJson<ReportDataModel>(data.ToString());
-            //ReportDataModel newReport = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             if (reportService.AddNewReport(newReport))
             {
@@ -121,7 +122,8 @@ namespace ProjectWebAPI.Controllers
         private string UpdateReport(object data, int ID)
         {
             ReportDataModel report = jsonHelper.FromJson<ReportDataModel>(data.ToString());
-            //ReportDataModel report = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             string result = "Error - No changes made";
 

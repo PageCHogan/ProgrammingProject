@@ -106,6 +106,8 @@ namespace ProjectWebAPI.Controllers
             string result = "Entered survey not found, failed to add question";
 
             QuestionDataModel question = jsonHelper.FromJson<QuestionDataModel>(data);
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             List<SurveyDataModel> existingSurveys = surveyService.GetSurveys();
 
@@ -130,7 +132,8 @@ namespace ProjectWebAPI.Controllers
         private string UpdateQuestion(object data, int questionID, int surveyID)
         {
             QuestionDataModel question = jsonHelper.FromJson<QuestionDataModel>(data.ToString());
-            //QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             string result = "Entered survey not found, failed to update question";
 

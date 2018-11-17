@@ -116,7 +116,8 @@ namespace ProjectWebAPI.Controllers
         private string AddNewResponse(object data)
         {
             BaseResponseModel response = jsonHelper.FromJson<BaseResponseModel>(data.ToString());
-            //BaseResponseModel response = JsonConvert.DeserializeObject<BaseResponseModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             string result = "Error - unable to add new response record";
 
@@ -151,7 +152,8 @@ namespace ProjectWebAPI.Controllers
         private string UpdateResponse(object data, int ID)
         {
             BaseResponseModel response = jsonHelper.FromJson<BaseResponseModel>(data.ToString());
-            //BaseResponseModel response = JsonConvert.DeserializeObject<BaseResponseModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             string result = "Error - No changes made";
 

@@ -102,7 +102,8 @@ namespace ProjectWebAPI.Controllers
         private string AddNewSurvey(object data)
         {
             SurveyDataModel survey = jsonHelper.FromJson<SurveyDataModel>(data.ToString());
-            //SurveyDataModel survey = JsonConvert.DeserializeObject<SurveyDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             string result = "Error - No changes made";
 
@@ -117,7 +118,8 @@ namespace ProjectWebAPI.Controllers
         private string UpdateSurvey(object data, int ID)
         {
             SurveyDataModel survey = jsonHelper.FromJson<SurveyDataModel>(data.ToString());
-            //SurveyDataModel survey = JsonConvert.DeserializeObject<SurveyDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             string result = "Error - No changes made";
 

@@ -101,3 +101,4 @@ C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProj
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.dll
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.pdb
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.csproj.CopyComplete
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.csprojAssemblyReference.cache

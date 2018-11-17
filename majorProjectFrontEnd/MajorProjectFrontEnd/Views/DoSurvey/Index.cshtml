@@ -80,11 +80,11 @@
 						{
 							if (i == options.ToList().IndexOf(option))
 							{
-								<option value="@options[i]" class="@question.QuestionNumber" selected>@options[i]</option>
+								<option value="@(i+1)" class="@question.QuestionNumber" selected>@options[i]</option>
 							}
 							else
 							{
-								<option value="@options[i]" class="@question.QuestionNumber">@options[i]</option>
+								<option value="@(i+1)" class="@question.QuestionNumber">@options[i]</option>
 							}
 
 

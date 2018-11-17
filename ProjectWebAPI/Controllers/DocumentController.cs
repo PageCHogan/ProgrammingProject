@@ -13,6 +13,7 @@ using System.Net;
 using ProjectWebAPI.Models.ResponseModels;
 using ProjectWebAPI.Models.QuestionModels;
 using ProjectWebAPI.Services;
+using ProjectWebAPI.Models.ReportModels;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -48,7 +49,6 @@ namespace ProjectWebAPI.Controllers
                         azureDocuments = ListDocuments().GetAwaiter().GetResult();
                         result = JsonConvert.SerializeObject(azureDocuments);
                         break;
-                    
                     default:
                         break;
                 }
@@ -56,7 +56,7 @@ namespace ProjectWebAPI.Controllers
 
             return result;
         }
-
+      
         // POST: api/Document/{Option}
         [HttpPost("{option}")]
         public string Post([FromBody]object data, string option)
@@ -70,8 +70,16 @@ namespace ProjectWebAPI.Controllers
                     case "download":
                         result = DownloadDocument(data).GetAwaiter().GetResult() ? "Successfully downloaded file to " + DOWNLOAD_DIRECTORY : "Error - File not downloaded please try again";
                         break;
-                    case "downloaddata": //For data manipulation
-                        GetSurveyResponses(data).GetAwaiter().GetResult();
+                    case "report": //For data manipulation
+                        List<CSVResponse> reportData = GetSurveyResponses(data).GetAwaiter().GetResult();
+                        if(reportData != null)
+                        {
+                            AnaliseReport(reportData);
+                        } 
+                        else
+                        {
+                            result = "Error, unable to run report.";
+                        }
                         break;
                     case "saveresponse": //To append a response to csv in azure.
                         result = AppendResponse(data).GetAwaiter().GetResult() ? "Successfully added response to CSV" : "Error adding response to CSV";
@@ -97,7 +105,6 @@ namespace ProjectWebAPI.Controllers
 
             return response;
         }
-
 
         private static async Task CreateContainer()
         {
@@ -276,6 +283,40 @@ namespace ProjectWebAPI.Controllers
             return csvResponse;
         }
 
+        private ReportAnalysisModel AnaliseReport(List<CSVResponse> reportData)
+        {
+            ReportAnalysisModel results = new ReportAnalysisModel();
+            string message = "";
 
+            SurveyQuestionsService service = new SurveyQuestionsService();
+
+            List<QuestionDataModel> questionData = service.GetSurveyQuestions(reportData[0].SurveyID);
+
+            foreach(QuestionDataModel question in questionData)
+            {
+                //run analysis on each question and populate response....
+                results.Responses.Add(new ReportResponseAnalysis()
+                {
+                    QuestionNumber = question.QuestionNumber,
+                    Question = question.Question,
+                    Type = question.Type,
+                    Message = message
+                });
+            }
+
+            foreach(CSVResponse responseData in reportData)
+            {
+                //foreach(var response in responseData.Responses)
+                //{
+                    
+                //}
+
+                
+            }
+
+
+
+            return results;
+        }
     }
 }

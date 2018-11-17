@@ -14,6 +14,7 @@ using ProjectWebAPI.Models.ResponseModels;
 using ProjectWebAPI.Models.QuestionModels;
 using ProjectWebAPI.Services;
 using ProjectWebAPI.Models.ReportModels;
+using ProjectWebAPI.Helpers;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -31,6 +32,7 @@ namespace ProjectWebAPI.Controllers
         private static readonly CloudBlobContainer CONTAINER = client.GetContainerReference("response-csv");
 
         ResponseService responseService = new ResponseService();
+        private static JsonHelper jsonHelper = new JsonHelper();
 
         //returns a full list of the csv's that are stored in the blob.
         // GET: api/Document
@@ -38,7 +40,7 @@ namespace ProjectWebAPI.Controllers
         public string Get(string option)
         {
             CreateContainer().GetAwaiter().GetResult();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (option != null)
             {
@@ -61,7 +63,7 @@ namespace ProjectWebAPI.Controllers
         [HttpPost("{option}")]
         public string Post([FromBody]object data, string option)
         {
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (option != null && data != null)
             {
@@ -96,7 +98,7 @@ namespace ProjectWebAPI.Controllers
         [HttpDelete("{id}")]
         public string DeleteAsync(int ID)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0)
             {
@@ -137,7 +139,8 @@ namespace ProjectWebAPI.Controllers
         private static async Task<bool> DownloadDocument(object data)
         {
             bool result = false;
-            AzureBlobDocuments document = JsonConvert.DeserializeObject<AzureBlobDocuments>(data.ToString());
+            AzureBlobDocuments document = jsonHelper.FromJson<AzureBlobDocuments>(data.ToString());
+            //AzureBlobDocuments document = JsonConvert.DeserializeObject<AzureBlobDocuments>(data.ToString());
 
             CloudAppendBlob appendBlob = CONTAINER.GetAppendBlobReference(document.Filename); // Get a reference to a blob named.
 
@@ -170,7 +173,9 @@ namespace ProjectWebAPI.Controllers
 
         private async Task<bool> AppendResponse(object data)
         {
-            CSVResponseAppendModel responseToAppend = JsonConvert.DeserializeObject<CSVResponseAppendModel>(data.ToString());
+            CSVResponseAppendModel responseToAppend = jsonHelper.FromJson<CSVResponseAppendModel>(data.ToString());
+            //CSVResponseAppendModel responseToAppend = JsonConvert.DeserializeObject<CSVResponseAppendModel>(data.ToString());
+
             bool result = false;
             string fileName = null;
 
@@ -198,7 +203,6 @@ namespace ProjectWebAPI.Controllers
             return result;
         }
 
-        //TODO: Untested as don't want to delete csv's at this point.
         private async Task<bool> DeleteCSV(int ID)
         {
             bool result = false;
@@ -231,7 +235,9 @@ namespace ProjectWebAPI.Controllers
 
         private static async Task<List<CSVResponse>> GetSurveyResponses(object data)
         {
-            AzureBlobDocuments document = JsonConvert.DeserializeObject<AzureBlobDocuments>(data.ToString());
+            AzureBlobDocuments document = jsonHelper.FromJson<AzureBlobDocuments>(data.ToString());
+            //AzureBlobDocuments document = JsonConvert.DeserializeObject<AzureBlobDocuments>(data.ToString());
+
             CSVResponse question = new CSVResponse();
             List<CSVResponse> csvResponse = new List<CSVResponse>();
             bool headerIgnore = true;

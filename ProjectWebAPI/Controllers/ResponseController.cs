@@ -9,6 +9,7 @@ using ProjectWebAPI.Services;
 using Newtonsoft.Json;
 using ProjectWebAPI.Models.UserModels;
 using ProjectWebAPI.Models.SurveyModels;
+using ProjectWebAPI.Helpers;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -19,16 +20,18 @@ namespace ProjectWebAPI.Controllers
         ResponseService responseService = new ResponseService();
         UserService userService = new UserService();
         SurveyServices surveyService = new SurveyServices();
+        JsonHelper jsonHelper = new JsonHelper();
 
         [HttpGet]
         public string Get()
         {
             List<BaseResponseModel> responseData = new List<BaseResponseModel>();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             responseData = responseService.GetResponses();
 
-            result = JsonConvert.SerializeObject(responseData);
+            if(responseData.Count > 0)
+                result = JsonConvert.SerializeObject(responseData);
 
             return result;
         }
@@ -37,7 +40,7 @@ namespace ProjectWebAPI.Controllers
         [HttpGet("{id}/{option?}")]
         public string Get(int id, string option = "")
         {
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (option != null && id > 0)
             {
@@ -63,8 +66,7 @@ namespace ProjectWebAPI.Controllers
         [HttpPost("{option}")]
         public string Post([FromBody]object data, string option)
         {
-            //HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (option != null && data != null)
             {
@@ -87,7 +89,7 @@ namespace ProjectWebAPI.Controllers
         [HttpPut("{id}")]
         public string Put(int ID, [FromBody]object data)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0 && data != null)
             {
@@ -101,7 +103,7 @@ namespace ProjectWebAPI.Controllers
         [HttpDelete("{id}")]
         public string Delete(int ID)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0)
             {
@@ -113,7 +115,9 @@ namespace ProjectWebAPI.Controllers
 
         private string AddNewResponse(object data)
         {
-            BaseResponseModel response = JsonConvert.DeserializeObject<BaseResponseModel>(data.ToString());
+            BaseResponseModel response = jsonHelper.FromJson<BaseResponseModel>(data.ToString());
+            //BaseResponseModel response = JsonConvert.DeserializeObject<BaseResponseModel>(data.ToString());
+
             string result = "Error - unable to add new response record";
 
             List<UserDataModel> existingUsers = userService.GetUsers();
@@ -146,7 +150,9 @@ namespace ProjectWebAPI.Controllers
 
         private string UpdateResponse(object data, int ID)
         {
-            BaseResponseModel response = JsonConvert.DeserializeObject<BaseResponseModel>(data.ToString());
+            BaseResponseModel response = jsonHelper.FromJson<BaseResponseModel>(data.ToString());
+            //BaseResponseModel response = JsonConvert.DeserializeObject<BaseResponseModel>(data.ToString());
+
             string result = "Error - No changes made";
 
             List<BaseResponseModel> existingResponse = responseService.GetResponses();

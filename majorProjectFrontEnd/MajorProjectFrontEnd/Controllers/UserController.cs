@@ -31,7 +31,10 @@ namespace MajorProjectFrontEnd.Controllers
 		// GET: User/Details/5
 		public ActionResult Details(int id)
 		{
-			return View();
+			requestUri = "api/user/" + id.ToString();
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+
+			return View(JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result));
 		}
 
 		// GET: User/Create
@@ -45,16 +48,7 @@ namespace MajorProjectFrontEnd.Controllers
 		[ValidateAntiForgeryToken]
 		public ActionResult Create(IFormCollection collection)
 		{
-			try
-			{
-				// TODO: Add insert logic here
-
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
+			return View();
 		}
 
 		// GET: User/Edit/5

@@ -14,7 +14,7 @@ namespace MajorProjectFrontEnd.Controllers
 	public class UserController : Controller
 	{
 
-		String baseAddress = "http://localhost:61081";
+		String baseAddress = "https://projectwebapis.azurewebsites.net/";
 		String requestUri = null;
 
 		APIService api = new APIService();

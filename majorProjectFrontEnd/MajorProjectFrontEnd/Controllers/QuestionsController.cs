@@ -15,7 +15,7 @@ namespace MajorProjectFrontEnd.Controllers
 	public class QuestionsController : Controller
 	{
 
-		String baseAddress = "http://localhost:61081";
+		String baseAddress = "https://projectwebapis.azurewebsites.net/";
 		String requestUri = null;
 
 		APIService api = new APIService();

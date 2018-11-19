@@ -16,7 +16,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="SurveyID" class="control-label"></label>
-                <input asp-for="SurveyID" class="form-control" required min="1" />
+                <input asp-for="SurveyID" type="number" class="form-control" required min="1" />
                 <span asp-validation-for="SurveyID" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -26,7 +26,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserID" class="control-label"></label>
-                <input asp-for="UserID" class="form-control" required min="1" />
+                <input asp-for="UserID" type="number" class="form-control" required min="1" />
                 <span asp-validation-for="UserID" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -36,18 +36,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" required spellcheck="true"/>
+                <textarea asp-for="Description" class="form-control" required spellcheck="true"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 	    <p>Start date and end date must be on or after 16 Nov 2018</p>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" class="form-control" required min="2018-11-16" />
+                <input asp-for="StartDate" type="date" class="form-control" required min="2018-11-16" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" class="form-control" required min="2018-11-16"/>
+                <input asp-for="EndDate" type="date" class="form-control" required min="2018-11-16"/>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -56,7 +56,7 @@
                 <span asp-validation-for="Permission" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default submit" />
             </div>
         </form>
     </div>

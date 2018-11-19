@@ -96,7 +96,7 @@ namespace MajorProjectFrontEnd.Controllers
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/surveyQuestions/save", Question);
 			response.EnsureSuccessStatusCode();
 
-			return View();
+			return RedirectToAction("Index", "Questions");
 
 		}
 
@@ -128,7 +128,7 @@ namespace MajorProjectFrontEnd.Controllers
 												+ collection["surveyID"], question);
 			response.EnsureSuccessStatusCode();
 
-			return View();
+			return RedirectToAction("Index", "Questions");
 
 		}
 

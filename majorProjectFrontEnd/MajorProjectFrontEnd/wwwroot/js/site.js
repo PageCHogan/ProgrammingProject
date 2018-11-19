@@ -7,7 +7,7 @@
 $(document).ready(function () {
 
     $('select.rank').on('change', function (e) {
-        var selections = [];
+        let selections = [];
 
         $('select').filter("[name=" + "'" + e.target.getAttribute("name") + "'" + "]").each(function () {
             selections.push($(this).val());
@@ -34,7 +34,7 @@ $(document).ready(function () {
 
 
     $('#menu-bar').on('click', function (e) {
-        var nav = document.getElementById("nav");
+        let nav = document.getElementById("nav");
 
         if (nav.className == "nav-hide") {
 
@@ -50,7 +50,7 @@ $(document).ready(function () {
 
 
     $("#target").submit(function(e) {
-        var invalid = false;
+        let invalid = false;
         $("p.errorMessage").each(function () {
 
 
@@ -66,6 +66,17 @@ $(document).ready(function () {
         }); 
 
         if (invalid == true) {
+            return false;
+        }
+    });
+
+
+    $("#survey").submit(function (e) {
+        let startDate = new Date($("#startDate").val());
+        let endDate = new Date($("#endDate").val());
+
+        if (startDate >= endDate) {
+            $(".errorMessage").html("Start date must not be on or after end date.");
             return false;
         }
     });

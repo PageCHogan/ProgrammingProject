@@ -48,7 +48,7 @@ namespace MajorProjectFrontEnd.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create(IFormCollection collection)
 		{
-			int SurveyID = int.Parse(collection["SurveyID"]);
+			
 			string SurveyName = collection["SurveyName"];
 			int UserID = int.Parse(collection["UserID"]);
 			string Type = collection["Type"];
@@ -59,7 +59,6 @@ namespace MajorProjectFrontEnd.Controllers
 
 			var survey = new SurveyDataModel
 			{
-				SurveyID = SurveyID,
 				SurveyName = SurveyName,
 				UserID = UserID,
 				Type = Type,
@@ -73,7 +72,7 @@ namespace MajorProjectFrontEnd.Controllers
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/save", survey);
 			response.EnsureSuccessStatusCode();
 
-			return View();
+			return RedirectToAction("Index", "Survey");
 		}
 
 		// GET: Survey/Edit/5
@@ -119,7 +118,7 @@ namespace MajorProjectFrontEnd.Controllers
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/" + SurveyID.ToString(), survey);
 			response.EnsureSuccessStatusCode();
 
-			return View();
+			return RedirectToAction("Index", "Survey");
 		}
 
 		// GET: Survey/Delete/5
@@ -143,7 +142,7 @@ namespace MajorProjectFrontEnd.Controllers
 			response.EnsureSuccessStatusCode();
 
 
-			return RedirectToAction("Index", "Questions");
+			return RedirectToAction("Index", "Survey");
 		}
 	}
 }

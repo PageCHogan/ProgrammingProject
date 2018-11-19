@@ -234,3 +234,11 @@ tr:nth-child(even) {
 .bold {
     font-weight: bold;
 }
+
+input:not(.submit) {
+    width: 50%;
+}
+
+.submit {
+    width: auto;
+}

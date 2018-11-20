@@ -1,4 +1,4 @@
-﻿@model ProjectWebAPI.Models.ViewModels.ResponseDataViewModel
+﻿@*@model ProjectWebAPI.Models.ViewModels.ResponseDataViewModel*@
 @*@model List<ProjectWebAPI.Models.ResponseDataModel>*@
 
 @{
@@ -12,33 +12,35 @@
 	<h4>ResponseDataModel</h4>
 	<hr />
 
-	<table>
-		<tr>
-			<th>ResponseID</th>
-			<th>SurveyName</th>
-			<th>SurveyType</th>
-			<th>SurveyDescription</th>
-			<th>SurveyDate</th>
-			<th>StaffName</th>
-			<th>ResponseCSV</th>
-			<th>ResponseDate</th>
-		</tr>
-	@foreach ( var row in Model.Responses)
-	{
-		<tr>
-			<td>@row.ResponseID</td>
-			<td>@row.SurveyName</td>
-			<td>@row.SurveyType</td>
-			<td>@row.SurveyDescription</td>
-			<td>@row.SurveyDate</td>
-			<td>@row.StaffName</td>
-			<td>@row.ResponseCSV</td>
-			<td>@row.ResponseDate</td>
-		</tr>
+    <table>
+        <tr>
+            <th>ResponseID</th>
+            <th>SurveyName</th>
+            <th>SurveyType</th>
+            <th>SurveyDescription</th>
+            <th>SurveyDate</th>
+            <th>StaffName</th>
+            <th>ResponseCSV</th>
+            <th>ResponseDate</th>
+        </tr>
+        @* //removing for publishing
+        @foreach (var row in Model.Responses)
+        {
+            <tr>
+                <td>@row.ResponseID</td>
+                <td>@row.SurveyName</td>
+                <td>@row.SurveyType</td>
+                <td>@row.SurveyDescription</td>
+                <td>@row.SurveyDate</td>
+                <td>@row.StaffName</td>
+                <td>@row.ResponseCSV</td>
+                <td>@row.ResponseDate</td>
+            </tr>
 
-	}
+        }
+        *@
 
-	</table>
+    </table>
 
 	
 </div>

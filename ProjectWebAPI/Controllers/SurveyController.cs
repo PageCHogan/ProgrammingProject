@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectWebAPI.Models.SurveyModels;
 using ProjectWebAPI.Services;
 using Newtonsoft.Json;
+using ProjectWebAPI.Helpers;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -15,16 +16,19 @@ namespace ProjectWebAPI.Controllers
     public class SurveyController : Controller
     {
         SurveyServices surveyService = new SurveyServices();
+        JsonHelper jsonHelper = new JsonHelper();
 
         // GET: api/Survey
         public string Get()
         {
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             surveyData = surveyService.GetSurveys();
 
-            result = JsonConvert.SerializeObject(surveyData);
+            if(surveyData.Count > 0)
+                result = JsonConvert.SerializeObject(surveyData);
+            
             return result;
         }
 
@@ -33,12 +37,13 @@ namespace ProjectWebAPI.Controllers
         public string Get(int id)
         {
             List<SurveyDataModel> surveyData = new List<SurveyDataModel>();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             surveyData = surveyService.GetSurveys(id);
 
-            result = JsonConvert.SerializeObject(surveyData);
-
+            if(surveyData.Count > 0)
+                result = JsonConvert.SerializeObject(surveyData);
+            
             return result;
         }
 
@@ -46,14 +51,14 @@ namespace ProjectWebAPI.Controllers
         [HttpPost("{option}")]
         public string Post([FromBody]object data, string option)
         {
-            string response = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (option != null && data != null)
             {
                 switch (option.ToLower())
                 {
                     case "save":
-                        response = AddNewSurvey(data);
+                        result = AddNewSurvey(data);
                         break;
                     case "????": //TODO: Any other options required for interacting with survey?
                         break;
@@ -62,41 +67,45 @@ namespace ProjectWebAPI.Controllers
                 }
             }
 
-            return response;
+            
+            return result;
         }
 
         // PUT: api/Survey/5
         [HttpPut("{id}")]
         public string Put(int ID, [FromBody]object data)
         {
-            string response = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0 && data != null)
             {
-                response = UpdateSurvey(data, ID);
+                result = UpdateSurvey(data, ID);
             }
 
-            return response;
+            return result;
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public string Delete(int ID)
         {
-            string response = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0)
             {
-                response = DeleteSurvey(ID);
+                result = DeleteSurvey(ID);
             }
 
-            return response;
+            return result;
         }
 
         private string AddNewSurvey(object data)
         {
-            SurveyDataModel survey = JsonConvert.DeserializeObject<SurveyDataModel>(data.ToString());
-            string result = "";
+            SurveyDataModel survey = jsonHelper.FromJson<SurveyDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
+
+            string result = "Error - No changes made";
 
             if (surveyService.AddNewSurvey(survey))
             {
@@ -108,7 +117,10 @@ namespace ProjectWebAPI.Controllers
 
         private string UpdateSurvey(object data, int ID)
         {
-            SurveyDataModel survey = JsonConvert.DeserializeObject<SurveyDataModel>(data.ToString());
+            SurveyDataModel survey = jsonHelper.FromJson<SurveyDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
+
             string result = "Error - No changes made";
 
             List<SurveyDataModel> existingSurveys = surveyService.GetSurveys(); //Create list of existing surveys
@@ -134,7 +146,7 @@ namespace ProjectWebAPI.Controllers
 
         private string DeleteSurvey(int ID)
         {
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (surveyService.DeleteSurvey(ID))
                 result = "Successfully deleted survey";

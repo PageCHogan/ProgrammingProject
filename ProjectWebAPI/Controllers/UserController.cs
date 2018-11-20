@@ -11,6 +11,7 @@ using System.Net;
 using ProjectWebAPI.Messages;
 using ProjectWebAPI.Models.UserModels;
 using System.Text;
+using ProjectWebAPI.Helpers;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -19,17 +20,20 @@ namespace ProjectWebAPI.Controllers
     public class UserController : Controller
     {
         UserService userService = new UserService();
+        JsonHelper jsonHelper = new JsonHelper();
 
         // GET api/user
         [HttpGet]
         public string Get()
         {
-            string result;
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             List<UserDataModel> userData = new List<UserDataModel>();
             userData = userService.GetUsers();
 
-            result = JsonConvert.SerializeObject(userData);
+            if(userData.Count > 0)
+                result = JsonConvert.SerializeObject(userData);
+
 
             return result;
         }
@@ -38,19 +42,14 @@ namespace ProjectWebAPI.Controllers
         // GET api/user/5
         [HttpGet("{id}")]
         public string Get(int ID)
-        //public HttpResponseMessage Get(int ID)
         {
-            //https://stackoverflow.com/questions/17097841/return-a-json-string-explicitly-from-asp-net-webapi
             List<UserDataModel> userData = new List<UserDataModel>();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             userData = userService.GetUsers(ID);
 
-            result = JsonConvert.SerializeObject(userData, Formatting.Indented);
-
-            //HttpResponseMessage response = new HttpResponseMessage();
-            //response.Content = new StringContent(result, Encoding.UTF8, "application/json");
-            //return response;
+            if(userData.Count > 0)
+                result = JsonConvert.SerializeObject(userData);
 
             return result;
         }
@@ -59,7 +58,6 @@ namespace ProjectWebAPI.Controllers
         [HttpPost("{option}")]
         public string Post([FromBody]object data, string option)
         {
-            //HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
             string response = "";
 
             if (option != null && data != null)
@@ -83,7 +81,7 @@ namespace ProjectWebAPI.Controllers
         [HttpPut("{id}")]
         public string Put(int ID, [FromBody]object data)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0 && data != null)
             {
@@ -97,7 +95,7 @@ namespace ProjectWebAPI.Controllers
         [HttpDelete("{id}")]
         public string Delete(int ID)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0)
             {
@@ -109,7 +107,10 @@ namespace ProjectWebAPI.Controllers
 
         private string AddNewUser(object data)
         {
-            UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
+            UserDataModel user = jsonHelper.FromJson<UserDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
+
             string result = "Error - User already exists";
 
             List<UserDataModel> existingUsers = userService.GetUsers();
@@ -130,7 +131,10 @@ namespace ProjectWebAPI.Controllers
 
         private string UpdateUser(object data, int ID)
         {
-            UserDataModel user = JsonConvert.DeserializeObject<UserDataModel>(data.ToString());
+            UserDataModel user = jsonHelper.FromJson<UserDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
+
             string result = "Error - No changes made";
 
             List<UserDataModel> existingUsers = userService.GetUsers(); //Create list of existing users
@@ -156,7 +160,7 @@ namespace ProjectWebAPI.Controllers
 
         private string DeleteUser(int ID)
         {
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (userService.DeleteUser(ID))
                 result = "Successfully deleted user";

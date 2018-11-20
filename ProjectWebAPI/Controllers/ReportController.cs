@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectWebAPI.Services;
 using ProjectWebAPI.Models.ReportModels;
 using Newtonsoft.Json;
+using ProjectWebAPI.Helpers;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -15,17 +16,20 @@ namespace ProjectWebAPI.Controllers
     public class ReportController : Controller
     {
         ReportService reportService = new ReportService();
+        JsonHelper jsonHelper = new JsonHelper();
 
         // GET api/report
         [HttpGet]
         public string Get()
         {
             List<ReportDataModel> reportData = new List<ReportDataModel>();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             reportData = reportService.GetReports();
 
-            result = JsonConvert.SerializeObject(reportData);
+            if(reportData.Count > 0)
+                result = JsonConvert.SerializeObject(reportData);
+
             return result;
         }
 
@@ -34,11 +38,12 @@ namespace ProjectWebAPI.Controllers
         public string Get(int id)
         {
             List<ReportDataModel> reportData = new List<ReportDataModel>();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             reportData = reportService.GetReports(id);
 
-            result = JsonConvert.SerializeObject(reportData);
+            if(reportData.Count > 0)
+                result = JsonConvert.SerializeObject(reportData);
 
             return result;
         }
@@ -47,8 +52,7 @@ namespace ProjectWebAPI.Controllers
         [HttpPost("{option}")]
         public string Post([FromBody]object data, string option)
         {
-            //HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (option != null && data != null)
             {
@@ -71,7 +75,7 @@ namespace ProjectWebAPI.Controllers
         [HttpPut("{id}")]
         public string Put(int ID, [FromBody]object data)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0 && data != null)
             {
@@ -85,7 +89,7 @@ namespace ProjectWebAPI.Controllers
         [HttpDelete("{id}")]
         public string Delete(int ID)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (ID > 0)
             {
@@ -97,8 +101,11 @@ namespace ProjectWebAPI.Controllers
 
         private string AddNewReport(object data)
         {
-            ReportDataModel newReport = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
+
+            ReportDataModel newReport = jsonHelper.FromJson<ReportDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             if (reportService.AddNewReport(newReport))
             {
@@ -108,13 +115,16 @@ namespace ProjectWebAPI.Controllers
             {
                 result = "Error - Report not added";
             }
-
+            
             return result;
         }
 
         private string UpdateReport(object data, int ID)
         {
-            ReportDataModel report = JsonConvert.DeserializeObject<ReportDataModel>(data.ToString());
+            ReportDataModel report = jsonHelper.FromJson<ReportDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
+
             string result = "Error - No changes made";
 
             List<ReportDataModel> existingReports = reportService.GetReports(); //Create list of existing reports
@@ -140,7 +150,7 @@ namespace ProjectWebAPI.Controllers
 
         private string DeleteReport(int ID)
         {
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (reportService.DeleteReport(ID))
                 result = "Successfully deleted report";

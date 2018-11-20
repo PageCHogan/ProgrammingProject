@@ -7,6 +7,7 @@ using ProjectWebAPI.Services;
 using ProjectWebAPI.Models.QuestionModels;
 using ProjectWebAPI.Models.SurveyModels;
 using Newtonsoft.Json;
+using ProjectWebAPI.Helpers;
 
 namespace ProjectWebAPI.Controllers
 {
@@ -16,17 +17,20 @@ namespace ProjectWebAPI.Controllers
     {
         SurveyQuestionsService surveyQuestionService = new SurveyQuestionsService();
         SurveyServices surveyService = new SurveyServices();
+        JsonHelper jsonHelper = new JsonHelper();
 
         // GET api/surveyQuestions
         [HttpGet]
         public string Get()
         {
             List<QuestionDataModel> questionData = new List<QuestionDataModel>();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             questionData = surveyQuestionService.GetSurveyQuestions();
 
-            result = JsonConvert.SerializeObject(questionData);
+            if(questionData.Count > 0)
+                result = JsonConvert.SerializeObject(questionData);
+
             return result;
         }
 
@@ -36,11 +40,12 @@ namespace ProjectWebAPI.Controllers
         public string Get(int id)
         {
             List<QuestionDataModel> questionData = new List<QuestionDataModel>();
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             questionData = surveyQuestionService.GetSurveyQuestions(id);
 
-            result = JsonConvert.SerializeObject(questionData);
+            if(questionData.Count > 0)
+                result = JsonConvert.SerializeObject(questionData);
 
             return result;
         }
@@ -49,8 +54,7 @@ namespace ProjectWebAPI.Controllers
         [HttpPost("{option}")]
         public string Post([FromBody]object data, string option)
         {
-            //HttpResponseMessage responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (option != null && data != null)
             {
@@ -73,7 +77,7 @@ namespace ProjectWebAPI.Controllers
         [HttpPut("{questionID}/{surveyID}")]
         public string Put(int questionID, int surveyID, [FromBody]object data)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if ((questionID > 0 && surveyID > 0) && data != null)
             {
@@ -87,7 +91,7 @@ namespace ProjectWebAPI.Controllers
         [HttpDelete("{questionID}/{surveyID}")]
         public string Delete(int questionID, int surveyID)
         {
-            string response = "";
+            string response = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (questionID > 0 && surveyID > 0)
             {
@@ -99,8 +103,11 @@ namespace ProjectWebAPI.Controllers
 
         private string AddNewQuestion(object data)
         {
-            QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
             string result = "Entered survey not found, failed to add question";
+
+            QuestionDataModel question = jsonHelper.FromJson<QuestionDataModel>(data);
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
 
             List<SurveyDataModel> existingSurveys = surveyService.GetSurveys();
 
@@ -124,7 +131,10 @@ namespace ProjectWebAPI.Controllers
 
         private string UpdateQuestion(object data, int questionID, int surveyID)
         {
-            QuestionDataModel question = JsonConvert.DeserializeObject<QuestionDataModel>(data.ToString());
+            QuestionDataModel question = jsonHelper.FromJson<QuestionDataModel>(data.ToString());
+            if (!string.IsNullOrEmpty(jsonHelper.ErrorMessage))
+                return jsonHelper.ErrorMessage;
+
             string result = "Entered survey not found, failed to update question";
 
             List<SurveyDataModel> existingSurveys = surveyService.GetSurveys();
@@ -149,7 +159,7 @@ namespace ProjectWebAPI.Controllers
 
         private string DeleteQuestion(int questionID, int surveyID)
         {
-            string result = "";
+            string result = "Error unable to process request. Please ensure all inputs are valid.";
 
             if (surveyQuestionService.DeleteQuestion(questionID, surveyID))
                 result = "Successfully deleted question";

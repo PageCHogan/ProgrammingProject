@@ -92,7 +92,6 @@ C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProj
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Survey\Details.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Survey\Edit.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Survey\Index.g.cshtml.cs
-C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\User\Index.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\_ViewImports.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\_ViewStart.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.RazorTargetAssemblyInfo.cache
@@ -102,3 +101,6 @@ C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProj
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.pdb
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.csproj.CopyComplete
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\MajorProjectFrontEnd.csprojAssemblyReference.cache
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\User\Create.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\User\Index.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\User\Delete.g.cshtml.cs

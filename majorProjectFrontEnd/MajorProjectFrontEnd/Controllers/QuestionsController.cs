@@ -150,7 +150,7 @@ namespace MajorProjectFrontEnd.Controllers
 		{
 			api.Client().BaseAddress = new Uri(baseAddress);
 
-			HttpResponseMessage response = await api.Client().DeleteAsync("api/surveyQuestions/" + int.Parse(collection["questionNumber"]) + "/"
+			HttpResponseMessage response = await api.Client().DeleteAsync("api/surveyQuestions/" + collection["questionNumber"] + "/"
 												+ collection["surveyID"]);
 			response.EnsureSuccessStatusCode();
 

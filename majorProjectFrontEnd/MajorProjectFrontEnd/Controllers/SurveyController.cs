@@ -115,7 +115,7 @@ namespace MajorProjectFrontEnd.Controllers
 			};
 
 			api.Client().BaseAddress = new Uri(baseAddress);
-			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/" + SurveyID.ToString(), survey);
+			HttpResponseMessage response = await api.Client().PutAsJsonAsync("api/survey/" + SurveyID.ToString(), survey);
 			response.EnsureSuccessStatusCode();
 
 			return RedirectToAction("Index", "Survey");

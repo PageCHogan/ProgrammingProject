@@ -61,7 +61,7 @@ namespace MajorProjectFrontEnd.Controllers
 
 			var user = new UserDataModel { Username = username, Title = title, Firstname = firstName, Lastname = lastName,
 							Email = email, Password = password, Type = type, Permission = permission, Groups = groups };
-			api.Client().BaseAddress = new Uri("http://localhost:61081/");
+			api.Client().BaseAddress = new Uri("https://projectwebapis.azurewebsites.net/");
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/user/save", user);
 			response.EnsureSuccessStatusCode();
 

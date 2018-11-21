@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ProjectWebAPI.Services;
-using ProjectWebAPI.Models;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Net;
-using ProjectWebAPI.Messages;
 using ProjectWebAPI.Models.UserModels;
-using System.Text;
 using ProjectWebAPI.Helpers;
 
 namespace ProjectWebAPI.Controllers

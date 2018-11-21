@@ -300,7 +300,6 @@ namespace ProjectWebAPI.Controllers
 
             foreach(QuestionDataModel question in questionData)
             {
-                //run analysis on each question and populate response....
                 results.Responses.Add(new ReportResponseAnalysis()
                 {
                     QuestionNumber = question.QuestionNumber,
@@ -310,40 +309,66 @@ namespace ProjectWebAPI.Controllers
                 });
             }
 
-            Dictionary<string, int> MQAnalysis = new Dictionary<string, int>();
+            Dictionary<string, int> MQAnalysis = null;
+            Dictionary<string, int> RangeAnalysis = null;
+            List<QuestionAnalysisCollection> MQAnalysisList = new List<QuestionAnalysisCollection>();
+            List<QuestionAnalysisCollection> RangeAnalysisList = new List<QuestionAnalysisCollection>();
 
-            foreach(CSVResponse responseData in reportData)
+            int questionNum = 1;
+
+            do
             {
-                foreach(var response in responseData.Responses)
+                MQAnalysis = new Dictionary<string, int>();
+                RangeAnalysis = new Dictionary<string, int>();
+
+                foreach (CSVResponse responseData in reportData)
                 {
-                    string questionType = questionData.Find(o => o.QuestionNumber == response.QuestionNumber).Type;
-
-                    switch(questionType.ToLower())
+                    foreach (var response in responseData.Responses)
                     {
-                        case "mq":
-                            if (MQAnalysis.ContainsKey(response.Answer))
-                            {
-                                MQAnalysis[response.Answer]++;
-                            }
-                            else
-                            {
-                                MQAnalysis.Add(response.Answer, 1);
-                            }
-                            break;
-                        case "range":
-                            break;
-                        case "text":
-                            break;
-                        default:
-                            break;
+                        if (response.QuestionNumber == questionNum)
+                        {
+                            string questionType = questionData.Find(o => o.QuestionNumber == response.QuestionNumber).Type;
 
+                            switch (questionType.ToLower())
+                            {
+                                case "mq":
+                                    if (MQAnalysis.ContainsKey(response.Answer))
+                                    {
+                                        MQAnalysis[response.Answer]++;
+                                    }
+                                    else
+                                    {
+                                        MQAnalysis.Add(response.Answer, 1);
+                                    }
+                                    break;
+                                case "range":
+                                    if (RangeAnalysis.ContainsKey(response.Answer))
+                                    {
+                                        RangeAnalysis[response.Answer]++;
+                                    }
+                                    else
+                                    {
+                                        RangeAnalysis.Add(response.Answer, 1);
+                                    }
+                                    break;
+                                case "text":
+                                    break;
+                                default:
+                                    break;
+
+                            }
+                        }
                     }
                 }
+                if(MQAnalysis.Count > 0)
+                    MQAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = MQAnalysis });
 
-                
-            }
+                if (RangeAnalysis.Count > 0)
+                    RangeAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = RangeAnalysis });
 
 
+                questionNum++;
+            } while (questionNum <= questionData.Count);
 
             return results;
         }

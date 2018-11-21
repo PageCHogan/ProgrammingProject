@@ -68,7 +68,7 @@ namespace MajorProjectFrontEnd.Controllers
 				Permission = Permission
 			};
 
-			api.Client().BaseAddress = new Uri("http://localhost:61081/");
+			api.Client().BaseAddress = new Uri(baseAddress);
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/save", survey);
 			response.EnsureSuccessStatusCode();
 
@@ -84,9 +84,9 @@ namespace MajorProjectFrontEnd.Controllers
 
 			var survey = list.Where(o => o.SurveyID == SurveyID).ElementAt(0);
 
-			ViewData["Survey"] = survey.ToString();
+			//ViewData["Survey"] = survey.ToString();
 
-			return View();
+			return View(survey);
 		}
 
 		// POST: Survey/Edit/5
@@ -114,7 +114,7 @@ namespace MajorProjectFrontEnd.Controllers
 				Permission = Permission
 			};
 
-			api.Client().BaseAddress = new Uri("http://localhost:61081/");
+			api.Client().BaseAddress = new Uri(baseAddress);
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/" + SurveyID.ToString(), survey);
 			response.EnsureSuccessStatusCode();
 

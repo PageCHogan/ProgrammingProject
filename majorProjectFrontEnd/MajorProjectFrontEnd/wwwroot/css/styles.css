@@ -90,7 +90,7 @@ article {
 }
 
 /* Browser's width is 400px or less */
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 500px) {
 
 	.nav-hide {
 		height: 0;
@@ -126,9 +126,10 @@ article {
 	footer {
 		width: 100%;
 	}
-	input {
-		width: 100%;
-	}
+    input {
+        width: 100%;
+    }
+
 }
 
 .survey-question {
@@ -235,10 +236,6 @@ tr:nth-child(even) {
     font-weight: bold;
 }
 
-input:not(.submit) {
-    width: 50%;
-}
-
-.submit {
-    width: auto;
+.form-control {
+    width: 100%;
 }

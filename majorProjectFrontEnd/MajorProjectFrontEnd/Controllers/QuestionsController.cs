@@ -72,27 +72,20 @@ namespace MajorProjectFrontEnd.Controllers
 			*/
 			
 
-			ViewData["Question"] = "question number: " + collection["QuestionNumber"] + ", question: " + collection["Question"]
-			+ ", surveyID: " + collection["surveyID"] + ", type: " + collection["Type"] + ", options: " + collection["Options"];
-
 			string question = collection["Question"];
-			int questionNumber = int.Parse(collection["QuestionNumber"]);
+			
 			int surveyID = int.Parse(collection["surveyID"]);
 			string type = collection["Type"];
 			string options = collection["Options"];
 
-			if (questionNumber <= 0) {
-				ViewData["Error"] = "Please review form: Question number must be greater than or equal to 1";
-				return View();
-			}
+			api.Client().BaseAddress = new Uri(baseAddress);
+			requestUri = "api/SurveyQuestions";
+			var responseSurveyQuestions = api.GetResponseAsync(baseAddress, requestUri);
+			var list = JsonConvert.DeserializeObject<List<QuestionDataModel>>(responseSurveyQuestions.Result.Content.ReadAsAsync<string>().Result);
+			list = list.Where(x => x.SurveyID == surveyID).ToList();
+			int questionNumber = list.Count +1;
 
-			if (surveyID <= 0) {
-				ViewData["Error"] = "Please review form: Survey ID must be greater than or equal to 1.";
-				return View();
-			}
-			
 			var Question = new QuestionDataModel(questionNumber, surveyID, question, type, options);
-			api.Client().BaseAddress = new Uri("http://localhost:61081/");
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/surveyQuestions/save", Question);
 			response.EnsureSuccessStatusCode();
 
@@ -123,7 +116,7 @@ namespace MajorProjectFrontEnd.Controllers
 
 			var question = new QuestionDataModel(int.Parse(collection["QuestionNumber"]), int.Parse(collection["surveyID"]), collection["Question"],
 								collection["Type"], collection["Options"]);
-			api.Client().BaseAddress = new Uri("http://localhost:61081/");
+			api.Client().BaseAddress = new Uri(baseAddress);
 			HttpResponseMessage response = await api.Client().PutAsJsonAsync("api/surveyQuestions/" + int.Parse(collection["QuestionNumber"]) + "/"
 												+ collection["surveyID"], question);
 			response.EnsureSuccessStatusCode();

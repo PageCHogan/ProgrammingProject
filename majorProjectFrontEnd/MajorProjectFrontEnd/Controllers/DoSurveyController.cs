@@ -17,7 +17,7 @@ namespace MajorProjectFrontEnd.Controllers
 
 		APIService api = new APIService();
 
-		String baseAddress = "http://localhost:61081";
+		String baseAddress = "https://projectwebapis.azurewebsites.net/";
 
 
 		// GET: DoSurvey

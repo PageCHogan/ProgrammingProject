@@ -29,12 +29,13 @@ namespace MajorProjectFrontEnd.Controllers
 		}
 
 		// GET: User/Details/5
-		public ActionResult Details(int id)
+		public ActionResult Details(int userID)
 		{
-			requestUri = "api/user/" + id.ToString();
+			requestUri = "api/user/" + userID.ToString();
 			var response = api.GetResponseAsync(baseAddress, requestUri);
+			var list = JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
 
-			return View(JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result));
+			return View(list.Where(o => o.UserID == userID).ElementAt(0));
 		}
 
 		// GET: User/Create
@@ -70,7 +71,7 @@ namespace MajorProjectFrontEnd.Controllers
 		// GET: User/Edit/5
 		public ActionResult Edit(int userID)
 		{
-			requestUri = "api/user" + userID.ToString();
+			requestUri = "api/user/" + userID.ToString();
 			var response = api.GetResponseAsync(baseAddress, requestUri);
 			var list = JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
 
@@ -82,7 +83,7 @@ namespace MajorProjectFrontEnd.Controllers
 		// POST: User/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<ActionResult> EditAsync(int userID, IFormCollection collection)
+		public async Task<ActionResult> Edit(int UserID, IFormCollection collection)
 		{
 			string username = collection["Username"];
 			string title = collection["Title"];
@@ -97,6 +98,7 @@ namespace MajorProjectFrontEnd.Controllers
 
 			var user = new UserDataModel
 			{
+				UserID = UserID,
 				Username = username,
 				Title = title,
 				Firstname = firstName,
@@ -107,9 +109,11 @@ namespace MajorProjectFrontEnd.Controllers
 				Permission = permission,
 				Groups = groups
 			};
-			api.Client().BaseAddress = new Uri("http://localhost:61081/");
-			HttpResponseMessage response = await api.Client().PutAsJsonAsync("api/user/" + userID.ToString(), user);
+			api.Client().BaseAddress = new Uri(baseAddress);
+			HttpResponseMessage response = await api.Client().PutAsJsonAsync("api/user/" + UserID.ToString(), user);
 			response.EnsureSuccessStatusCode();
+
+			string responsestring = await response.Content.ReadAsStringAsync();
 
 			return RedirectToAction("Index", "User");
 		}

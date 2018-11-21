@@ -16,11 +16,6 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="QuestionNumber" class="control-label"></label>
-                <input asp-for="QuestionNumber" type="number" class="form-control" required min="1" />
-                <span asp-validation-for="QuestionNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="SurveyID" class="control-label"></label>
                 <input asp-for="SurveyID" type="number" class="form-control" required min="1" />
                 <span asp-validation-for="SurveyID" class="text-danger"></span>

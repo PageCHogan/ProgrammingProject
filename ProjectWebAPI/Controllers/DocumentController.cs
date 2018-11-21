@@ -76,7 +76,7 @@ namespace ProjectWebAPI.Controllers
                         List<CSVResponse> reportData = GetSurveyResponses(data).GetAwaiter().GetResult();
                         if(reportData != null)
                         {
-                            AnaliseReport(reportData);
+                            AnalyseReport(reportData);
                         } 
                         else
                         {
@@ -289,7 +289,7 @@ namespace ProjectWebAPI.Controllers
             return csvResponse;
         }
 
-        private ReportAnalysisModel AnaliseReport(List<CSVResponse> reportData)
+        private ReportAnalysisModel AnalyseReport(List<CSVResponse> reportData)
         {
             ReportAnalysisModel results = new ReportAnalysisModel();
             string message = "";
@@ -310,12 +310,35 @@ namespace ProjectWebAPI.Controllers
                 });
             }
 
+            Dictionary<string, int> MQAnalysis = new Dictionary<string, int>();
+
             foreach(CSVResponse responseData in reportData)
             {
-                //foreach(var response in responseData.Responses)
-                //{
-                    
-                //}
+                foreach(var response in responseData.Responses)
+                {
+                    string questionType = questionData.Find(o => o.QuestionNumber == response.QuestionNumber).Type;
+
+                    switch(questionType.ToLower())
+                    {
+                        case "mq":
+                            if (MQAnalysis.ContainsKey(response.Answer))
+                            {
+                                MQAnalysis[response.Answer]++;
+                            }
+                            else
+                            {
+                                MQAnalysis.Add(response.Answer, 1);
+                            }
+                            break;
+                        case "range":
+                            break;
+                        case "text":
+                            break;
+                        default:
+                            break;
+
+                    }
+                }
 
                 
             }

@@ -309,17 +309,23 @@ namespace ProjectWebAPI.Controllers
                 });
             }
 
-            Dictionary<string, int> MQAnalysis = null;
-            Dictionary<string, int> RangeAnalysis = null;
-            List<QuestionAnalysisCollection> MQAnalysisList = new List<QuestionAnalysisCollection>();
-            List<QuestionAnalysisCollection> RangeAnalysisList = new List<QuestionAnalysisCollection>();
+            Dictionary<string, int> multiChoiceAnalysis = null;
+            Dictionary<string, int> rangeAnalysis = null;
+            Dictionary<string, int> stringAnalysis = null;
+            Dictionary<string, int> rankAnalysis = null;
+            List<QuestionAnalysisCollection> multiChoiceAnalysisList = new List<QuestionAnalysisCollection>();
+            List<QuestionAnalysisCollection> rangeAnalysisList = new List<QuestionAnalysisCollection>();
+            List<QuestionAnalysisCollection> stringAnalysisList = new List<QuestionAnalysisCollection>();
+            List<QuestionAnalysisCollection> rankAnalysisList = new List<QuestionAnalysisCollection>();
 
             int questionNum = 1;
 
             do
             {
-                MQAnalysis = new Dictionary<string, int>();
-                RangeAnalysis = new Dictionary<string, int>();
+                multiChoiceAnalysis = new Dictionary<string, int>();
+                rangeAnalysis = new Dictionary<string, int>();
+                stringAnalysis = new Dictionary<string, int>();
+                rankAnalysis = new Dictionary<string, int>();
 
                 foreach (CSVResponse responseData in reportData)
                 {
@@ -332,26 +338,45 @@ namespace ProjectWebAPI.Controllers
                             switch (questionType.ToLower())
                             {
                                 case "mq":
-                                    if (MQAnalysis.ContainsKey(response.Answer))
+                                    if (multiChoiceAnalysis.ContainsKey(response.Answer))
                                     {
-                                        MQAnalysis[response.Answer]++;
+                                        multiChoiceAnalysis[response.Answer]++;
                                     }
                                     else
                                     {
-                                        MQAnalysis.Add(response.Answer, 1);
+                                        multiChoiceAnalysis.Add(response.Answer, 1);
                                     }
                                     break;
                                 case "range":
-                                    if (RangeAnalysis.ContainsKey(response.Answer))
+                                    if (rangeAnalysis.ContainsKey(response.Answer))
                                     {
-                                        RangeAnalysis[response.Answer]++;
+                                        rangeAnalysis[response.Answer]++;
                                     }
                                     else
                                     {
-                                        RangeAnalysis.Add(response.Answer, 1);
+                                        rangeAnalysis.Add(response.Answer, 1);
                                     }
                                     break;
+                                case "rank":
+                                    if (rankAnalysis.ContainsKey(response.Answer))
+                                    {
+                                        rankAnalysis[response.Answer]++;
+                                    }
+                                    else
+                                    {
+                                        rankAnalysis.Add(response.Answer, 1);
+                                    }
+                                    break;
+                                case "comment":
                                 case "text":
+                                    if (stringAnalysis.ContainsKey(response.Answer))
+                                    {
+                                        stringAnalysis[response.Answer]++;
+                                    }
+                                    else
+                                    {
+                                        stringAnalysis.Add(response.Answer, 1);
+                                    }
                                     break;
                                 default:
                                     break;
@@ -360,12 +385,17 @@ namespace ProjectWebAPI.Controllers
                         }
                     }
                 }
-                if(MQAnalysis.Count > 0)
-                    MQAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = MQAnalysis });
+                if(multiChoiceAnalysis.Count > 0)
+                    multiChoiceAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = multiChoiceAnalysis });
 
-                if (RangeAnalysis.Count > 0)
-                    RangeAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = RangeAnalysis });
+                if (rangeAnalysis.Count > 0)
+                    rangeAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = rangeAnalysis });
 
+                if (stringAnalysis.Count > 0)
+                    stringAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = stringAnalysis });
+
+                if (rankAnalysis.Count > 0)
+                    rankAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = rankAnalysis });
 
                 questionNum++;
             } while (questionNum <= questionData.Count);

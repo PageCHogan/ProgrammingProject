@@ -40,6 +40,14 @@ namespace MajorProjectFrontEnd.Controllers
 		// GET: Survey/Create
 		public ActionResult Create()
 		{
+			requestUri = "api/user";
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+			int count = JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result).Count;
+			if (count == 0) {
+				ViewData["userIDMax"] = 1;
+			} else {
+				ViewData["userIDMax"] = count;
+			}
 			return View();
 		}
 

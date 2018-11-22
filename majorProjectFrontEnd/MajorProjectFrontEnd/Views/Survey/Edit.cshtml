@@ -12,7 +12,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" id="survey">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="SurveyID" class="control-label"></label>
@@ -42,12 +42,12 @@
 	    <p>Start date and end date must be on or after 16 Nov 2018</p>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label"></label>
-                <input asp-for="StartDate" type="date" class="form-control" required min="2018-11-16" />
+                <input asp-for="StartDate" type="date" id="startDate" class="form-control" required min="2018-11-16" />
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label"></label>
-                <input asp-for="EndDate" type="date" class="form-control" required min="2018-11-16"/>
+                <input asp-for="EndDate" type="date" id="endDate" class="form-control" required min="2018-11-16"/>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -56,6 +56,7 @@
                 <span asp-validation-for="Permission" class="text-danger"></span>
             </div>
             <div class="form-group">
+		    <p class="errorMessage"></p>
                 <input type="submit" value="Save" class="btn btn-default submit" />
             </div>
         </form>

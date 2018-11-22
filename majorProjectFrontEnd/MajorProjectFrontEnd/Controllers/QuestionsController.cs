@@ -48,6 +48,16 @@ namespace MajorProjectFrontEnd.Controllers
 		// GET: Questions/Create
 		public ActionResult Create()
 		{
+
+			requestUri = "api/Survey";
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+			int count = JsonConvert.DeserializeObject<List<SurveyDataModel>>(response.Result.Content.ReadAsAsync<string>().Result).Count;
+			if (count == 0) {
+				ViewData["surveyIDMax"] = 1;
+			} else {
+				ViewData["surveyIDMax"] = count;
+			}
+
 			ViewData["Question"] = "";
 			return View();
 		}

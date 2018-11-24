@@ -74,9 +74,15 @@ namespace ProjectWebAPI.Controllers
                         break;
                     case "report": //For data manipulation
                         List<CSVResponse> reportData = GetSurveyResponses(data).GetAwaiter().GetResult();
-                        if(reportData != null)
+                        AzureBlobDocuments document = jsonHelper.FromJson<AzureBlobDocuments>(data.ToString());
+                        if (reportData != null)
                         {
-                            AnalyseReport(reportData);
+                            ReportAnalysisModel report = CollateReportData(reportData);
+                            report.ReportTitle = document.Filename;
+                            if(report != null)
+                            {
+                                result = JsonConvert.SerializeObject(report);
+                            }
                         } 
                         else
                         {
@@ -289,9 +295,9 @@ namespace ProjectWebAPI.Controllers
             return csvResponse;
         }
 
-        private ReportAnalysisModel AnalyseReport(List<CSVResponse> reportData)
+        private ReportAnalysisModel CollateReportData(List<CSVResponse> reportData)
         {
-            ReportAnalysisModel results = new ReportAnalysisModel();
+            ReportAnalysisModel report = new ReportAnalysisModel();
             string message = "";
 
             SurveyQuestionsService service = new SurveyQuestionsService();
@@ -300,7 +306,7 @@ namespace ProjectWebAPI.Controllers
 
             foreach(QuestionDataModel question in questionData)
             {
-                results.Responses.Add(new ReportResponseAnalysis()
+                report.Responses.Add(new ReportResponseAnalysis()
                 {
                     QuestionNumber = question.QuestionNumber,
                     Question = question.Question,
@@ -309,17 +315,20 @@ namespace ProjectWebAPI.Controllers
                 });
             }
 
-            Dictionary<string, int> MQAnalysis = null;
-            Dictionary<string, int> RangeAnalysis = null;
-            List<QuestionAnalysisCollection> MQAnalysisList = new List<QuestionAnalysisCollection>();
-            List<QuestionAnalysisCollection> RangeAnalysisList = new List<QuestionAnalysisCollection>();
+            Dictionary<string, int> multiChoiceAnalysis = null;
+            Dictionary<string, int> rangeAnalysis = null;
+            Dictionary<string, int> stringAnalysis = null;
+            Dictionary<string, int> rankAnalysis = null;
+            List<QuestionAnalysisCollection> surveyAnalysis = new List<QuestionAnalysisCollection>();
 
             int questionNum = 1;
 
             do
             {
-                MQAnalysis = new Dictionary<string, int>();
-                RangeAnalysis = new Dictionary<string, int>();
+                multiChoiceAnalysis = new Dictionary<string, int>();
+                rangeAnalysis = new Dictionary<string, int>();
+                stringAnalysis = new Dictionary<string, int>();
+                rankAnalysis = new Dictionary<string, int>();
 
                 foreach (CSVResponse responseData in reportData)
                 {
@@ -332,45 +341,133 @@ namespace ProjectWebAPI.Controllers
                             switch (questionType.ToLower())
                             {
                                 case "mq":
-                                    if (MQAnalysis.ContainsKey(response.Answer))
+                                    if (multiChoiceAnalysis.ContainsKey(response.Answer))
                                     {
-                                        MQAnalysis[response.Answer]++;
+                                        multiChoiceAnalysis[response.Answer]++;
                                     }
                                     else
                                     {
-                                        MQAnalysis.Add(response.Answer, 1);
+                                        multiChoiceAnalysis.Add(response.Answer, 1);
                                     }
                                     break;
                                 case "range":
-                                    if (RangeAnalysis.ContainsKey(response.Answer))
+                                    if (rangeAnalysis.ContainsKey(response.Answer))
                                     {
-                                        RangeAnalysis[response.Answer]++;
+                                        rangeAnalysis[response.Answer]++;
                                     }
                                     else
                                     {
-                                        RangeAnalysis.Add(response.Answer, 1);
+                                        rangeAnalysis.Add(response.Answer, 1);
                                     }
                                     break;
+                                case "rank":
+                                    if (rankAnalysis.ContainsKey(response.Answer))
+                                    {
+                                        rankAnalysis[response.Answer]++;
+                                    }
+                                    else
+                                    {
+                                        rankAnalysis.Add(response.Answer, 1);
+                                    }
+                                    break;
+                                case "comment":
                                 case "text":
+                                    if (stringAnalysis.ContainsKey(response.Answer))
+                                    {
+                                        stringAnalysis[response.Answer]++;
+                                    }
+                                    else
+                                    {
+                                        stringAnalysis.Add(response.Answer, 1);
+                                    }
                                     break;
                                 default:
                                     break;
-
                             }
                         }
                     }
                 }
-                if(MQAnalysis.Count > 0)
-                    MQAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = MQAnalysis });
-
-                if (RangeAnalysis.Count > 0)
-                    RangeAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = RangeAnalysis });
-
+                if(multiChoiceAnalysis.Count > 0)
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "mq", QuestionNumber = questionNum, Summary = multiChoiceAnalysis });
+                else if (rangeAnalysis.Count > 0)
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "range", QuestionNumber = questionNum, Summary = rangeAnalysis });
+                else if (rankAnalysis.Count > 0)
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "rank", QuestionNumber = questionNum, Summary = rankAnalysis });
+                else if (stringAnalysis.Count > 0)
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "text", QuestionNumber = questionNum, Summary = stringAnalysis });
 
                 questionNum++;
             } while (questionNum <= questionData.Count);
 
-            return results;
+            report = AnalyseReport(report, surveyAnalysis);
+
+            return report;
+        }
+
+        private ReportAnalysisModel AnalyseReport(ReportAnalysisModel report, List<QuestionAnalysisCollection> surveyAnalysis)
+        {
+            if(report != null)
+            {
+                foreach(ReportResponseAnalysis response in report.Responses)
+                {
+                    QuestionAnalysisCollection surveyResponse = surveyAnalysis.Find(o => o.QuestionNumber == response.QuestionNumber);
+
+                    switch(surveyResponse.QuestionType)
+                    {
+                        case "mq":
+                            response.Message = MultipleChoiceAnalysis(surveyResponse);
+                            break;
+                        case "range":
+                            response.Message = RangeChoiceAnalysis(surveyResponse);
+                            break;
+                        case "rank":
+                            response.Message = RankChoiceAnalysis(surveyResponse);
+                            break;
+                        case "text":
+                            response.Message = TextChoiceAnalysis(surveyResponse);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            return report;
+        }
+
+        private string MultipleChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            string result = "";
+            int sum = 0;
+
+            foreach(var response in surveyResponse.Summary)
+            {
+                sum += response.Value; //Counts total number of responses...ugly
+            }
+
+            result = string.Format("{0} People answered this survey, need some additional analysis done...", sum);
+
+            return result;
+        }
+
+        private string RangeChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            string result = "";
+
+            return result;
+        }
+
+        private string RankChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            string result = "";
+
+            return result;
+        }
+
+        private string TextChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            string result = "";
+
+            return result;
         }
     }
 }

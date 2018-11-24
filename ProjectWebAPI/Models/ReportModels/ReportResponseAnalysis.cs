@@ -10,14 +10,16 @@ namespace ProjectWebAPI.Models.ReportModels
         public int QuestionNumber { get; set; }
         public string Type { get; set; }
         public string Question { get; set; }
-        public string Message { get; set; }
+        public List<string> Message { get; set; }
+        public string Options { get; set; }
 
         public ReportResponseAnalysis()
         {
             QuestionNumber = 0;
             Type = "";
             Question = "";
-            Message = "";
+            Message = new List<string>();
+            Options = "";
         }
     }
 }

@@ -298,7 +298,6 @@ namespace ProjectWebAPI.Controllers
         private ReportAnalysisModel CollateReportData(List<CSVResponse> reportData)
         {
             ReportAnalysisModel report = new ReportAnalysisModel();
-            string message = "";
 
             SurveyQuestionsService service = new SurveyQuestionsService();
 
@@ -311,7 +310,7 @@ namespace ProjectWebAPI.Controllers
                     QuestionNumber = question.QuestionNumber,
                     Question = question.Question,
                     Type = question.Type,
-                    Message = message
+                    Options = question.Options
                 });
             }
 
@@ -415,17 +414,17 @@ namespace ProjectWebAPI.Controllers
                     switch(surveyResponse.QuestionType)
                     {
                         case "mq":
-                            response.Message = MultipleChoiceAnalysis(surveyResponse);
+                            response.Message = MultipleChoiceAnalysis(response, surveyResponse);
                             break;
-                        case "range":
-                            response.Message = RangeChoiceAnalysis(surveyResponse);
-                            break;
-                        case "rank":
-                            response.Message = RankChoiceAnalysis(surveyResponse);
-                            break;
-                        case "text":
-                            response.Message = TextChoiceAnalysis(surveyResponse);
-                            break;
+                        //case "range":
+                        //    response = RangeChoiceAnalysis(response, surveyResponse);
+                        //    break;
+                        //case "rank":
+                        //    response = RankChoiceAnalysis(response, surveyResponse);
+                        //    break;
+                        //case "text":
+                        //    response = TextChoiceAnalysis(response, surveyResponse);
+                        //    break;
                         default:
                             break;
                     }
@@ -434,38 +433,43 @@ namespace ProjectWebAPI.Controllers
             return report;
         }
 
-        private string MultipleChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        private List<string> MultipleChoiceAnalysis(ReportResponseAnalysis response, QuestionAnalysisCollection surveyResponse)
         {
-            string result = "";
-            int sum = 0;
+            List<string> result = new List<string>();
 
-            foreach(var response in surveyResponse.Summary)
+            List<string> options = response.Options.Split(',').ToList();
+            string option = "";
+            var ordered = surveyResponse.Summary.OrderBy(x => x.Key);
+
+           for(int i = 0; i < surveyResponse.Summary.Count; i++)
             {
-                sum += response.Value; //Counts total number of responses...ugly
+                option = options.ElementAt(Int32.Parse(ordered.ElementAt(i).Key)-1);
+                result.Add(string.Format("{0} people answered with a response of: {1}",ordered.ElementAt(i).Value.ToString(), option));
             }
 
-            result = string.Format("{0} People answered this survey, need some additional analysis done...", sum);
+            result.Add(string.Format("A total of {0} people participated in this survey.", surveyResponse.Summary.Values.Sum()));
+
+            response.Message = result;
+            return result;
+        }
+
+        private List<string> RangeChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            List<string> result = new List<string>();
 
             return result;
         }
 
-        private string RangeChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        private List<string> RankChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
         {
-            string result = "";
+            List<string> result = new List<string>();
 
             return result;
         }
 
-        private string RankChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        private List<string> TextChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
         {
-            string result = "";
-
-            return result;
-        }
-
-        private string TextChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
-        {
-            string result = "";
+            List<string> result = new List<string>();
 
             return result;
         }

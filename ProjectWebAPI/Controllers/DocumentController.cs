@@ -416,15 +416,15 @@ namespace ProjectWebAPI.Controllers
                         case "mq":
                             response.Message = MultipleChoiceAnalysis(response, surveyResponse);
                             break;
-                        //case "range":
-                        //    response = RangeChoiceAnalysis(response, surveyResponse);
-                        //    break;
-                        //case "rank":
-                        //    response = RankChoiceAnalysis(response, surveyResponse);
-                        //    break;
-                        //case "text":
-                        //    response = TextChoiceAnalysis(response, surveyResponse);
-                        //    break;
+                        case "range":
+                            response.Message = RangeChoiceAnalysis(response, surveyResponse);
+                            break;
+                        case "rank":
+                            response.Message = RankChoiceAnalysis(response, surveyResponse);
+                            break;
+                        case "text":
+                            response.Message = TextChoiceAnalysis(response, surveyResponse);
+                            break;
                         default:
                             break;
                     }
@@ -453,21 +453,21 @@ namespace ProjectWebAPI.Controllers
             return result;
         }
 
-        private List<string> RangeChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        private List<string> RangeChoiceAnalysis(ReportResponseAnalysis response, QuestionAnalysisCollection surveyResponse)
         {
             List<string> result = new List<string>();
 
             return result;
         }
 
-        private List<string> RankChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        private List<string> RankChoiceAnalysis(ReportResponseAnalysis response, QuestionAnalysisCollection surveyResponse)
         {
             List<string> result = new List<string>();
 
             return result;
         }
 
-        private List<string> TextChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        private List<string> TextChoiceAnalysis(ReportResponseAnalysis response, QuestionAnalysisCollection surveyResponse)
         {
             List<string> result = new List<string>();
 

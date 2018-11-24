@@ -8,11 +8,13 @@ namespace ProjectWebAPI.Models.ReportModels
     public class QuestionAnalysisCollection
     {
         public int QuestionNumber { get; set; }
+        public string QuestionType { get; set; }
         public Dictionary<string, int> Summary { get; set; }
 
         public QuestionAnalysisCollection()
         {
             Summary = new Dictionary<string, int>();
+            QuestionType = "";
         }
     }
 }

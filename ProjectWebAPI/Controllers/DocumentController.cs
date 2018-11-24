@@ -74,9 +74,15 @@ namespace ProjectWebAPI.Controllers
                         break;
                     case "report": //For data manipulation
                         List<CSVResponse> reportData = GetSurveyResponses(data).GetAwaiter().GetResult();
-                        if(reportData != null)
+                        AzureBlobDocuments document = jsonHelper.FromJson<AzureBlobDocuments>(data.ToString());
+                        if (reportData != null)
                         {
-                            AnalyseReport(reportData);
+                            ReportAnalysisModel report = CollateReportData(reportData);
+                            report.ReportTitle = document.Filename;
+                            if(report != null)
+                            {
+                                result = JsonConvert.SerializeObject(report);
+                            }
                         } 
                         else
                         {
@@ -289,9 +295,9 @@ namespace ProjectWebAPI.Controllers
             return csvResponse;
         }
 
-        private ReportAnalysisModel AnalyseReport(List<CSVResponse> reportData)
+        private ReportAnalysisModel CollateReportData(List<CSVResponse> reportData)
         {
-            ReportAnalysisModel results = new ReportAnalysisModel();
+            ReportAnalysisModel report = new ReportAnalysisModel();
             string message = "";
 
             SurveyQuestionsService service = new SurveyQuestionsService();
@@ -300,7 +306,7 @@ namespace ProjectWebAPI.Controllers
 
             foreach(QuestionDataModel question in questionData)
             {
-                results.Responses.Add(new ReportResponseAnalysis()
+                report.Responses.Add(new ReportResponseAnalysis()
                 {
                     QuestionNumber = question.QuestionNumber,
                     Question = question.Question,
@@ -313,10 +319,7 @@ namespace ProjectWebAPI.Controllers
             Dictionary<string, int> rangeAnalysis = null;
             Dictionary<string, int> stringAnalysis = null;
             Dictionary<string, int> rankAnalysis = null;
-            List<QuestionAnalysisCollection> multiChoiceAnalysisList = new List<QuestionAnalysisCollection>();
-            List<QuestionAnalysisCollection> rangeAnalysisList = new List<QuestionAnalysisCollection>();
-            List<QuestionAnalysisCollection> stringAnalysisList = new List<QuestionAnalysisCollection>();
-            List<QuestionAnalysisCollection> rankAnalysisList = new List<QuestionAnalysisCollection>();
+            List<QuestionAnalysisCollection> surveyAnalysis = new List<QuestionAnalysisCollection>();
 
             int questionNum = 1;
 
@@ -380,27 +383,91 @@ namespace ProjectWebAPI.Controllers
                                     break;
                                 default:
                                     break;
-
                             }
                         }
                     }
                 }
                 if(multiChoiceAnalysis.Count > 0)
-                    multiChoiceAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = multiChoiceAnalysis });
-
-                if (rangeAnalysis.Count > 0)
-                    rangeAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = rangeAnalysis });
-
-                if (stringAnalysis.Count > 0)
-                    stringAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = stringAnalysis });
-
-                if (rankAnalysis.Count > 0)
-                    rankAnalysisList.Add(new QuestionAnalysisCollection { QuestionNumber = questionNum, Summary = rankAnalysis });
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "mq", QuestionNumber = questionNum, Summary = multiChoiceAnalysis });
+                else if (rangeAnalysis.Count > 0)
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "range", QuestionNumber = questionNum, Summary = rangeAnalysis });
+                else if (rankAnalysis.Count > 0)
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "rank", QuestionNumber = questionNum, Summary = rankAnalysis });
+                else if (stringAnalysis.Count > 0)
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "text", QuestionNumber = questionNum, Summary = stringAnalysis });
 
                 questionNum++;
             } while (questionNum <= questionData.Count);
 
-            return results;
+            report = AnalyseReport(report, surveyAnalysis);
+
+            return report;
+        }
+
+        private ReportAnalysisModel AnalyseReport(ReportAnalysisModel report, List<QuestionAnalysisCollection> surveyAnalysis)
+        {
+            if(report != null)
+            {
+                foreach(ReportResponseAnalysis response in report.Responses)
+                {
+                    QuestionAnalysisCollection surveyResponse = surveyAnalysis.Find(o => o.QuestionNumber == response.QuestionNumber);
+
+                    switch(surveyResponse.QuestionType)
+                    {
+                        case "mq":
+                            response.Message = MultipleChoiceAnalysis(surveyResponse);
+                            break;
+                        case "range":
+                            response.Message = RangeChoiceAnalysis(surveyResponse);
+                            break;
+                        case "rank":
+                            response.Message = RankChoiceAnalysis(surveyResponse);
+                            break;
+                        case "text":
+                            response.Message = TextChoiceAnalysis(surveyResponse);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            return report;
+        }
+
+        private string MultipleChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            string result = "";
+            int sum = 0;
+
+            foreach(var response in surveyResponse.Summary)
+            {
+                sum += response.Value; //Counts total number of responses...ugly
+            }
+
+            result = string.Format("{0} People answered this survey, need some additional analysis done...", sum);
+
+            return result;
+        }
+
+        private string RangeChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            string result = "";
+
+            return result;
+        }
+
+        private string RankChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            string result = "";
+
+            return result;
+        }
+
+        private string TextChoiceAnalysis(QuestionAnalysisCollection surveyResponse)
+        {
+            string result = "";
+
+            return result;
         }
     }
 }

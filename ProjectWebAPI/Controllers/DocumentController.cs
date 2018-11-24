@@ -318,6 +318,7 @@ namespace ProjectWebAPI.Controllers
             Dictionary<string, int> rangeAnalysis = null;
             Dictionary<string, int> stringAnalysis = null;
             Dictionary<string, int> rankAnalysis = null;
+            Dictionary<string, int> numericAnalysis = null;
             List<QuestionAnalysisCollection> surveyAnalysis = new List<QuestionAnalysisCollection>();
 
             int questionNum = 1;
@@ -328,6 +329,7 @@ namespace ProjectWebAPI.Controllers
                 rangeAnalysis = new Dictionary<string, int>();
                 stringAnalysis = new Dictionary<string, int>();
                 rankAnalysis = new Dictionary<string, int>();
+                numericAnalysis = new Dictionary<string, int>();
 
                 foreach (CSVResponse responseData in reportData)
                 {
@@ -357,6 +359,16 @@ namespace ProjectWebAPI.Controllers
                                     else
                                     {
                                         rangeAnalysis.Add(response.Answer, 1);
+                                    }
+                                    break;
+                                case "ni":
+                                    if (numericAnalysis.ContainsKey(response.Answer))
+                                    {
+                                        numericAnalysis[response.Answer]++;
+                                    }
+                                    else
+                                    {
+                                        numericAnalysis.Add(response.Answer, 1);
                                     }
                                     break;
                                 case "rank":
@@ -394,6 +406,8 @@ namespace ProjectWebAPI.Controllers
                     surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "rank", QuestionNumber = questionNum, Summary = rankAnalysis });
                 else if (stringAnalysis.Count > 0)
                     surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "text", QuestionNumber = questionNum, Summary = stringAnalysis });
+                else if (numericAnalysis.Count > 0)
+                    surveyAnalysis.Add(new QuestionAnalysisCollection { QuestionType = "ni", QuestionNumber = questionNum, Summary = numericAnalysis });
 
                 questionNum++;
             } while (questionNum <= questionData.Count);
@@ -411,22 +425,26 @@ namespace ProjectWebAPI.Controllers
                 {
                     QuestionAnalysisCollection surveyResponse = surveyAnalysis.Find(o => o.QuestionNumber == response.QuestionNumber);
 
-                    switch(surveyResponse.QuestionType)
+                    if(surveyResponse != null)
                     {
-                        case "mq":
-                            response.Message = MultipleChoiceAnalysis(response, surveyResponse);
-                            break;
-                        case "range":
-                            response.Message = RangeChoiceAnalysis(response, surveyResponse);
-                            break;
-                        case "rank":
-                            response.Message = RankChoiceAnalysis(response, surveyResponse);
-                            break;
-                        case "text":
-                            response.Message = TextChoiceAnalysis(response, surveyResponse);
-                            break;
-                        default:
-                            break;
+                        switch(surveyResponse.QuestionType)
+                        {
+                            case "mq":
+                                response.Message = MultipleChoiceAnalysis(response, surveyResponse);
+                                break;
+                            case "ni":
+                            case "range":
+                                response.Message = RangeChoiceAnalysis(response, surveyResponse);
+                                break;
+                            case "rank":
+                                response.Message = RankChoiceAnalysis(response, surveyResponse);
+                                break;
+                            case "text":
+                                response.Message = TextChoiceAnalysis(response, surveyResponse);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
             }
@@ -436,26 +454,56 @@ namespace ProjectWebAPI.Controllers
         private List<string> MultipleChoiceAnalysis(ReportResponseAnalysis response, QuestionAnalysisCollection surveyResponse)
         {
             List<string> result = new List<string>();
-
-            List<string> options = response.Options.Split(',').ToList();
             string option = "";
-            var ordered = surveyResponse.Summary.OrderBy(x => x.Key);
 
-           for(int i = 0; i < surveyResponse.Summary.Count; i++)
+            try
             {
-                option = options.ElementAt(Int32.Parse(ordered.ElementAt(i).Key)-1);
-                result.Add(string.Format("{0} people answered with a response of: {1}",ordered.ElementAt(i).Value.ToString(), option));
+                int sum = surveyResponse.Summary.Values.Sum();
+                List<string> options = response.Options.Split(',').ToList();
+                var ordered = surveyResponse.Summary.OrderBy(x => x.Key);
+
+                for (int i = 0; i < surveyResponse.Summary.Count; i++)
+                {
+                    option = options.ElementAt(Int32.Parse(ordered.ElementAt(i).Key) - 1);
+                    result.Add(string.Format("{0} people answered with a response of: {1}", ordered.ElementAt(i).Value.ToString(), option));
+                }
+
+                result.Add(string.Format("A total of {0} people participated in this survey.", sum));
+
+                response.Message = result;
             }
-
-            result.Add(string.Format("A total of {0} people participated in this survey.", surveyResponse.Summary.Values.Sum()));
-
-            response.Message = result;
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+            }
+            
             return result;
         }
 
         private List<string> RangeChoiceAnalysis(ReportResponseAnalysis response, QuestionAnalysisCollection surveyResponse)
         {
             List<string> result = new List<string>();
+            double percentage = 0;
+
+            try
+            {
+                double sum = surveyResponse.Summary.Values.Sum();
+                var ordered = surveyResponse.Summary.OrderBy(x => x.Key);
+
+                for (int i = 0; i < surveyResponse.Summary.Count; i++)
+                {
+                    percentage = Math.Round((ordered.ElementAt(i).Value / sum) * 100);
+                    result.Add(string.Format("approximately {0}% of people answered with a response of: {1}", percentage, ordered.ElementAt(i).Key.ToString()));
+                }
+
+                result.Add(string.Format("A total of {0} people participated in this survey.", sum));
+
+                response.Message = result;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+            }
 
             return result;
         }
@@ -464,12 +512,44 @@ namespace ProjectWebAPI.Controllers
         {
             List<string> result = new List<string>();
 
+            try
+            {
+                int sum = surveyResponse.Summary.Values.Sum();
+                var ordered = surveyResponse.Summary.OrderBy(x => x.Value);
+
+                result.Add(string.Format("{0} people answered with the least popular response of: {1}", ordered.First().Value.ToString(), ordered.First().Key.ToString()));
+                result.Add(string.Format("{0} people answered with the most popular response of: {1}", ordered.Last().Value.ToString(), ordered.Last().Key.ToString()));
+                result.Add(string.Format("A total of {0} people participated in this survey.", sum));
+
+                response.Message = result;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+            }
+
             return result;
         }
 
         private List<string> TextChoiceAnalysis(ReportResponseAnalysis response, QuestionAnalysisCollection surveyResponse)
         {
             List<string> result = new List<string>();
+
+            try
+            {
+                int sum = surveyResponse.Summary.Values.Sum();
+                var ordered = surveyResponse.Summary.OrderBy(x => x.Value);
+
+                result.Add(string.Format("{0} people answered with the least popular response of: {1}", ordered.First().Value.ToString(), ordered.First().Key.ToString()));
+                result.Add(string.Format("{0} people answered with the most popular response of: {1}", ordered.Last().Value.ToString(), ordered.Last().Key.ToString()));
+                result.Add(string.Format("A total of {0} people participated in this survey.", sum));
+
+                response.Message = result;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
+            }
 
             return result;
         }

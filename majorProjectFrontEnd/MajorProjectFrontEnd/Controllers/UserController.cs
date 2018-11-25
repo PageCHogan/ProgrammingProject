@@ -29,9 +29,13 @@ namespace MajorProjectFrontEnd.Controllers
 		}
 
 		// GET: User/Details/5
-		public ActionResult Details(int id)
+		public ActionResult Details(int userID)
 		{
-			return View();
+			requestUri = "api/user/" + userID.ToString();
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+			var list = JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
+
+			return View(list.Where(o => o.UserID == userID).ElementAt(0));
 		}
 
 		// GET: User/Create
@@ -43,64 +47,99 @@ namespace MajorProjectFrontEnd.Controllers
 		// POST: User/Create
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Create(IFormCollection collection)
+		public async Task<ActionResult> Create(IFormCollection collection)
 		{
-			try
-			{
-				// TODO: Add insert logic here
+			string username = collection["Username"];
+			string title = collection["Title"];
+			string firstName = collection["Firstname"];
+			string lastName = collection["Lastname"];
+			string email = collection["Email"];
+			string password = collection["Password"];
+			string type = collection["Type"];
+			string permission = collection["Permission"];
+			string groups = collection["Groups"];
 
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
+			var user = new UserDataModel { Username = username, Title = title, Firstname = firstName, Lastname = lastName,
+							Email = email, Password = password, Type = type, Permission = permission, Groups = groups };
+			api.Client().BaseAddress = new Uri("https://projectwebapis.azurewebsites.net/");
+			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/user/save", user);
+			response.EnsureSuccessStatusCode();
+
+			return RedirectToAction("Index", "User");
 		}
 
 		// GET: User/Edit/5
-		public ActionResult Edit(int id)
+		public ActionResult Edit(int userID)
 		{
-			return View();
+			requestUri = "api/user/" + userID.ToString();
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+			var list = JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
+
+			var user = list.Where(o => o.UserID == userID).ElementAt(0);
+		
+			return View(user);
 		}
 
 		// POST: User/Edit/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Edit(int id, IFormCollection collection)
+		public async Task<ActionResult> Edit(int UserID, IFormCollection collection)
 		{
-			try
-			{
-				// TODO: Add update logic here
+			string username = collection["Username"];
+			string title = collection["Title"];
+			string firstName = collection["Firstname"];
+			string lastName = collection["Lastname"];
+			string email = collection["Email"];
+			string password = collection["Password"];
+			string type = collection["Type"];
+			string permission = collection["Permission"];
+			string groups = collection["Groups"];
 
-				return RedirectToAction(nameof(Index));
-			}
-			catch
+
+			var user = new UserDataModel
 			{
-				return View();
-			}
+				UserID = UserID,
+				Username = username,
+				Title = title,
+				Firstname = firstName,
+				Lastname = lastName,
+				Email = email,
+				Password = password,
+				Type = type,
+				Permission = permission,
+				Groups = groups
+			};
+			api.Client().BaseAddress = new Uri(baseAddress);
+			HttpResponseMessage response = await api.Client().PutAsJsonAsync("api/user/" + UserID.ToString(), user);
+			response.EnsureSuccessStatusCode();
+
+			string responsestring = await response.Content.ReadAsStringAsync();
+
+			return RedirectToAction("Index", "User");
 		}
 
 		// GET: User/Delete/5
-		public ActionResult Delete(int id)
+		public ActionResult Delete(int userID)
 		{
-			return View();
+			requestUri = "api/user/" + userID.ToString();
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+			var list = JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
+
+			return View(list.Where(o => o.UserID == userID).ElementAt(0));
 		}
 
 		// POST: User/Delete/5
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public ActionResult Delete(int id, IFormCollection collection)
+		public async Task<ActionResult> Delete(int id, IFormCollection collection)
 		{
-			try
-			{
-				// TODO: Add delete logic here
+			api.Client().BaseAddress = new Uri(baseAddress);
+			string userID = collection["userID"];
+			HttpResponseMessage response = await api.Client().DeleteAsync("api/user/" + userID);
+			response.EnsureSuccessStatusCode();
 
-				return RedirectToAction(nameof(Index));
-			}
-			catch
-			{
-				return View();
-			}
+
+			return RedirectToAction("Index", "User");
 		}
 	}
 }

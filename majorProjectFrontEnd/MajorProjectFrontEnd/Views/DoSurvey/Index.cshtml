@@ -30,7 +30,7 @@
 						{
 					*/
 
-					<label class="radio">@options[i]<input type="radio" name="@question.QuestionNumber" value="@options[i]" required></label>
+					<label class="radio">@options[i]<input type="radio" name="@question.QuestionNumber" value="@(i+1)" required></label>
 
 				}
 			}
@@ -55,7 +55,7 @@
 			else if (question.Type == "COMMENT")
 			{
 				<input name="question_type_@question.QuestionNumber" type="hidden" value="COMMENT">
-				<textarea name="@question.QuestionNumber" required></textarea>
+				<textarea name="@question.QuestionNumber" required spellcheck="true"></textarea>
 
 
 			}
@@ -63,7 +63,7 @@
 			{
 
 				<input name="question_type_@question.QuestionNumber" type="hidden" value="TEXT">
-				<input class="text" name="@question.QuestionNumber" required>
+				<input class="text" name="@question.QuestionNumber" required spellcheck="true">
 			}
 			else if (question.Type == "RANK")
 			{
@@ -80,11 +80,11 @@
 						{
 							if (i == options.ToList().IndexOf(option))
 							{
-								<option value="@options[i]" class="@question.QuestionNumber" selected>@options[i]</option>
+								<option value="@(i+1)" class="@question.QuestionNumber" selected>@options[i]</option>
 							}
 							else
 							{
-								<option value="@options[i]" class="@question.QuestionNumber">@options[i]</option>
+								<option value="@(i+1)" class="@question.QuestionNumber">@options[i]</option>
 							}
 
 

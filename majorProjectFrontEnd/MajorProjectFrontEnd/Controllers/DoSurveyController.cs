@@ -85,7 +85,13 @@ namespace MajorProjectFrontEnd.Controllers
 			for (int i = 1; i <= numberOfQuestions; ++i)
 			{
 				ResponseCSV += ",";
-				ResponseCSV += col[i.ToString()].ToString().Replace(',', '|');
+
+				if (col["question_type_" + i.ToString()] == "RANK") {
+					ResponseCSV += col[i.ToString()].ToString().Replace(",", "").Replace(" ", "");
+				} else {
+					ResponseCSV += col[i.ToString()].ToString().Replace(',', '|');
+				}
+				
 
             }
 

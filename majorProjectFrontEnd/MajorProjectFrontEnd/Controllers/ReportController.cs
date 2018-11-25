@@ -16,7 +16,7 @@ namespace MajorProjectFrontEnd.Controllers
 	public class ReportController : Controller
 	{
 
-		String baseAddress = "http://localhost:61081";
+		String baseAddress = "https://projectwebapis.azurewebsites.net/";
 		String requestUri = null;
 
 		APIService api = new APIService();
@@ -32,7 +32,8 @@ namespace MajorProjectFrontEnd.Controllers
 
 			string responseString = await response.Content.ReadAsAsync<string>();
 
-			return View(JsonConvert.DeserializeObject<ReportAnalysisModel>(responseString));
+			
+return View(JsonConvert.DeserializeObject<ReportAnalysisModel>(responseString));
 		}
 
 		// GET: Report/Details/5

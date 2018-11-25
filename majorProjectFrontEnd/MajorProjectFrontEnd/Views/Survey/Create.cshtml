@@ -1,4 +1,4 @@
-﻿@model MajorProjectFrontEnd.Models.SurveyDataModel
+﻿@model MajorProjectFrontEnd.ViewModels.SurveyViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -21,7 +21,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserID" class="control-label"></label>
-                <input asp-for="UserID" type="number" class="form-control" required min="1" max="@ViewData["userIDMax"]"/>
+		<select asp-for="UserID">
+			@foreach (var user in Model.userDataModels)
+			{
+				<option value="@user.UserID">@user.UserID</option>
+			}
+
+		</select>
                 <span asp-validation-for="UserID" class="text-danger"></span>
             </div>
             <div class="form-group">

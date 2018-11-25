@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using MajorProjectFrontEnd.Models;
 using MajorProjectFrontEnd.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using ProjectWebAPI.Models.ReportModels;
 
 namespace MajorProjectFrontEnd.Controllers
 {
@@ -12,7 +16,7 @@ namespace MajorProjectFrontEnd.Controllers
 	public class ReportController : Controller
 	{
 
-		String baseAddress = "https://projectwebapis.azurewebsites.net/";
+		String baseAddress = "http://localhost:61081";
 		String requestUri = null;
 
 		APIService api = new APIService();
@@ -20,9 +24,15 @@ namespace MajorProjectFrontEnd.Controllers
 		// GET: Report
 
 		[HttpGet("{fileName}")]
-		public ActionResult Index(string fileName)
+		public async Task<ActionResult> Index(string fileName)
 		{
-			return View();
+			requestUri = "api/Document/report";
+			api.Client().BaseAddress = new Uri(baseAddress);
+			HttpResponseMessage response = await api.Client().PostAsJsonAsync<ReportModel>(requestUri, new ReportModel { Filename = fileName });
+
+			string responseString = await response.Content.ReadAsAsync<string>();
+
+			return View(JsonConvert.DeserializeObject<ReportAnalysisModel>(responseString));
 		}
 
 		// GET: Report/Details/5

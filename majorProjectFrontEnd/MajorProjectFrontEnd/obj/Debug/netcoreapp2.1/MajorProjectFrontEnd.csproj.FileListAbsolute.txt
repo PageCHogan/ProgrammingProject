@@ -107,3 +107,4 @@ C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProj
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\User\Details.g.cshtml.cs
 C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\User\Edit.g.cshtml.cs
+C:\Users\New\gges-main\programming-project\GitHub\majorProjectFrontEnd\MajorProjectFrontEnd\obj\Debug\netcoreapp2.1\Razor\Views\Report\Index.g.cshtml.cs

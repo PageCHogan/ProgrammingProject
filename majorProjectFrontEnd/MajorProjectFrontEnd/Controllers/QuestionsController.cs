@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using MajorProjectFrontEnd.Models;
 using MajorProjectFrontEnd.Services;
+using MajorProjectFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -51,15 +52,9 @@ namespace MajorProjectFrontEnd.Controllers
 
 			requestUri = "api/Survey";
 			var response = api.GetResponseAsync(baseAddress, requestUri);
-			int count = JsonConvert.DeserializeObject<List<SurveyDataModel>>(response.Result.Content.ReadAsAsync<string>().Result).Count;
-			if (count == 0) {
-				ViewData["surveyIDMax"] = 1;
-			} else {
-				ViewData["surveyIDMax"] = count;
-			}
-
-			ViewData["Question"] = "";
-			return View();
+			var list = JsonConvert.DeserializeObject<List<SurveyDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
+			
+			return View(new QuestionViewModel {surveyDataModels = list });
 		}
 
 		// POST: Questions/Create

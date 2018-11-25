@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using MajorProjectFrontEnd.Models;
 using MajorProjectFrontEnd.Services;
+using MajorProjectFrontEnd.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -40,7 +41,11 @@ namespace MajorProjectFrontEnd.Controllers
 		// GET: Survey/Create
 		public ActionResult Create()
 		{
-			return View();
+			requestUri = "api/user";
+			var response = api.GetResponseAsync(baseAddress, requestUri);
+			var list = JsonConvert.DeserializeObject<List<UserDataModel>>(response.Result.Content.ReadAsAsync<string>().Result);
+			
+			return View(new SurveyViewModel { userDataModels = list });
 		}
 
 		// POST: Survey/Create
@@ -48,7 +53,7 @@ namespace MajorProjectFrontEnd.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<ActionResult> Create(IFormCollection collection)
 		{
-			int SurveyID = int.Parse(collection["SurveyID"]);
+			
 			string SurveyName = collection["SurveyName"];
 			int UserID = int.Parse(collection["UserID"]);
 			string Type = collection["Type"];
@@ -59,7 +64,6 @@ namespace MajorProjectFrontEnd.Controllers
 
 			var survey = new SurveyDataModel
 			{
-				SurveyID = SurveyID,
 				SurveyName = SurveyName,
 				UserID = UserID,
 				Type = Type,
@@ -69,11 +73,11 @@ namespace MajorProjectFrontEnd.Controllers
 				Permission = Permission
 			};
 
-			api.Client().BaseAddress = new Uri("http://localhost:61081/");
+			api.Client().BaseAddress = new Uri(baseAddress);
 			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/save", survey);
 			response.EnsureSuccessStatusCode();
 
-			return View();
+			return RedirectToAction("Index", "Survey");
 		}
 
 		// GET: Survey/Edit/5
@@ -85,9 +89,9 @@ namespace MajorProjectFrontEnd.Controllers
 
 			var survey = list.Where(o => o.SurveyID == SurveyID).ElementAt(0);
 
-			ViewData["Survey"] = survey.ToString();
+			//ViewData["Survey"] = survey.ToString();
 
-			return View();
+			return View(survey);
 		}
 
 		// POST: Survey/Edit/5
@@ -115,11 +119,11 @@ namespace MajorProjectFrontEnd.Controllers
 				Permission = Permission
 			};
 
-			api.Client().BaseAddress = new Uri("http://localhost:61081/");
-			HttpResponseMessage response = await api.Client().PostAsJsonAsync("api/survey/" + SurveyID.ToString(), survey);
+			api.Client().BaseAddress = new Uri(baseAddress);
+			HttpResponseMessage response = await api.Client().PutAsJsonAsync("api/survey/" + SurveyID.ToString(), survey);
 			response.EnsureSuccessStatusCode();
 
-			return View();
+			return RedirectToAction("Index", "Survey");
 		}
 
 		// GET: Survey/Delete/5
@@ -143,7 +147,7 @@ namespace MajorProjectFrontEnd.Controllers
 			response.EnsureSuccessStatusCode();
 
 
-			return RedirectToAction("Index", "Questions");
+			return RedirectToAction("Index", "Survey");
 		}
 	}
 }

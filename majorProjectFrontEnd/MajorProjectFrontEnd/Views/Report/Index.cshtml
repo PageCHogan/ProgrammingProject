@@ -1,0 +1,22 @@
+﻿@model ProjectWebAPI.Models.ReportModels.ReportAnalysisModel
+
+@{
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.ReportTitle</h2>
+<h3>@Model.ReportDate</h3>
+@foreach (var response in Model.Responses)
+{
+	<p>Question number: @response.QuestionNumber</p>
+	<p>Question type: @response.Type</p>
+	<p>Question: @response.Question</p>
+	<p>Question message:</p>
+	@foreach (var message in response.Message)
+	{
+		<p>Message: @message</p>
+	}
+	<br>
+	<br>
+	<br>
+}

@@ -169,7 +169,6 @@ namespace ProjectWebAPI.Controllers
                     catch (Exception ex)
                     {
                         System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
-                        //throw;
                     }
                 }
             }
@@ -242,7 +241,6 @@ namespace ProjectWebAPI.Controllers
         private static async Task<List<CSVResponse>> GetSurveyResponses(object data)
         {
             AzureBlobDocuments document = jsonHelper.FromJson<AzureBlobDocuments>(data.ToString());
-            //AzureBlobDocuments document = JsonConvert.DeserializeObject<AzureBlobDocuments>(data.ToString());
 
             CSVResponse question = new CSVResponse();
             List<CSVResponse> csvResponse = new List<CSVResponse>();
@@ -289,7 +287,6 @@ namespace ProjectWebAPI.Controllers
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
-                //throw;
             }
 
             return csvResponse;

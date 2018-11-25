@@ -19,7 +19,6 @@ namespace ProjectWebAPI.Helpers
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
-                //throw;
             }
 
             return response;
@@ -39,7 +38,6 @@ namespace ProjectWebAPI.Helpers
             {
                 System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
                 ErrorMessage = ex.Message;
-                //throw;
             }
 
             return response;

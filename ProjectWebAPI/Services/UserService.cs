@@ -62,7 +62,6 @@ namespace ProjectWebAPI.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
-                //throw;
             }
 
             return userData;
@@ -107,7 +106,6 @@ namespace ProjectWebAPI.Services
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
-                    //throw;
                 }
             }
 
@@ -154,7 +152,6 @@ namespace ProjectWebAPI.Services
                 catch (Exception ex)
                 {
                     System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
-                    //throw;
                 }
             }
 
@@ -193,7 +190,6 @@ namespace ProjectWebAPI.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("Exception Caught - " + ex.Message);
-                //throw;
             }
 
             if (!result)
